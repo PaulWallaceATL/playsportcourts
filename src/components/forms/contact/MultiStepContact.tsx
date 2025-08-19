@@ -43,7 +43,7 @@ export function MultiStepContact() {
       ["projectType", "hasPad", "courtSize", "padSize"] as const,
       ["address", "city", "state", "zip", "games"] as const
     ];
-    const valid = await trigger(fieldsByStep[step] as any, { shouldFocus: true });
+    const valid = await trigger(fieldsByStep[step] as unknown as readonly (keyof Values)[], { shouldFocus: true });
     if (valid) setStep((s) => Math.min(2, s + 1));
   }
 
@@ -146,7 +146,7 @@ export function MultiStepContact() {
       {isSubmitSuccessful && (
         <div className="relative h-8">
           {celebrate && Array.from({length:16}).map((_,i)=> (
-            <span key={i} className="particle" style={{ left: '50%', top: '0', color: i%2? '#00d4ff':'#8b5cf6', ['--dx' as any]: `${(Math.cos(i)*40)}px`, ['--dy' as any]: `${(-20-Math.sin(i)*30)}px` }} />
+            <span key={i} className="particle" style={{ left: '50%', top: '0', color: i%2? '#00d4ff':'#8b5cf6', ['--dx' as unknown as string]: `${(Math.cos(i)*40)}px`, ['--dy' as unknown as string]: `${(-20-Math.sin(i)*30)}px` }} />
           ))}
           <p className="text-sm text-[var(--secondary)] mt-2">Thanks for submitting!</p>
         </div>

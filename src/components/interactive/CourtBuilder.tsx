@@ -27,7 +27,7 @@ export function CourtBuilder() {
 	return (
 		<div className="cb">
 			<div ref={ref} className="cb-preview aspect-16-9 glass-card glass-border">
-				<div className="cb-stage" style={{ ['--sel' as any]: color, ['--ambient' as any]: `${parseInt(color.slice(1,3),16)},${parseInt(color.slice(3,5),16)},${parseInt(color.slice(5,7),16)}` }}>
+				<div className="cb-stage" style={{ ['--sel' as unknown as string]: color, ['--ambient' as unknown as string]: `${parseInt(color.slice(1,3),16)},${parseInt(color.slice(3,5),16)},${parseInt(color.slice(5,7),16)}` }}>
 					<div className="cb-court" />
 					<div className="cb-lines" />
 					<div className="cb-center" />
