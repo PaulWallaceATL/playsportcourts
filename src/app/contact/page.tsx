@@ -16,11 +16,9 @@ const schema = z.object({
 	city: z.string().optional().default(""),
 	state: z.string().optional().default(""),
 	zip: z.string().optional().default(""),
-	projectType: z.enum(["Residential", "Commercial"], {
-		required_error: "Required",
-	}),
+	projectType: z.enum(["Residential", "Commercial"]),
 	courtSize: z.string().optional().default(""),
-	hasPad: z.enum(["Yes", "No"], { required_error: "Required" }),
+	hasPad: z.enum(["Yes", "No"]),
 	padSize: z.string().optional().default(""),
 	games: z.string().optional().default(""),
 });
