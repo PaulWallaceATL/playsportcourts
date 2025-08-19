@@ -30,6 +30,33 @@ export function CourtBuilder() {
 		}
 	}
 
+	function applyPreset(name: "driveway-basketball" | "backyard-pickleball" | "multi-hockey") {
+		if (name === "driveway-basketball") {
+			setSport("basketball");
+			setColor("#1E40AF");
+			setKeyColor("#EA580C");
+			setItems([
+				{ id: "left-hoop", x: 4, y: 50, type: "hoop" },
+				{ id: "right-hoop", x: 96, y: 50, type: "hoop" },
+			]);
+		}
+		if (name === "backyard-pickleball") {
+			setSport("pickleball");
+			setColor("#10B981");
+			setKeyColor("#0EA5E9");
+			setItems([{ id: "net", x: 50, y: 50, type: "net" }]);
+		}
+		if (name === "multi-hockey") {
+			setSport("hockey");
+			setColor("#0EA5E9");
+			setKeyColor("rgba(255,255,255,0.12)");
+			setItems([
+				{ id: "goal-left", x: 5, y: 50, type: "goal" },
+				{ id: "goal-right", x: 95, y: 50, type: "goal" },
+			]);
+		}
+	}
+
 	function onDragStart(e: React.MouseEvent, id: string) {
 		const target = e.currentTarget as HTMLElement;
 		target.dataset.dragging = "true";
@@ -87,6 +114,20 @@ export function CourtBuilder() {
 					<button onClick={()=>setSport("hockey")} className={`swatch3d ${sport==='hockey'?'active':''}`} style={{ background: '#8B5CF6' }} aria-label="Hockey" />
 				</div>
 				<p className="text-caption">Drag goals/hoops/nets on the court</p>
+				<div className="mt-3">
+					<p className="text-caption mb-2">Quick Presets</p>
+					<div className="flex flex-wrap gap-2">
+						<button className="swatch3d" style={{ background: '#1E40AF' }} aria-label="Driveway Basketball" onClick={()=>applyPreset('driveway-basketball')}> 
+							<span style={{color:'#fff',fontSize:12,padding:'4px 6px'}}>Basketball</span>
+						</button>
+						<button className="swatch3d" style={{ background: '#10B981' }} aria-label="Backyard Pickleball" onClick={()=>applyPreset('backyard-pickleball')}>
+							<span style={{color:'#fff',fontSize:12,padding:'4px 6px'}}>Pickleball</span>
+						</button>
+						<button className="swatch3d" style={{ background: '#0EA5E9' }} aria-label="Multi-sport Hockey" onClick={()=>applyPreset('multi-hockey')}>
+							<span style={{color:'#fff',fontSize:12,padding:'4px 6px'}}>Hockey</span>
+						</button>
+					</div>
+				</div>
 			</div>
 			<div className="mt-3">
 				<p className="text-caption mb-2">Key/Restricted Area</p>
