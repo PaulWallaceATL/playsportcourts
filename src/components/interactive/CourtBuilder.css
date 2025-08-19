@@ -26,6 +26,31 @@
 .cb-key { position: absolute; left: 0; top: 25%; bottom: 25%; width: 15%; border-radius: 8px 0 0 8px; background: var(--key, rgba(255,255,255,0.12)); box-shadow: inset 0 -20px 40px rgba(0,0,0,0.35); }
 .cb-key.right { left: auto; right: 0; border-radius: 0 8px 8px 0; }
 
+/* Sport overlays */
+.overlay { position: absolute; inset: 0; pointer-events: none; }
+.overlay .line { position: absolute; background: rgba(255,255,255,0.9); box-shadow: 0 0 6px rgba(255,255,255,0.5); }
+.overlay .circle { position: absolute; border: 2px solid rgba(255,255,255,0.9); border-radius: 9999px; box-shadow: 0 0 6px rgba(255,255,255,0.5); }
+
+/* Basketball */
+.bb-center { width: 12%; aspect-ratio: 1/1; left: 44%; top: 44%; }
+
+/* Pickleball inner rectangle */
+.pb-rect { left: 20%; right: 20%; top: 30%; bottom: 30%; border: 2px solid rgba(255,255,255,0.9); border-radius: 6px; box-shadow: 0 0 6px rgba(255,255,255,0.5); }
+.pb-center { left: 20%; right: 20%; top: 50%; height: 2px; }
+
+/* Hockey (center line and creases) */
+.hk-center { left: 0; right: 0; top: 50%; height: 2px; }
+.hk-crease { width: 10%; height: 10%; border: 2px solid rgba(255,255,255,0.9); border-radius: 30%/40%; top: 45%; }
+.hk-crease.left { left: 2%; transform: translateY(-50%); }
+.hk-crease.right { right: 2%; transform: translateY(-50%); }
+
+/* Draggable items */
+.drag-item { position: absolute; width: 24px; height: 24px; border-radius: 6px; background: var(--drag, #00d4ff); box-shadow: 0 0 12px rgba(0,212,255,0.6); cursor: grab; pointer-events: auto; }
+.drag-item:active { cursor: grabbing; }
+.drag-hoop { border-radius: 9999px; width: 18px; height: 18px; border: 3px solid #ff6b35; background: transparent; box-shadow: 0 0 12px rgba(255,107,53,0.6); }
+.drag-net { width: 26px; height: 6px; background: #00ff88; box-shadow: 0 0 10px rgba(0,255,136,0.6); border-radius: 3px; }
+.drag-goal { width: 20px; height: 14px; background: #8b5cf6; box-shadow: 0 0 10px rgba(139,92,246,0.6); border-radius: 3px; }
+
 /* Palette */
 .palette { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
 .swatch3d { width: 32px; height: 32px; border-radius: 8px; cursor: pointer; transform-style: preserve-3d; transition: transform 180ms ease, box-shadow 180ms ease; box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 6px 14px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); position: relative; }
