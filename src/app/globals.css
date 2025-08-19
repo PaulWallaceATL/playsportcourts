@@ -285,7 +285,9 @@
 
   /* Text gradient & glow */
   .text-gradient-primary { background: var(--gradient-primary); background-clip: text; -webkit-background-clip: text; color: transparent; }
+  .text-gradient-hero { background: linear-gradient(180deg, #ffffff 0%, #e5f0ff 55%, #cfe3ff 100%); background-clip: text; -webkit-background-clip: text; color: transparent; }
   .text-glow { text-shadow: 0 2px 24px color-mix(in oklch, var(--brand-primary) 25%, transparent); }
+  .text-glow-strong { text-shadow: 0 2px 28px rgba(255,255,255,0.35), 0 0 1px rgba(255,255,255,0.9); }
   .text-glow-accent { text-shadow: 0 2px 24px color-mix(in oklch, var(--brand-accent) 25%, transparent); }
 
   /* Variable weight hover (for variable fonts) */

@@ -35,7 +35,7 @@ export default function ContactPage() {
 		formState: { errors, isSubmitting, isSubmitSuccessful },
 	} = useForm<FormValues>({ resolver: zodResolver(schema) });
 
-	function onSubmit(values: FormValues) {
+	function onSubmit(_values: FormValues) {
 		// TODO: wire to server action / API route
 		return new Promise((resolve) => setTimeout(resolve, 600)).then(() => {
 			reset();

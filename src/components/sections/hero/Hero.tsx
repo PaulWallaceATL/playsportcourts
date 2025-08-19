@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { siteContent } from "@/data/home";
@@ -17,11 +16,11 @@ export function Hero() {
 
       <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
         <div className="max-w-3xl text-white anim-slide-up">
-          <h1 className="heading-display text-gradient-primary text-glow hover-weight-smooth">{siteContent.hero.title}</h1>
-          <p className="mt-4 text-body-lg text-white/90 drop-cap reveal-up">{siteContent.hero.subtitle}</p>
+          <h1 className="heading-display text-gradient-hero text-glow-strong hover-weight-smooth">{siteContent.hero.title}</h1>
+          <p className="mt-4 text-body-lg text-white/95 drop-cap reveal-up">{siteContent.hero.subtitle}</p>
           <div className="mt-6 flex flex-wrap items-center gap-3">
             {siteContent.hero.ctas.map((c) => (
-              <Button key={c.label} size="lg" variant={(c as any).variant as any} asChild>
+              <Button key={c.label} size="lg" variant={(c as { variant?: "default" | "secondary" | "outline" | "ghost" | "link" | "accent" | "gradient" }).variant} asChild>
                 <Link href={c.href}>{c.label}</Link>
               </Button>
             ))}

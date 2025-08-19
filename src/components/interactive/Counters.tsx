@@ -32,6 +32,7 @@ export function Counters() {
 		if (isVisible) {
 			a.startAnim(); b.startAnim(); c.startAnim(); d.startAnim();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isVisible]);
 
 	return (
