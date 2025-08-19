@@ -23,17 +23,15 @@ const schema = z.object({
 	games: z.string().optional().default(""),
 });
 
-type FormValues = z.infer<typeof schema>;
-
 export default function ContactPage() {
 	const {
 		register,
 		handleSubmit,
 		reset,
 		formState: { errors, isSubmitting, isSubmitSuccessful },
-	} = useForm<FormValues>({ resolver: zodResolver(schema) });
+	} = useForm({ resolver: zodResolver(schema) });
 
-	function onSubmit(_values: FormValues) {
+	function onSubmit(_values: unknown) {
 		// TODO: wire to server action / API route
 		return new Promise((resolve) => setTimeout(resolve, 600)).then(() => {
 			reset();
