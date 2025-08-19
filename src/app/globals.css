@@ -492,11 +492,11 @@
   .glitch:hover { animation: glitch 600ms steps(2, jump-none); }
 
   /* Mobile neon panel */
-  .panel-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); opacity: 0; pointer-events: none; transition: opacity 220ms ease; }
+  .panel-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity 220ms ease; }
   .panel-overlay.open { opacity: 1; pointer-events: auto; }
   .panel-neon { position: fixed; top: 0; right: 0; height: 100vh; width: min(86vw, 420px); transform: translateX(100%); transition: transform 260ms cubic-bezier(.22,1,.36,1); }
   .panel-neon.open { transform: translateX(0); }
-  .panel-neon > .inner { height: 100%; padding: 18px; display: grid; grid-auto-rows: max-content; gap: 12px; }
+  .panel-neon > .inner { height: 100%; padding: 18px; display: grid; grid-auto-rows: max-content; gap: 12px; background: rgba(17,17,17,0.85); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(16px) saturate(1.25); -webkit-backdrop-filter: blur(16px) saturate(1.25); }
 
   /* Floating labels */
   .field { position: relative; }
