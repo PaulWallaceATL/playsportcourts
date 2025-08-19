@@ -40,14 +40,14 @@ export function Header() {
     <header
       className={cn(
         "sticky top-0 z-50 w-full transition-colors",
-        isScrolled ? "bg-background/70 header-blur border-b" : "bg-transparent"
+        isScrolled ? "glass-nav border-b" : "bg-transparent"
       )}
     >
       <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-3">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-md bg-[var(--primary)]" />
+          <Link href="/" className="flex items-center gap-2 neon-logo">
+            <span className="dot" aria-hidden />
             <span className="sr-only">PlaySport Atlanta</span>
             <span className="hidden font-semibold sm:inline">PlaySport Atlanta</span>
           </Link>
@@ -60,10 +60,16 @@ export function Header() {
                   <Link
                     href={item.href}
                     className={cn(
-                      "text-sm font-medium transition-colors nav-underline hover:text-[var(--primary)]",
+                      "text-sm font-medium transition-colors nav-underline holo-link",
                       pathname === item.href ? "text-[var(--primary)]" : "text-foreground/80"
                     )}
                     aria-current={pathname === item.href ? "page" : undefined}
+                    onMouseMove={(e) => {
+                      const t = e.currentTarget as HTMLElement;
+                      const rect = t.getBoundingClientRect();
+                      const x = ((e.clientX - rect.left) / rect.width) * 100;
+                      t.style.setProperty("--mx", `${x}%`);
+                    }}
                   >
                     {item.label}
                   </Link>
@@ -90,21 +96,19 @@ export function Header() {
                 <Link href="/design">Design Your Own</Link>
               </Button>
             </div>
-            <Button variant="ghost" size="icon" className="md:hidden" aria-label="Toggle menu" onClick={() => setOpen((v) => !v)}>
+            <Button variant="glass" size="icon" className="md:hidden shadow-neon-blue" aria-label="Toggle menu" onClick={() => setOpen((v) => !v)}>
               {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Mobile drawer */}
-      <div
-        className={cn(
-          "md:hidden overflow-hidden border-t",
-          open ? "anim-slide-down" : "hidden"
-        )}
+      {/* Mobile neon slide-in */}
+      <div className={cn("panel-overlay md:hidden", open && "open")} onClick={() => setOpen(false)} />
+      <aside className={cn("panel-neon md:hidden z-50", open && "open")}
+        aria-hidden={!open}
       >
-        <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-4">
+        <div className="inner glass-card glass-border shadow-neon-blue">
           <div className="grid gap-4">
             <div>
               <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Navigation</p>
@@ -114,7 +118,7 @@ export function Header() {
                     <Link
                       href={item.href}
                       className={cn(
-                        "block rounded-md px-3 py-2 text-sm font-medium hover:bg-muted/50",
+                        "block rounded-md px-3 py-2 text-sm font-medium glass-hover",
                         pathname === item.href ? "text-[var(--primary)]" : "text-foreground/90"
                       )}
                     >
@@ -128,7 +132,7 @@ export function Header() {
               <Button variant="outline" asChild>
                 <Link href="/residential">Residential Court</Link>
               </Button>
-              <Button asChild>
+              <Button variant="glass" className="shadow-neon-blue" asChild>
                 <Link href="/design">Design Your Own</Link>
               </Button>
             </div>
@@ -144,7 +148,7 @@ export function Header() {
             </div>
           </div>
         </div>
-      </div>
+      </aside>
     </header>
   );
 }

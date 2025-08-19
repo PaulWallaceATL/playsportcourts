@@ -1,18 +1,33 @@
-.court {
-	--line: color-mix(in oklch, white 92%, transparent);
-	--tile: color-mix(in oklch, var(--brand-primary) 18%, white);
-	position: relative; border-radius: 16px; overflow: hidden;
-	background:
-		linear-gradient(0deg, var(--line) 2px, transparent 2px) 0 0/100% 20%,
-		linear-gradient(90deg, var(--line) 2px, transparent 2px) 0 0/20% 100%,
-		var(--tile);
-}
-.court .key, .court .arc, .court .center { position: absolute; border: 2px solid var(--line); }
-.court .key { left: 0; top: 25%; bottom: 25%; width: 15%; border-right: 0; }
-.court .arc { right: 0; top: 25%; bottom: 25%; width: 15%; border-left: 0; }
-.court .center { left: 50%; top: 0; bottom: 0; width: 2px; transform: translateX(-50%); }
+/* Container */
+.cb { --sel: #1E40AF; --ambient: 30,64,175; }
+.cb .readout { font-feature-settings: "tnum" on, "lnum" on; letter-spacing: 0.02em; }
 
-.palette { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-.swatch { width: 28px; height: 28px; border-radius: 6px; cursor: pointer; border: 1px solid rgba(0,0,0,0.08); transition: transform 160ms ease; }
-.swatch:hover { transform: translateY(-2px); }
+/* Preview with perspective */
+.cb-preview { position: relative; border-radius: 16px; overflow: hidden; backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.35), 0 0 32px rgba(0,212,255,0.1); }
+.cb-preview::before { content: ""; position: absolute; inset: -20%; background: radial-gradient(600px 400px at 20% 120%, rgba(var(--ambient),0.18), transparent 60%); pointer-events: none; }
+.cb-preview::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(255,255,255,0.05), rgba(255,255,255,0.05) 2px, transparent 2px, transparent 6px); mix-blend-mode: overlay; opacity: 0.08; pointer-events: none; }
+.cb-preview.rippling::before { background:
+  radial-gradient(200px 200px at var(--rx,50%) var(--ry,50%), rgba(255,255,255,0.18), transparent 60%),
+  radial-gradient(600px 400px at 20% 120%, rgba(var(--ambient),0.18), transparent 60%); }
+
+.cb-stage { position: relative; perspective: 1000px; height: 100%; }
+.cb-court { position: absolute; inset: 10% 5% 20%; border-radius: 12px; background: var(--sel); transform: rotateX(55deg); transform-origin: center bottom; box-shadow: inset 0 -40px 120px rgba(0,0,0,0.45); }
+.cb-court::before { content: ""; position: absolute; inset: 0; border-radius: 12px; background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0) 30%),
+    radial-gradient(800px 400px at 50% 0%, rgba(255,255,255,0.12), transparent 60%);
+  pointer-events: none; }
+.cb-lines { position: absolute; inset: 0; border-radius: 12px; border: 2px solid rgba(255,255,255,0.9); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+.cb-lines::before, .cb-lines::after { content: ""; position: absolute; top: 25%; bottom: 25%; width: 15%; border: 2px solid rgba(255,255,255,0.9); }
+.cb-lines::before { left: 0; border-right: 0; }
+.cb-lines::after { right: 0; border-left: 0; }
+.cb-center { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,0.9); transform: translateX(-50%); box-shadow: 0 0 10px rgba(255,255,255,0.5); }
+
+/* Palette */
+.palette { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.swatch3d { width: 32px; height: 32px; border-radius: 8px; cursor: pointer; transform-style: preserve-3d; transition: transform 180ms ease, box-shadow 180ms ease; box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 6px 14px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); position: relative; }
+.swatch3d::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0)); pointer-events: none; }
+.swatch3d:hover { transform: translateY(-2px) rotateX(6deg); }
+.swatch3d.active { box-shadow: 0 0 0 2px rgba(0,212,255,0.6), 0 0 20px rgba(0,212,255,0.4), inset 0 1px 0 rgba(255,255,255,0.2); }
+
+.code-badge { padding: 4px 8px; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 0 0 1px rgba(0,212,255,0.25), 0 0 18px rgba(0,212,255,0.12); }
 
