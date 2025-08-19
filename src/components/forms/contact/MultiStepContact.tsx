@@ -24,8 +24,6 @@ const schema = z.object({
   games: z.string().optional().default("")
 });
 
-type Values = z.infer<typeof schema>;
-
 export function MultiStepContact() {
   const [step, setStep] = React.useState(0);
   const [celebrate, setCelebrate] = React.useState(false);
@@ -43,7 +41,7 @@ export function MultiStepContact() {
       ["projectType", "hasPad", "courtSize", "padSize"] as const,
       ["address", "city", "state", "zip", "games"] as const
     ];
-    const valid = await trigger(fieldsByStep[step] as unknown as readonly string[], { shouldFocus: true });
+    const valid = await trigger(fieldsByStep[step] as Parameters<typeof trigger>[0], { shouldFocus: true });
     if (valid) setStep((s) => Math.min(2, s + 1));
   }
 
