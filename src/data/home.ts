@@ -47,14 +47,14 @@ export const siteContent = {
 	solutions: {
 		title: "SOLUTIONS BY SPORT",
 		items: [
-			{ title: "BASKETBALL COURTS", href: "/sports/basketball" },
-			{ title: "TENNIS COURTS", href: "/sports/tennis" },
-			{ title: "PLAYGROUNDS", href: "/sports/playgrounds" },
-			{ title: "PICKLEBALL COURTS", href: "/sports/pickleball" },
-			{ title: "MULTI-SPORT GAME COURTS", href: "/sports/multi-sport" },
-			{ title: "SHUFFLEBOARD COURTS", href: "/sports/shuffleboard" },
-			{ title: "HOCKEY / SKATE RINKS", href: "/sports/hockey-skate" },
-			{ title: "CUSTOM COURT DESIGN", href: "/design" },
+			{ title: "BASKETBALL COURTS", href: "/residential" },
+			{ title: "TENNIS COURTS", href: "/residential" },
+			{ title: "PLAYGROUNDS", href: "/residential" },
+			{ title: "PICKLEBALL COURTS", href: "/residential" },
+			{ title: "MULTI-SPORT GAME COURTS", href: "/residential" },
+			{ title: "SHUFFLEBOARD COURTS", href: "/residential" },
+			{ title: "HOCKEY / SKATE RINKS", href: "/residential" },
+			{ title: "CUSTOM COURT DESIGN", href: "/residential" },
 		],
 	},
 	designer: {
