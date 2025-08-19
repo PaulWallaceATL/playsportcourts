@@ -35,7 +35,7 @@ export function MultiStepContact() {
     trigger,
     formState: { errors, isSubmitting, isSubmitSuccessful },
     reset
-  } = useForm<Values>({ resolver: zodResolver(schema), mode: "onChange" });
+  } = useForm({ resolver: zodResolver(schema), mode: "onChange" });
 
   async function next() {
     const fieldsByStep = [
@@ -43,7 +43,7 @@ export function MultiStepContact() {
       ["projectType", "hasPad", "courtSize", "padSize"] as const,
       ["address", "city", "state", "zip", "games"] as const
     ];
-    const valid = await trigger(fieldsByStep[step] as unknown as readonly (keyof Values)[], { shouldFocus: true });
+    const valid = await trigger(fieldsByStep[step] as unknown as readonly string[], { shouldFocus: true });
     if (valid) setStep((s) => Math.min(2, s + 1));
   }
 
