@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+// Image not used; placeholders for now
 import { Placeholder } from "@/components/ui/Placeholder";
 import { garageTiles } from "@/data/products";
 

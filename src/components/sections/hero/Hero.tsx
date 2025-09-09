@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button, type ButtonProps } from "@/components/ui/button";
 import { siteContent } from "@/data/home";
 
 export function Hero() {
@@ -14,7 +14,7 @@ export function Hero() {
           <p className="mt-4 text-body-lg text-muted-foreground">{siteContent.hero.subtitle}</p>
           <div className="mt-6 flex flex-wrap items-center gap-3">
             {siteContent.hero.ctas.map((c) => (
-              <Button key={c.label} size="lg" variant={c.variant === "accent" ? "default" : "outline"} asChild>
+              <Button key={c.label} size="lg" variant={c.variant as ButtonProps["variant"]} asChild>
                 <Link href={c.href}>{c.label}</Link>
               </Button>
             ))}

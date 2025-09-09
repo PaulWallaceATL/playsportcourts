@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Placeholder } from "@/components/ui/Placeholder";
 import { courtTiles } from "@/data/products";
 
