@@ -363,6 +363,13 @@
   @keyframes gradient-move { 0% { background-position: 0% 50% } 100% { background-position: 100% 50% } }
   .animate-gradient { animation: gradient-move 8s ease-in-out infinite alternate; }
 
+  /* CTA pulse */
+  @keyframes cta-pulse { 0% { box-shadow: 0 0 0 0 rgba(0,212,255,0.35) } 100% { box-shadow: 0 0 0 12px rgba(0,212,255,0) } }
+  .cta-pulse { animation: cta-pulse 1600ms ease-out infinite; }
+
+  /* 3D tile rotation */
+  @keyframes tile-rotate { from { transform: rotateX(12deg) rotateY(-24deg) } to { transform: rotateX(12deg) rotateY(336deg) } }
+
   /* Surfaces and backgrounds */
   .bg-gradient-primary { background-image: var(--gradient-primary); background-size: 200% 200%; background-position: 0% 50%; }
   .bg-gradient-secondary { background-image: var(--gradient-secondary); background-size: 200% 200%; background-position: 0% 50%; }
