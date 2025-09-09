@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
+import { Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/header/Header";
 import { ScrollProgress } from "@/components/animations/ScrollProgress";
 import { PageTransition } from "@/components/animations/PageTransition";
 
-const inter = Inter({
+const body = Manrope({
   variable: "--font-body",
   subsets: ["latin"],
   display: "swap",
-  weight: ["300", "400", "500", "700", "900"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-const poppins = Poppins({
+const display = Space_Grotesk({
   variable: "--font-display",
   subsets: ["latin"],
   display: "swap",
-  weight: ["300", "400", "500", "700", "900"],
+  weight: ["400", "500", "600", "700"]
 });
 
 export const metadata: Metadata = {
@@ -30,8 +30,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.variable} ${poppins.variable} antialiased`}>
+    <html lang="en" className="dark theme-premium-dark">
+      <body className={`${body.variable} ${display.variable} antialiased`}>
         <ScrollProgress />
         <Header />
         <main>
