@@ -3,19 +3,15 @@
 import Link from "next/link";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import { RotatingTile } from "@/components/interactive/RotatingTile";
+import { ThreeTile } from "@/components/interactive/ThreeTile";
+import { HeroVideo } from "@/components/sections/hero/HeroVideo";
 import { siteContent } from "@/data/home";
 
 export function Hero() {
   return (
     <section className="relative isolate">
       {/* Cinematic background video */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        {/* If a video is present, it will show; otherwise fall back to solid brand backdrop */}
-        <video className="absolute inset-0 h-full w-full object-cover" autoPlay muted loop playsInline>
-          <source src="/hero-courts.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-[var(--background)]" />
-      </div>
+      <HeroVideo />
       <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
         <div className="max-w-3xl text-foreground anim-slide-up">
           <h1 className="heading-display text-white">{siteContent.hero.title}</h1>
@@ -36,8 +32,8 @@ export function Hero() {
               </div>
             ))}
             {/* 3D rotating tile */}
-            <div className="hidden lg:block justify-self-end">
-              <RotatingTile />
+            <div className="hidden lg:block justify-self-end w-[300px]">
+              <ThreeTile height={260} />
             </div>
           </div>
         </div>
