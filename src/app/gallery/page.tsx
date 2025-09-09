@@ -1,30 +1,50 @@
+"use client";
+import * as React from "react";
+import Image from "next/image";
+
+const categories = [
+    { key: "basketball", label: "Basketball" },
+    { key: "pickleball", label: "Pickleball" },
+    { key: "tennis", label: "Tennis" },
+    { key: "garage", label: "Garage" },
+];
+
+const placeholder = "/window.svg";
+
 export default function GalleryPage() {
-	return (
-		<section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
-			<h1 className="heading-1 text-gradient-primary text-glow">Gallery</h1>
-			<p className="mt-2 text-body text-muted-foreground">Projects coming soon.</p>
+    const [lightbox, setLightbox] = React.useState<string | null>(null);
 
-			<div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-				{Array.from({ length: 6 }).map((_, i) => (
-					<div key={i} className="placeholder-card aspect-16-9 placeholder-gradient pattern-court shadow-layered hover-lift" />
-				))}
-			</div>
+    return (
+        <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
+            <h1 className="heading-1 text-gradient-primary text-glow">Gallery</h1>
+            <p className="mt-2 text-body text-muted-foreground">Explore recent installs by category.</p>
 
-			<div className="mt-10 grid gap-4 max-w-xl">
-				<div className="skeleton-line lg skeleton" />
-				<div className="skeleton-line skeleton" />
-				<div className="skeleton-line xs skeleton" />
-			</div>
+            <div className="mt-8 grid gap-10">
+                {categories.map((cat) => (
+                    <div key={cat.key}>
+                        <h2 className="heading-2 mb-3">{cat.label}</h2>
+                        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                            {Array.from({ length: 6 }).map((_, i) => (
+                                <button key={i} type="button" className="relative aspect-[16/10] overflow-hidden rounded-md glass-card"
+                                    onClick={() => setLightbox(placeholder)}
+                                >
+                                    <Image src={placeholder} alt={`${cat.label} ${i+1}`} fill className="object-contain" />
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
 
-			<div className="mt-10">
-				<div className="chart-bars">
-					{[70, 45, 90, 55].map((v, idx) => (
-						<div key={idx} className="chart-bar"><span style={{ width: `${v}%` }} /></div>
-					))}
-				</div>
-			</div>
-		</section>
-	);
+            {lightbox && (
+                <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setLightbox(null)}>
+                    <div className="relative w-full max-w-5xl aspect-[16/9]">
+                        <Image src={lightbox} alt="Lightbox" fill className="object-contain" />
+                    </div>
+                </div>
+            )}
+        </section>
+    );
 }
 
 

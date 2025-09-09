@@ -7,12 +7,10 @@ export const siteContent = {
 	},
 	nav: [
 		{ label: "Home", href: "/" },
-		{ label: "Residential", href: "/residential" },
-		{ label: "Commercial", href: "/commercial" },
+		{ label: "Court Tiles", href: "/court-tiles" },
+		{ label: "Garage Tiles", href: "/garage-tiles" },
 		{ label: "Resurfacing", href: "/resurfacing" },
-		{ label: "About", href: "/about" },
 		{ label: "Gallery", href: "/gallery" },
-		{ label: "Contact", href: "/contact" },
 		{ label: "Shop", href: "/shop" },
 	],
 	hero: {
@@ -20,12 +18,11 @@ export const siteContent = {
 		subtitle:
 			"PlaySport Atlanta designs, installs, & supplies innovative court solutions for a wide variety of sports",
 		ctas: [
-			{ label: "RESIDENTIAL COURT", href: "/residential", variant: "secondary" },
-			{ label: "COMMERCIAL COURT", href: "/commercial", variant: "outline" },
-			{ label: "DESIGN YOUR OWN", href: "/design", variant: "accent" },
+			{ label: "COURT TILES", href: "/court-tiles", variant: "secondary" },
+			{ label: "GARAGE TILES", href: "/garage-tiles", variant: "outline" },
+			{ label: "SHOP", href: "/shop", variant: "accent" },
 		],
 		trust: [
-			{ label: "Years in Business", value: "10+" },
 			{ label: "Projects Completed", value: "500+" },
 			{ label: "VersaCourt Dealer", value: "Certified" },
 			{ label: "Customer Reviews", value: "5★" },
@@ -45,16 +42,14 @@ export const siteContent = {
 		],
 	},
 	solutions: {
-		title: "SOLUTIONS BY SPORT",
+		title: "SPORTS APPLICATIONS",
 		items: [
-			{ title: "BASKETBALL COURTS", href: "/residential" },
-			{ title: "TENNIS COURTS", href: "/residential" },
-			{ title: "PLAYGROUNDS", href: "/residential" },
-			{ title: "PICKLEBALL COURTS", href: "/residential" },
-			{ title: "MULTI-SPORT GAME COURTS", href: "/residential" },
-			{ title: "SHUFFLEBOARD COURTS", href: "/residential" },
-			{ title: "HOCKEY / SKATE RINKS", href: "/residential" },
-			{ title: "CUSTOM COURT DESIGN", href: "/residential" },
+			{ title: "Basketball", href: "/court-tiles" },
+			{ title: "Pickleball", href: "/court-tiles" },
+			{ title: "Shuffleboard", href: "/court-tiles" },
+			{ title: "Tennis", href: "/court-tiles" },
+			{ title: "Multi-Sport Game Courts", href: "/court-tiles" },
+			{ title: "Hockey/Skate Rinks", href: "/court-tiles" },
 		],
 	},
 	designer: {

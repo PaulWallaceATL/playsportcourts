@@ -8,7 +8,7 @@ export default function ShopPage() {
 
 			<div className="mt-6 grid gap-6 lg:grid-cols-[240px_1fr]">
 				<aside className="glass-card gradient-border-anim p-4 h-fit">
-					<p className="font-semibold mb-2">Browse by</p>
+					<p className="font-semibold mb-2">Categories</p>
 					<ul className="grid gap-2 text-sm">
 						{c.categories.map((cat) => (
 							<li key={cat}>
@@ -16,17 +16,6 @@ export default function ShopPage() {
 							</li>
 						))}
 					</ul>
-					<div className="mt-6">
-						<p className="font-semibold mb-2">Filter by</p>
-						<div className="text-sm text-muted-foreground">
-							<p>Price</p>
-							<p>
-								${c.filters.price.min.toLocaleString()}–${c.filters.price.max.toLocaleString()}
-							</p>
-							<p className="mt-2">Custom Colors and Logos</p>
-							<p>{c.filters.customColorsNote}</p>
-						</div>
-					</div>
 				</aside>
 				<section className="min-h-[320px] glass-card gradient-border-anim p-6 flex items-center justify-center text-muted-foreground">
 					Product listings coming soon.
