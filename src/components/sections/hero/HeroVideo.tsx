@@ -3,15 +3,24 @@
 import dynamic from "next/dynamic";
 import * as React from "react";
 
-// Loosen types to avoid TS mismatch from react-player's ambient types in CI
-const ReactPlayer = dynamic(() => import("react-player") as any, { ssr: false }) as any;
+type ReactPlayerLike = React.ComponentType<{
+  url: string;
+  playing?: boolean;
+  muted?: boolean;
+  loop?: boolean;
+  width?: string | number;
+  height?: string | number;
+  playsinline?: boolean;
+  className?: string;
+}>;
+
+const ReactPlayer = dynamic(() => import("react-player"), { ssr: false }) as unknown as ReactPlayerLike;
 
 interface HeroVideoProps {
   url?: string;
-  poster?: string;
 }
 
-export function HeroVideo({ url, poster }: HeroVideoProps) {
+export function HeroVideo({ url }: HeroVideoProps) {
   // Temporary stock video if none provided
   const src = url ??
     "https://storage.googleapis.com/coverr-main/mp4/Footwork-1.mp4"; // placeholder sports-style b-roll
