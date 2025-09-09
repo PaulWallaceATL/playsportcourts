@@ -10,18 +10,11 @@ export function Hero() {
     <section className="relative isolate">
       {/* Cinematic background video */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        <video
-          className="absolute inset-0 h-full w-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          poster="/window.svg"
-        >
+        {/* If a video is present, it will show; otherwise fall back to solid brand backdrop */}
+        <video className="absolute inset-0 h-full w-full object-cover" autoPlay muted loop playsInline>
           <source src="/hero-courts.mp4" type="video/mp4" />
         </video>
-        {/* Scrim for readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/10" />
+        <div className="absolute inset-0 bg-[var(--background)]" />
       </div>
       <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
         <div className="max-w-3xl text-foreground anim-slide-up">

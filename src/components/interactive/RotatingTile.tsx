@@ -33,9 +33,7 @@ export function RotatingTile({ className, size = 220 }: RotatingTileProps) {
             boxShadow:
               "0 20px 40px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(255,255,255,0.04)",
           }}
-        >
-          <div className="absolute inset-0 pattern-court-dense opacity-30" />
-        </div>
+        />
         {/* Edge */}
         <div
           className="absolute inset-0 rounded-md"
