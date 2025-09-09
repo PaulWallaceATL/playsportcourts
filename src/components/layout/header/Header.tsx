@@ -7,15 +7,13 @@ import { ShoppingCart, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { siteContent } from "@/data/home";
 import { cn } from "@/lib/utils";
+import { courtTiles, garageTiles } from "@/data/products";
 
 const NAV_ITEMS = [
   { href: "/", label: "Home" },
-  { href: "/residential", label: "Residential" },
-  { href: "/commercial", label: "Commercial" },
-  { href: "/resurfacing", label: "Resurfacing" },
-  { href: "/about", label: "About" },
+  { href: "/court-tiles", label: "Court Tiles", dropdown: "court" as const },
+  { href: "/garage-tiles", label: "Garage Tiles", dropdown: "garage" as const },
   { href: "/gallery", label: "Gallery" },
-  { href: "/contact", label: "Contact" },
   { href: "/shop", label: "Shop" },
 ];
 
@@ -56,7 +54,7 @@ export function Header() {
           <nav className="hidden md:block">
             <ul className="flex items-center gap-6">
               {NAV_ITEMS.map((item) => (
-                <li key={item.href}>
+                <li key={item.href} className="relative group">
                   <Link
                     href={item.href}
                     className={cn(
@@ -73,6 +71,60 @@ export function Header() {
                   >
                     {item.label}
                   </Link>
+
+                  {item.dropdown === "court" && (
+                    <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition pointer-events-none group-hover:pointer-events-auto absolute left-1/2 -translate-x-1/2 mt-3 w-[640px]">
+                      <div className="glass-card glass-border shadow-neon-blue p-4 grid grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">PlaySport Products</p>
+                          <ul className="grid gap-2">
+                            {courtTiles
+                              .filter((p) => p.brand !== "Versa Court")
+                              .map((p) => (
+                                <li key={p.slug}>
+                                  <Link href={`/court-tiles/${p.slug}`} className="flex items-center gap-3 rounded-md px-2 py-2 hover:bg-foreground/5">
+                                    <img src={p.thumbnail} alt="" className="h-10 w-10 rounded object-cover" />
+                                    <span className="text-sm font-medium">{p.name}</span>
+                                  </Link>
+                                </li>
+                              ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Versa Court</p>
+                          <ul className="grid gap-2">
+                            {courtTiles
+                              .filter((p) => p.brand === "Versa Court")
+                              .map((p) => (
+                                <li key={p.slug}>
+                                  <Link href={`/court-tiles/${p.slug}`} className="flex items-center gap-3 rounded-md px-2 py-2 hover:bg-foreground/5">
+                                    <img src={p.thumbnail} alt="" className="h-10 w-10 rounded object-cover" />
+                                    <span className="text-sm font-medium">{p.name}</span>
+                                  </Link>
+                                </li>
+                              ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {item.dropdown === "garage" && (
+                    <div className="invisible opacity-0 group-hover:visible group-hover:opacity-100 transition pointer-events-none group-hover:pointer-events-auto absolute left-1/2 -translate-x-1/2 mt-3 w-[360px]">
+                      <div className="glass-card glass-border shadow-neon-blue p-4 grid gap-2">
+                        <ul className="grid gap-2">
+                          {garageTiles.map((p) => (
+                            <li key={p.slug}>
+                              <Link href={`/garage-tiles/${p.slug}`} className="flex items-center gap-3 rounded-md px-2 py-2 hover:bg-foreground/5">
+                                <img src={p.thumbnail} alt="" className="h-10 w-10 rounded object-cover" />
+                                <span className="text-sm font-medium">{p.name}</span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>
@@ -90,10 +142,10 @@ export function Header() {
             </Button>
             <div className="hidden sm:flex gap-2">
               <Button variant="outline" asChild>
-                <Link href="/residential">Residential Court</Link>
+                <Link href="/resurfacing">Resurfacing</Link>
               </Button>
               <Button asChild>
-                <Link href="/design">Design Your Own</Link>
+                <Link href="/shop">Shop</Link>
               </Button>
             </div>
             <Button variant="glass" size="icon" className="md:hidden shadow-neon-blue" aria-label="Toggle menu" onClick={() => setOpen((v) => !v)}>
@@ -124,6 +176,30 @@ export function Header() {
                     >
                       {item.label}
                     </Link>
+                    {item.dropdown === "court" && (
+                      <ul className="mt-1 ml-3 grid gap-1">
+                        {courtTiles.map((p) => (
+                          <li key={p.slug}>
+                            <Link href={`/court-tiles/${p.slug}`} className="flex items-center gap-2 rounded px-2 py-1 text-sm hover:bg-foreground/5">
+                              <img src={p.thumbnail} alt="" className="h-6 w-6 rounded object-cover" />
+                              <span>{p.name}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {item.dropdown === "garage" && (
+                      <ul className="mt-1 ml-3 grid gap-1">
+                        {garageTiles.map((p) => (
+                          <li key={p.slug}>
+                            <Link href={`/garage-tiles/${p.slug}`} className="flex items-center gap-2 rounded px-2 py-1 text-sm hover:bg-foreground/5">
+                              <img src={p.thumbnail} alt="" className="h-6 w-6 rounded object-cover" />
+                              <span>{p.name}</span>
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </li>
                 ))}
               </ul>

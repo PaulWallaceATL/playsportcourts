@@ -1,35 +1,35 @@
 import { Hero } from "@/components/sections/hero/Hero";
-import { Benefits } from "@/components/sections/benefits/Benefits";
 import { Solutions } from "@/components/sections/sports/Solutions";
 import { Resurfacing } from "@/components/sections/resurfacing/Resurfacing";
-import { Accessories } from "@/components/sections/accessories/Accessories";
-import { CourtBuilder } from "@/components/interactive/CourtBuilder";
-import { BeforeAfter } from "@/components/interactive/BeforeAfter";
+import Link from "next/link";
+import Image from "next/image";
+import { courtTiles, garageTiles } from "@/data/products";
 import { Counters } from "@/components/interactive/Counters";
 
 export default function Home() {
   return (
     <div>
       <Hero />
-      <section className="mx-auto max-w-screen-lg px-4 sm:px-6 lg:px-8 pad-section">
-        <h2 className="heading-2 mb-4">Try the Court Colors</h2>
-        <div className="max-w-3xl">
-          <CourtBuilder />
+      {/* Garage Tiles Slideshow (simple autoplay swap) */}
+      <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
+        <h2 className="heading-2 mb-4">Garage Tiles</h2>
+        <div className="grid gap-4 md:grid-cols-3">
+          {garageTiles.slice(0, 3).map((p) => (
+            <Link key={p.slug} href={`/garage-tiles/${p.slug}`} className="glass-card gradient-border-anim p-4 hover-lift">
+              <div className="relative aspect-[16/10]">
+                <Image src={p.heroImage} alt={p.name} fill className="object-contain" />
+              </div>
+              <p className="mt-2 font-medium">{p.name}</p>
+            </Link>
+          ))}
         </div>
       </section>
 
-      <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
-        <h2 className="heading-2 mb-4">Before / After</h2>
-        <BeforeAfter />
-      </section>
-
-      <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
-        <Counters />
-      </section>
-      <Benefits />
+      {/* Sports Applications Grid */}
       <Solutions />
+
+      {/* Resurfacing CTA */}
       <Resurfacing />
-      <Accessories />
     </div>
   );
 }

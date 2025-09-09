@@ -28,3 +28,36 @@ export interface QuoteRequest extends ContactForm {
   location: string
   timeline: string
 }
+
+// Product models for tiles
+export type TileProductKind = 'court' | 'garage'
+
+export interface TileColorOption {
+  name: string
+  hex: string
+}
+
+export interface TileSpec {
+  material: string
+  dimensions: string
+  thickness?: string
+  weight?: string
+  features: string[]
+}
+
+export interface TileProduct {
+  kind: TileProductKind
+  slug: string
+  name: string
+  brand?: string
+  heroImage: string
+  thumbnail: string
+  description: string
+  specs: TileSpec
+  bestFor: string[]
+  compatibleSports: string[]
+  colors: TileColorOption[]
+  pricePerUnitLabel: string // e.g., "$/sq ft" or "$ per tile"
+  price: number
+  gallery: string[]
+}
