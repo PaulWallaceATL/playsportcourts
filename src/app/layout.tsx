@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/header/Header";
 import { ScrollProgress } from "@/components/animations/ScrollProgress";
 import { PageTransition } from "@/components/animations/PageTransition";
+import { LiveChat } from "@/components/advanced/LiveChat";
 
 const body = Manrope({
   variable: "--font-body",
@@ -37,6 +38,7 @@ export default function RootLayout({
         <main>
           <PageTransition>{children}</PageTransition>
         </main>
+        <LiveChat />
       </body>
     </html>
   );

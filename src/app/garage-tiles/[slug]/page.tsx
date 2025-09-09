@@ -4,6 +4,10 @@ import { garageTiles } from "@/data/products";
 import { ColorPreview } from "@/components/interactive/ColorPreview";
 import { Button } from "@/components/ui/button";
 import { Check, Boxes, Ruler } from "lucide-react";
+import { Recommendations } from "@/components/advanced/Recommendations";
+import { CostCalculator } from "@/components/advanced/CostCalculator";
+import { ShareButtons } from "@/components/advanced/ShareButtons";
+import { ARButton, VRButton } from "@/components/advanced/ARVR";
 
 export default async function GarageTilePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -53,6 +57,11 @@ export default async function GarageTilePage({ params }: { params: Promise<{ slu
           </div>
           <div className="glass-card p-6">
             <ColorPreview title="Color Customizer" baseImage={product.heroImage} colors={product.colors} />
+            <div className="mt-4 flex items-center gap-3">
+              <ShareButtons title={`Check out the ${product.name} tile`} />
+              <ARButton />
+              <VRButton />
+            </div>
           </div>
         </div>
       </section>
@@ -65,6 +74,13 @@ export default async function GarageTilePage({ params }: { params: Promise<{ slu
               <Image src={src} alt={`${product.name} ${i+1}`} fill className="object-contain" />
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
+        <div className="grid gap-6 md:grid-cols-2">
+          <Recommendations products={[product]} input={{ primarySport: "Garages", surface: "indoors", budget: "balanced" }} />
+          <CostCalculator basePrice={product.price} />
         </div>
       </section>
     </div>

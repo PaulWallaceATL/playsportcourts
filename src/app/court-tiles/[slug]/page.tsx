@@ -2,6 +2,10 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ColorPreview } from "@/components/interactive/ColorPreview";
 import { Check, Ruler, Boxes, Droplets } from "lucide-react";
+import { Recommendations } from "@/components/advanced/Recommendations";
+import { CostCalculator } from "@/components/advanced/CostCalculator";
+import { ShareButtons } from "@/components/advanced/ShareButtons";
+import { ARButton, VRButton } from "@/components/advanced/ARVR";
 import { notFound } from "next/navigation";
 import { courtTiles } from "@/data/products";
 
@@ -54,6 +58,11 @@ export default async function CourtTilePage({ params }: { params: Promise<{ slug
           </div>
           <div className="glass-card p-6">
             <ColorPreview title="Color Customizer" baseImage={product.heroImage} colors={product.colors} />
+            <div className="mt-4 flex items-center gap-3">
+              <ShareButtons title={`Check out the ${product.name} tile`} />
+              <ARButton />
+              <VRButton />
+            </div>
           </div>
         </div>
       </section>
@@ -65,6 +74,14 @@ export default async function CourtTilePage({ params }: { params: Promise<{ slug
           {product.compatibleSports.map((s) => (
             <span key={s} className="rounded-full px-3 py-1 bg-foreground/5 border">{s}</span>
           ))}
+        </div>
+      </section>
+
+      {/* Recommendations & Calculator */}
+      <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
+        <div className="grid gap-6 md:grid-cols-2">
+          <Recommendations products={[product]} input={{ primarySport: product.bestFor[0] ?? "Basketball", surface: "concrete", budget: "balanced" }} />
+          <CostCalculator basePrice={product.price} />
         </div>
       </section>
 
