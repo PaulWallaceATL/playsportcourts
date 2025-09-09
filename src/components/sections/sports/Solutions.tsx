@@ -1,7 +1,8 @@
+"use client";
+import * as React from "react";
 import Link from "next/link";
 import { siteContent } from "@/data/home";
 import { courtTiles } from "@/data/products";
-import * as React from "react";
 
 const accentByIndex = ["#00D4FF", "#00FF88", "#FF6B35", "#8B5CF6", "#FF0080", "#00D4FF", "#00FF88", "#8B5CF6"];
 

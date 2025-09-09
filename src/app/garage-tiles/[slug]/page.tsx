@@ -3,12 +3,9 @@ import { notFound } from "next/navigation";
 import { garageTiles } from "@/data/products";
 import { ColorPreview } from "@/components/interactive/ColorPreview";
 
-interface Props {
-  params: { slug: string }
-}
-
-export default function GarageTilePage({ params }: Props) {
-  const product = garageTiles.find((p) => p.slug === params.slug);
+export default async function GarageTilePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const product = garageTiles.find((p) => p.slug === slug);
   if (!product) return notFound();
 
   return (
