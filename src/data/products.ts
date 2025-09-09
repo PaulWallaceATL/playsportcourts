@@ -31,7 +31,7 @@ export const courtTiles: TileProduct[] = [
     heroImage: img.elitePro,
     thumbnail: img.elitePro,
     description:
-      "Premium outdoor sports tile engineered for traction, drainage, and long-term durability.",
+      "Our flagship court tile—fast underfoot, forgiving on joints, and engineered to drain and cool in Georgia heat.",
     specs: {
       material: "Polypropylene copolymer",
       dimensions: "12" + "x12" + " tile",
@@ -64,7 +64,7 @@ export const courtTiles: TileProduct[] = [
     heroImage: img.trueTile,
     thumbnail: img.trueTile,
     description:
-      "Balanced performance and value for backyard and community courts.",
+      "All-around performer that delivers pro feel without the premium price—perfect for families and community play.",
     specs: {
       material: "Polypropylene copolymer",
       dimensions: "12" + "x12" + " tile",
@@ -90,7 +90,7 @@ export const courtTiles: TileProduct[] = [
     brand: "PlaySport",
     heroImage: img.xCourt,
     thumbnail: img.xCourt,
-    description: "High-grip tile optimized for quick changes of direction.",
+    description: "High-grip performance for quick cuts and hard stops—built for hoopers who love pace.",
     specs: {
       material: "Polypropylene copolymer",
       dimensions: "12" + "x12" + " tile",
@@ -112,7 +112,7 @@ export const courtTiles: TileProduct[] = [
     heroImage: img.gameTile,
     thumbnail: img.gameTile,
     description:
-      "Trusted Versa Court outdoor tile for versatile residential and community use.",
+      "Versa Court’s versatile standard—clean looks, reliable interlock, and ready for multi‑sport action.",
     specs: {
       material: "Polypropylene copolymer",
       dimensions: "12" + "x12" + " tile",
@@ -142,7 +142,7 @@ export const garageTiles: TileProduct[] = [
     brand: "Swisstrax",
     heroImage: img.ribtraxPro,
     thumbnail: img.ribtraxPro,
-    description: "Open-profile garage tile for drainage and airflow.",
+    description: "Open-rib tile that breathes—great drainage, strong support, and easy to clean.",
     specs: {
       material: "Polypropylene copolymer",
       dimensions: "15.75" + "x15.75" + " tile",
@@ -163,7 +163,7 @@ export const garageTiles: TileProduct[] = [
     brand: "Swisstrax",
     heroImage: img.ribtraxSmooth,
     thumbnail: img.ribtraxSmooth,
-    description: "Smooth-profile variant for a refined appearance.",
+    description: "Smooth ribbed profile for a refined garage finish with everyday durability.",
     specs: {
       material: "Polypropylene copolymer",
       dimensions: "15.75" + "x15.75" + " tile",
@@ -184,7 +184,7 @@ export const garageTiles: TileProduct[] = [
     brand: "Swisstrax",
     heroImage: img.vinyltraxPro,
     thumbnail: img.vinyltraxPro,
-    description: "Vinyl inlay tile achieving premium garage aesthetics.",
+    description: "Premium vinyl inlay for showroom-grade style with modular convenience.",
     specs: {
       material: "Polypropylene with vinyl surface",
       dimensions: "15.75" + "x15.75" + " tile",

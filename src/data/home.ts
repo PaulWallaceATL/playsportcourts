@@ -14,9 +14,9 @@ export const siteContent = {
 		{ label: "Shop", href: "/shop" },
 	],
 	hero: {
-		title: "THE ULTIMATE ATHLETIC COURT SYSTEM",
+		title: "BUILD THE COURT YOU CAN’T STOP PLAYING ON",
 		subtitle:
-			"PlaySport Atlanta designs, installs, & supplies innovative court solutions for a wide variety of sports",
+			"Premium tiles. Pro‑grade performance. Designed, installed, and dialed to your game.",
 		ctas: [
 			{ label: "COURT TILES", href: "/court-tiles", variant: "secondary" },
 			{ label: "GARAGE TILES", href: "/garage-tiles", variant: "outline" },
@@ -29,16 +29,13 @@ export const siteContent = {
 		],
 	},
 	benefits: {
-		title: "BENEFITS OF COURT TILE",
+		title: "WHY PLAYSPORT TILES WIN",
 		items: [
-			{ title: "Low Maintenance", description: "Easy to clean with broom, hose or leaf blower" },
-			{ title: "Backed by Warranty", description: "Offering limited and lifetime warranties for VersaCourt systems" },
-			{ title: "Superior Grip", description: "Unique surface profile offers superior grip and traction" },
-			{ title: "Up to 50% Cooler", description: "Tile surface stays up to 50% cooler than concrete or asphalt" },
-			{ title: "Unmatched Durability", description: "Will stand up to aggressive play and harsh weather conditions" },
-			{ title: "Wide Selection of Tile Colors", description: "Tile is available in a wide variety of color options" },
-			{ title: "Completely Customizable", description: "Add your favorite game lines, designs and logos" },
-			{ title: "Suspended Surface", description: "Provides forgiveness for players’ knees, joints and lower backs" },
+			{ title: "Plays Fast. Feels Safe.", description: "High‑traction surface with shock‑absorbing support for joints and knees." },
+			{ title: "Built for Weather.", description: "UV‑stable pigments and open‑grid drainage keep courts cooler and dry faster." },
+			{ title: "Set It. Forget It.", description: "Low‑maintenance tiles clean easily and keep looking new for years." },
+			{ title: "Your Colors. Your Lines.", description: "Endless colorways, custom logos, and game lines dialed to your space." },
+			{ title: "Backed by Warranty.", description: "Confidence that lasts—coverage from leading manufacturers." },
 		],
 	},
 	solutions: {

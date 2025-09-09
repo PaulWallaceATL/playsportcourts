@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import Image from "next/image";
-import { Placeholder } from "@/components/ui/Placeholder";
+//
 
 const categories = [
     { key: "basketball", label: "Basketball" },
