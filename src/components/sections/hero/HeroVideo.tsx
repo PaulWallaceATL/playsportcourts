@@ -3,7 +3,8 @@
 import dynamic from "next/dynamic";
 import * as React from "react";
 
-const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
+// Loosen types to avoid TS mismatch from react-player's ambient types in CI
+const ReactPlayer = dynamic(() => import("react-player") as any, { ssr: false }) as any;
 
 interface HeroVideoProps {
   url?: string;
