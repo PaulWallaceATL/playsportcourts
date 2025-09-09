@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Placeholder } from "@/components/ui/Placeholder";
 import { garageTiles } from "@/data/products";
 
 export default function GarageTilesIndexPage() {
@@ -11,7 +12,7 @@ export default function GarageTilesIndexPage() {
         {garageTiles.map((p) => (
           <Link key={p.slug} href={`/garage-tiles/${p.slug}`} className="glass-card gradient-border-anim p-4 hover-lift">
             <div className="relative aspect-[16/10] overflow-hidden rounded-md">
-              <Image src={p.heroImage} alt={p.name} fill className="object-contain" />
+              <Placeholder />
             </div>
             <h3 className="heading-3 mt-3">{p.name}</h3>
             <p className="text-sm text-muted-foreground mt-1">{p.description}</p>

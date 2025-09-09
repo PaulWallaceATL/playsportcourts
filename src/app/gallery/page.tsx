@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
 import Image from "next/image";
+import { Placeholder } from "@/components/ui/Placeholder";
 
 const categories = [
     { key: "basketball", label: "Basketball" },
@@ -25,10 +26,8 @@ export default function GalleryPage() {
                         <h2 className="heading-2 mb-3">{cat.label}</h2>
                         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                             {Array.from({ length: 6 }).map((_, i) => (
-                                <button key={i} type="button" className="relative aspect-[16/10] overflow-hidden rounded-md glass-card"
-                                    onClick={() => setLightbox(placeholder)}
-                                >
-                                    <Image src={placeholder} alt={`${cat.label} ${i+1}`} fill className="object-contain" />
+                                <button key={i} type="button" className="glass-card" onClick={() => setLightbox(placeholder)}>
+                                    <Placeholder label="Image coming soon" />
                                 </button>
                             ))}
                         </div>
