@@ -25,7 +25,6 @@ export function HeroVideo({ url, poster }: HeroVideoProps) {
         width="100%"
         height="100%"
         playsinline
-        config={{ file: { attributes: { poster } } }}
         className="!absolute !top-0 !left-0 !h-full !w-full"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
