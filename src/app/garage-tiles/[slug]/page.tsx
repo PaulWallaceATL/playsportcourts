@@ -8,7 +8,7 @@ import { Recommendations } from "@/components/advanced/Recommendations";
 import { CostCalculator } from "@/components/advanced/CostCalculator";
 import { ShareButtons } from "@/components/advanced/ShareButtons";
 import { ARButton, VRButton } from "@/components/advanced/ARVR";
-import { trackQuote } from "@/lib/analytics";
+import { QuoteButton } from "@/components/advanced/QuoteButton";
 
 export default async function GarageTilePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -30,7 +30,7 @@ export default async function GarageTilePage({ params }: { params: Promise<{ slu
               <p className="mt-2 text-body text-muted-foreground max-w-prose">{product.description}</p>
               <div className="mt-5 flex items-center gap-3">
                 <Button size="lg">From ${product.price.toFixed(2)} {product.pricePerUnitLabel}</Button>
-                <Button variant="outline" size="lg" onClick={() => trackQuote({ product: product.name })}>Get a Quote</Button>
+                <QuoteButton productName={product.name} />
               </div>
             </div>
             <div className="relative aspect-[16/10] rounded-xl overflow-hidden surface-elevated">
