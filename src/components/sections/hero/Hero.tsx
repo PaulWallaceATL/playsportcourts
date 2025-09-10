@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button, type ButtonProps } from "@/components/ui/button";
 // removed unused import
-import { ThreeTile } from "@/components/interactive/ThreeTile";
+import { HeroTile } from "@/components/sections/hero/HeroTile";
 import { HeroVideo } from "@/components/sections/hero/HeroVideo";
 import { siteContent } from "@/data/home";
 
@@ -31,10 +31,8 @@ export function Hero() {
                 <p className="text-caption">{t.label}</p>
               </div>
             ))}
-            {/* 3D rotating tile */}
-            <div className="block justify-self-center sm:justify-self-end lg:justify-self-start w-[180px] sm:w-[220px] lg:w-[300px] sm:mt-2 lg:-ml-10">
-              <ThreeTile height={220} />
-            </div>
+            {/* 3D tile with parallax & fallback */}
+            <HeroTile className="justify-self-center sm:justify-self-end lg:justify-self-start w-[200px] sm:w-[240px] lg:w-[320px] sm:mt-2 lg:-ml-12" />
           </div>
         </div>
       </div>
