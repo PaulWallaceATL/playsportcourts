@@ -7,7 +7,7 @@ import { CostCalculator } from "@/components/advanced/CostCalculator";
 import { ShareButtons } from "@/components/advanced/ShareButtons";
 import { ARButton, VRButton } from "@/components/advanced/ARVR";
 import { notFound } from "next/navigation";
-import { trackProductView, trackQuote } from "@/lib/analytics";
+import { trackQuote } from "@/lib/analytics";
 import { courtTiles } from "@/data/products";
 
 export default async function CourtTilePage({ params }: { params: Promise<{ slug: string }> }) {
