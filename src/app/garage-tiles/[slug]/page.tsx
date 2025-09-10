@@ -20,7 +20,7 @@ export default async function GarageTilePage({ params }: { params: Promise<{ slu
       {/* Hero */}
       <section className="relative isolate">
         <div className="absolute inset-0 -z-10">
-          <div className="h-full w-full" style={{ background: "radial-gradient(1000px 600px at 20% 10%, rgba(255,255,255,0.06), transparent), linear-gradient(180deg, #0a0a0b, #0f172a)" }} />
+          <div className="h-full w-full bg-gradient-secondary animate-gradient" />
         </div>
         <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
           <div className="grid gap-6 md:grid-cols-2 items-center">
@@ -33,7 +33,7 @@ export default async function GarageTilePage({ params }: { params: Promise<{ slu
                 <QuoteButton productName={product.name} />
               </div>
             </div>
-            <div className="relative aspect-[16/10] rounded-xl overflow-hidden surface-elevated">
+            <div className="relative aspect-[16/10] rounded-xl overflow-hidden surface-elevated anim-scale-in">
               <Image src={product.heroImage} alt={product.name} fill className="object-contain" />
             </div>
           </div>

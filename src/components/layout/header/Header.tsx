@@ -55,7 +55,7 @@ export function Header() {
           <nav className="hidden md:block">
             <ul className="flex items-center gap-6">
               {NAV_ITEMS.map((item) => (
-                <li key={item.href} className="relative group">
+                <li key={item.href} className="relative group z-50">
                   <Link
                     href={item.href}
                     className={cn(
@@ -74,7 +74,7 @@ export function Header() {
                   </Link>
 
                   {item.dropdown === "court" && (
-                    <div className="menu-panel absolute left-1/2 -translate-x-1/2 mt-3 w-[720px]">
+                    <div className="menu-panel absolute left-1/2 -translate-x-1/2 top-full w-[720px]">
                       <div className="rounded-xl border bg-white text-black shadow-layered p-4 grid grid-cols-2 gap-6">
                         <div>
                           <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">PlaySport Products</p>
@@ -115,7 +115,7 @@ export function Header() {
                   )}
 
                   {item.dropdown === "garage" && (
-                    <div className="menu-panel absolute left-1/2 -translate-x-1/2 mt-3 w-[420px]">
+                    <div className="menu-panel absolute left-1/2 -translate-x-1/2 top-full w-[420px]">
                       <div className="rounded-xl border bg-white text-black shadow-layered p-4 grid gap-2">
                         <ul className="grid gap-2">
                           {garageTiles.map((p) => (
