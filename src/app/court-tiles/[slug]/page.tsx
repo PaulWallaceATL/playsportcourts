@@ -6,7 +6,7 @@ import { Recommendations } from "@/components/advanced/Recommendations";
 import { CostCalculator } from "@/components/advanced/CostCalculator";
 import { ShareButtons } from "@/components/advanced/ShareButtons";
 import { ARButton, VRButton } from "@/components/advanced/ARVR";
-import { TileCourt } from "@/components/icons";
+import { TileCourt, Basketball, Pickleball, Tennis, MultiSport } from "@/components/icons";
 import { notFound } from "next/navigation";
 import { QuoteButton } from "@/components/advanced/QuoteButton";
 import { courtTiles } from "@/data/products";
@@ -75,10 +75,15 @@ export default async function CourtTilePage({ params }: { params: Promise<{ slug
       {/* Sports suitability */}
       <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
         <h2 className="heading-2 mb-3">Best For</h2>
-        <div className="flex flex-wrap gap-2 text-sm">
-          {product.compatibleSports.map((s) => (
-            <span key={s} className="rounded-full px-3 py-1 bg-foreground/5 border">{s}</span>
-          ))}
+        <div className="flex flex-wrap gap-2 text-sm items-center">
+          {product.compatibleSports.map((s) => {
+            const Icon = s.includes("Basketball") ? Basketball : s.includes("Pickleball") ? Pickleball : s.includes("Tennis") ? Tennis : MultiSport;
+            return (
+              <span key={s} className="inline-flex items-center gap-1 rounded-full px-3 py-1 bg-foreground/5 border">
+                <Icon size={16} /> {s}
+              </span>
+            );
+          })}
         </div>
       </section>
 
