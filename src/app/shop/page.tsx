@@ -34,7 +34,7 @@ export default function ShopPage() {
 					<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 						{filtered.map((p) => (
 							<button key={p.id} className="glass-card p-4 text-left hover-lift" onClick={() => setQuick(p)}>
-								<div className="relative aspect-[16/10] rounded-md bg-white/5">
+								<div className="relative aspect-[16/10] rounded-md bg-gradient-primary bg-mesh-soft">
 									<span className="absolute right-2 top-2 rounded-full bg-black/60 text-white text-xs px-2 py-0.5">${p.price.toFixed(2)}</span>
 								</div>
 								<div className="mt-3 flex items-center justify-between">

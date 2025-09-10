@@ -101,7 +101,7 @@ export function Header() {
                         hoverTimer.current = setTimeout(() => setHovered(null), 120);
                       }}
                     >
-                      <div className="rounded-xl border bg-white text-black shadow-layered p-4 grid grid-cols-2 gap-6">
+                      <div className="rounded-xl border glass-card text-black p-4 grid grid-cols-2 gap-6">
                         <div>
                           <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">PlaySport Products</p>
                           <ul className="grid gap-2">
@@ -110,8 +110,8 @@ export function Header() {
                               .map((p) => (
                                 <li key={p.slug}>
                                   <Link href={`/court-tiles/${p.slug}`} className="menu-item flex items-center gap-3 rounded-md px-2 py-2 text-black">
-                                    <span className="relative h-10 w-10 overflow-hidden rounded">
-                                      <Image src={p.thumbnail} alt="" fill className="object-cover" />
+                                    <span className="relative h-10 w-10 overflow-hidden rounded bg-gradient-primary">
+                                      <Image src={p.thumbnail} alt="" fill className="object-contain p-1" />
                                     </span>
                                     <span className="text-sm font-medium">{p.name}</span>
                                   </Link>
@@ -152,13 +152,13 @@ export function Header() {
                         hoverTimer.current = setTimeout(() => setHovered(null), 120);
                       }}
                     >
-                      <div className="rounded-xl border bg-white text-black shadow-layered p-4 grid gap-2">
+                      <div className="rounded-xl border glass-card text-black p-4 grid gap-2">
                         <ul className="grid gap-2">
                           {garageTiles.map((p) => (
                             <li key={p.slug}>
                               <Link href={`/garage-tiles/${p.slug}`} className="menu-item flex items-center gap-3 rounded-md px-2 py-2">
-                                <span className="relative h-10 w-10 overflow-hidden rounded">
-                                  <Image src={p.thumbnail} alt="" fill className="object-cover" />
+                                <span className="relative h-10 w-10 overflow-hidden rounded bg-gradient-primary">
+                                  <Image src={p.thumbnail} alt="" fill className="object-contain p-1" />
                                 </span>
                                 <span className="text-sm font-medium">{p.name}</span>
                               </Link>
@@ -224,7 +224,7 @@ export function Header() {
                         {courtTiles.map((p) => (
                           <li key={p.slug}>
                             <Link href={`/court-tiles/${p.slug}`} className="flex items-center gap-2 rounded px-2 py-1 text-sm hover:bg-foreground/5">
-                              <img src={p.thumbnail} alt="" className="h-6 w-6 rounded object-cover" />
+                              <Image src={p.thumbnail} alt="" width={24} height={24} className="h-6 w-6 rounded object-contain" />
                               <span>{p.name}</span>
                             </Link>
                           </li>
@@ -236,7 +236,7 @@ export function Header() {
                         {garageTiles.map((p) => (
                           <li key={p.slug}>
                             <Link href={`/garage-tiles/${p.slug}`} className="flex items-center gap-2 rounded px-2 py-1 text-sm hover:bg-foreground/5">
-                              <img src={p.thumbnail} alt="" className="h-6 w-6 rounded object-cover" />
+                              <Image src={p.thumbnail} alt="" width={24} height={24} className="h-6 w-6 rounded object-contain" />
                               <span>{p.name}</span>
                             </Link>
                           </li>

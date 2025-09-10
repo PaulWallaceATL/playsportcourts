@@ -4,6 +4,7 @@ import Link from "next/link";
 import { siteContent } from "@/data/home";
 import { courtTiles } from "@/data/products";
 import Image from "next/image";
+import { RotatingTile } from "@/components/interactive/RotatingTile";
 
 const accentByIndex = ["#00D4FF", "#00FF88", "#FF6B35", "#8B5CF6", "#FF0080", "#00D4FF", "#00FF88", "#8B5CF6"];
 
@@ -41,14 +42,23 @@ export function Solutions() {
 							</Link>
 							{isOpen && (
 								<div className="mt-3 grid gap-2">
-									{products.map((p) => (
-										<Link key={p.slug} href={`/court-tiles/${p.slug}`} className="flex items-center gap-3 rounded-md px-2 py-2 hover:bg-foreground/5">
-											<span className="relative h-8 w-8 overflow-hidden rounded">
-												<Image src={p.thumbnail} alt="" fill className="object-cover" />
-											</span>
-											<span className="text-sm">{p.name}</span>
-										</Link>
-									))}
+									{products.map((p) => {
+										const ph = p.thumbnail.endsWith("/file.svg") || p.thumbnail.endsWith("/window.svg") || p.thumbnail.endsWith("/globe.svg") || p.thumbnail.endsWith("/next.svg");
+										return (
+											<Link key={p.slug} href={`/court-tiles/${p.slug}`} className="flex items-center gap-3 rounded-md px-2 py-2 hover:bg-foreground/5">
+												<span className="relative h-8 w-8 overflow-hidden rounded bg-gradient-primary">
+													{ph ? (
+														<div className="absolute inset-0 grid place-items-center scale-90">
+															<RotatingTile size={28} />
+														</div>
+													) : (
+														<Image src={p.thumbnail} alt="" fill className="object-contain p-1" />
+													)}
+												</span>
+												<span className="text-sm">{p.name}</span>
+											</Link>
+										);
+									})}
 									{products.length === 0 && (
 										<p className="text-sm text-muted-foreground">No compatible tiles listed.</p>
 									)}

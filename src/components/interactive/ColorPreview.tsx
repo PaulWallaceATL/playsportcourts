@@ -5,6 +5,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { TileColorOption } from "@/types";
 import { trackCustomizer } from "@/lib/analytics";
+import { RotatingTile } from "@/components/interactive/RotatingTile";
 
 interface ColorPreviewProps {
   title?: string;
@@ -26,9 +27,15 @@ export function ColorPreview({ title, baseImage = "/window.svg", colors, initial
   return (
     <div className="grid gap-3">
       {title && <p className="text-sm font-medium">{title}</p>}
-      <div className="relative aspect-[16/9] overflow-hidden rounded-md border">
-        <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)` }} />
-        <Image src={baseImage} alt="Tile preview" fill priority className="object-contain mix-blend-multiply" />
+      <div className="relative aspect-[16/9] overflow-hidden rounded-md border bg-gradient-primary bg-mesh-soft">
+        <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`, opacity: 0.35 }} />
+        {(baseImage.endsWith("/file.svg") || baseImage.endsWith("/window.svg") || baseImage.endsWith("/globe.svg") || baseImage.endsWith("/next.svg")) ? (
+          <div className="absolute inset-0 grid place-items-center">
+            <RotatingTile size={220} />
+          </div>
+        ) : (
+          <Image src={baseImage} alt="Tile preview" fill priority className="object-contain p-4" />
+        )}
       </div>
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex flex-wrap gap-2">
