@@ -35,7 +35,7 @@ export function Hero() {
               </div>
             ))}
             {/* 3D tile with parallax & fallback */}
-            <HeroTile className="justify-self-center sm:justify-self-end lg:justify-self-start w-[200px] sm:w-[240px] lg:w-[320px] sm:mt-2 lg:-ml-12" />
+            <HeroTile className="justify-self-center sm:justify-self-end lg:justify-self-end w-[200px] sm:w-[240px] lg:w-[340px] sm:mt-2 lg:ml-10" />
           </div>
         </div>
       </div>
