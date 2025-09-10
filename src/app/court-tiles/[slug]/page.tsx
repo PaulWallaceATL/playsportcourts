@@ -105,3 +105,8 @@ export default async function CourtTilePage({ params }: { params: Promise<{ slug
 }
 
 
+export async function generateStaticParams() {
+  return courtTiles.map((p) => ({ slug: p.slug }));
+}
+
+

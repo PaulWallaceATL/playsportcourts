@@ -88,4 +88,8 @@ export default async function GarageTilePage({ params }: { params: Promise<{ slu
   );
 }
 
+export async function generateStaticParams() {
+  return garageTiles.map((p) => ({ slug: p.slug }));
+}
+
 
