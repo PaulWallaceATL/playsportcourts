@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function Footer() {
   return (
     <footer className="mt-20 border-t border-border/60">
@@ -9,10 +11,10 @@ export function Footer() {
         <div>
           <p className="font-semibold mb-2">Explore</p>
           <ul className="space-y-1 text-sm text-muted-foreground">
-            <li><a href="/court-tiles" className="hover:underline">Court Tiles</a></li>
-            <li><a href="/garage-tiles" className="hover:underline">Garage Tiles</a></li>
-            <li><a href="/gallery" className="hover:underline">Gallery</a></li>
-            <li><a href="/resurfacing" className="hover:underline">Resurfacing</a></li>
+            <li><Link href="/court-tiles" className="hover:underline">Court Tiles</Link></li>
+            <li><Link href="/garage-tiles" className="hover:underline">Garage Tiles</Link></li>
+            <li><Link href="/gallery" className="hover:underline">Gallery</Link></li>
+            <li><Link href="/resurfacing" className="hover:underline">Resurfacing</Link></li>
           </ul>
         </div>
         <div>

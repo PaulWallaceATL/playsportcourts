@@ -1,7 +1,6 @@
-import Link from "next/link";
-import Image from "next/image";
+// removed unused imports
 import { courtTiles } from "@/data/products";
-import { RotatingTile } from "@/components/interactive/RotatingTile";
+// removed unused imports
 import { ProductCard } from "@/components/ui/ProductCard";
 
 export default function CourtTilesIndexPage() {

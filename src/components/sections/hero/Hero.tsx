@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button, type ButtonProps } from "@/components/ui/button";
-import { RotatingTile } from "@/components/interactive/RotatingTile";
+// removed unused import
 import { ThreeTile } from "@/components/interactive/ThreeTile";
 import { HeroVideo } from "@/components/sections/hero/HeroVideo";
 import { siteContent } from "@/data/home";

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ColorPreview } from "@/components/interactive/ColorPreview";
-import { Check, Ruler, Boxes, Droplets } from "lucide-react";
+import { Check, Boxes, Droplets } from "lucide-react";
 import { Recommendations } from "@/components/advanced/Recommendations";
 import { CostCalculator } from "@/components/advanced/CostCalculator";
 import { ShareButtons } from "@/components/advanced/ShareButtons";
