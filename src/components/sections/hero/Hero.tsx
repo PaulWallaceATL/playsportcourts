@@ -28,14 +28,14 @@ export function Hero() {
           </div>
 
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 items-end">
-            {/* 3D tile on left side */}
-            <HeroTile className="justify-self-start w-[200px] sm:w-[240px] lg:w-[340px] sm:mt-2 lg:ml-6" />
             {siteContent.hero.trust.map((t) => (
               <div key={t.label}>
                 <p className="text-3xl font-bold text-foreground">{t.value}</p>
                 <p className="text-caption">{t.label}</p>
               </div>
             ))}
+            {/* 3D tile on right side */}
+            <HeroTile className="justify-self-end w-[200px] sm:w-[260px] lg:w-[360px] sm:mt-2 lg:mr-6" />
           </div>
         </div>
       </div>
