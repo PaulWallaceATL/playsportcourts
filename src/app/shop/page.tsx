@@ -16,7 +16,7 @@ export default function ShopPage() {
 
 	return (
 		<div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
-			<h1 className="heading-1 text-neon text-glow">{c.page.title}</h1>
+			<h1 className="heading-1 text-white">{c.page.title}</h1>
 			<p className="mt-2 text-body text-muted-foreground">{c.page.description}</p>
 
 			<div className="mt-6 grid gap-6 lg:grid-cols-[240px_1fr]">
@@ -33,7 +33,7 @@ export default function ShopPage() {
 				<section>
 					<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
 						{filtered.map((p) => (
-							<button key={p.id} className="glass-card p-4 text-left hover-lift" onClick={() => setQuick(p)}>
+							<button key={p.id} className="glass-dark glass-border p-4 text-left hover-lift" onClick={() => setQuick(p)}>
 								<div className="relative aspect-[16/10] rounded-md bg-gradient-primary bg-mesh-soft">
 									<span className="absolute right-2 top-2 rounded-full bg-black/60 text-white text-xs px-2 py-0.5">${p.price.toFixed(2)}</span>
 								</div>

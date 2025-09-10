@@ -26,7 +26,7 @@ export default function GalleryPage() {
 
     return (
         <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
-            <h1 className="heading-1 text-gradient-primary text-glow">Gallery</h1>
+            <h1 className="heading-1 text-white">Gallery</h1>
             <p className="mt-2 text-body text-muted-foreground">Explore recent installs by category.</p>
 
             <div className="mt-8 grid gap-12">
