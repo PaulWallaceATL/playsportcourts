@@ -18,39 +18,40 @@ const sample = [
 ];
 
 export default function GalleryPage() {
+    const [active, setActive] = React.useState<string>(categories[0].key);
     const [lightbox, setLightbox] = React.useState<{ src: string; idx: number } | null>(null);
+    const images = sample; // per category would map differently in real data
     const open = (src: string, idx: number) => setLightbox({ src, idx });
     const close = () => setLightbox(null);
-    const next = () => lightbox && setLightbox({ src: sample[(lightbox.idx + 1) % sample.length], idx: (lightbox.idx + 1) % sample.length });
-    const prev = () => lightbox && setLightbox({ src: sample[(lightbox.idx - 1 + sample.length) % sample.length], idx: (lightbox.idx - 1 + sample.length) % sample.length });
+    const next = () => lightbox && setLightbox({ src: images[(lightbox.idx + 1) % images.length], idx: (lightbox.idx + 1) % images.length });
+    const prev = () => lightbox && setLightbox({ src: images[(lightbox.idx - 1 + images.length) % images.length], idx: (lightbox.idx - 1 + images.length) % images.length });
 
     return (
         <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
             <h1 className="heading-1 text-white">Gallery</h1>
             <p className="mt-2 text-body text-muted-foreground">Explore recent installs by category.</p>
 
-            <div className="mt-8 grid gap-12">
-                {categories.map((cat) => (
-                    <div key={cat.key}>
-                        <h2 className="heading-2 mb-3">{cat.label}</h2>
-                        <div className="grid gap-6">
-                            {sample.map((src, i) => (
-                                <button key={i} type="button" className="relative w-full aspect-[16/9] overflow-hidden rounded-xl surface-elevated hover-lift"
-                                    onClick={() => open(src, i)}
-                                >
-                                    <Image src={src} alt={`${cat.label} ${i+1}`} fill className="object-cover" loading="lazy" />
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+            <div className="mt-6 flex flex-wrap gap-2">
+                {categories.map((c) => (
+                    <button key={c.key} className={`sport-badge ${active===c.key? 'ring-1 ring-[var(--primary)]' : ''}`} onClick={()=>setActive(c.key)}>{c.label}</button>
+                ))}
+            </div>
+
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                {images.map((src, i) => (
+                    <button key={i} type="button" className="relative aspect-[16/10] overflow-hidden rounded-xl surface-elevated hover-lift"
+                        onClick={() => open(src, i)}
+                    >
+                        <Image src={src} alt={`${active} ${i+1}`} fill sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw" className="object-cover" loading="lazy" />
+                    </button>
                 ))}
             </div>
 
             {lightbox && (
-                <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="Gallery lightbox">
                     <button className="absolute left-3 top-1/2 -translate-y-1/2 text-white text-2xl" onClick={prev} aria-label="Previous">‹</button>
                     <div className="relative w-full max-w-6xl aspect-[16/9]">
-                        <Image src={lightbox.src} alt="Lightbox" fill className="object-contain" />
+                        <Image src={lightbox.src} alt="Selected gallery image" fill sizes="100vw" className="object-contain" />
                     </div>
                     <button className="absolute right-3 top-1/2 -translate-y-1/2 text-white text-2xl" onClick={next} aria-label="Next">›</button>
                     <button className="absolute top-3 right-3 text-white text-xl" onClick={close} aria-label="Close">×</button>
