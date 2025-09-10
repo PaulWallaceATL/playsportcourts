@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/header/Header";
 import { ScrollProgress } from "@/components/animations/ScrollProgress";
 import { PageTransition } from "@/components/animations/PageTransition";
 import { LiveChat } from "@/components/advanced/LiveChat";
+import { GA_ID } from "@/lib/analytics";
 
 const body = Manrope({
   variable: "--font-body",
@@ -33,6 +34,16 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark theme-premium-dark">
       <body className={`${body.variable} ${display.variable} antialiased`}>
+        {GA_ID && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${GA_ID}', { anonymize_ip: true });`,
+              }}
+            />
+          </>
+        )}
         <ScrollProgress />
         <Header />
         <main>

@@ -7,12 +7,16 @@ import { CostCalculator } from "@/components/advanced/CostCalculator";
 import { ShareButtons } from "@/components/advanced/ShareButtons";
 import { ARButton, VRButton } from "@/components/advanced/ARVR";
 import { notFound } from "next/navigation";
+import { trackProductView, trackQuote } from "@/lib/analytics";
 import { courtTiles } from "@/data/products";
 
 export default async function CourtTilePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const product = courtTiles.find((p) => p.slug === slug);
   if (!product) return notFound();
+
+  // Inline tracking for page view (executed client side after hydration via script)
+  const tracker = `window && window.gtag && window.gtag('event','product_view', ${JSON.stringify({ slug: "${slug}", name: "${product?.name}", price: product?.price })});`;
 
   return (
     <div>
@@ -29,7 +33,7 @@ export default async function CourtTilePage({ params }: { params: Promise<{ slug
               <p className="mt-2 text-body text-muted-foreground max-w-prose">{product.description}</p>
               <div className="mt-5 flex items-center gap-3">
                 <Button size="lg">From ${product.price.toFixed(2)} {product.pricePerUnitLabel}</Button>
-                <Button variant="outline" size="lg">Get a Quote</Button>
+                <Button variant="outline" size="lg" onClick={() => trackQuote({ product: product.name })}>Get a Quote</Button>
               </div>
             </div>
             <div className="relative aspect-[16/10] rounded-xl overflow-hidden surface-elevated">
@@ -95,6 +99,7 @@ export default async function CourtTilePage({ params }: { params: Promise<{ slug
           ))}
         </div>
       </section>
+      <script dangerouslySetInnerHTML={{ __html: tracker }} />
     </div>
   );
 }

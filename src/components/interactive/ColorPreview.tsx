@@ -4,6 +4,7 @@ import * as React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { TileColorOption } from "@/types";
+import { trackCustomizer } from "@/lib/analytics";
 
 interface ColorPreviewProps {
   title?: string;
@@ -16,6 +17,11 @@ interface ColorPreviewProps {
 export function ColorPreview({ title, baseImage = "/window.svg", colors, initialPrimary, initialSecondary }: ColorPreviewProps) {
   const [primary, setPrimary] = React.useState<string>(initialPrimary ?? colors[0]?.hex ?? "#2563eb");
   const [secondary, setSecondary] = React.useState<string>(initialSecondary ?? colors[1]?.hex ?? "#0ea5e9");
+
+  React.useEffect(() => {
+    trackCustomizer({ product: baseImage, primary, secondary });
+    // only track on first load and color changes
+  }, [primary, secondary, baseImage]);
 
   return (
     <div className="grid gap-3">
