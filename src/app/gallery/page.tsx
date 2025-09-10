@@ -35,7 +35,7 @@ export default function GalleryPage() {
                         <h2 className="heading-2 mb-3">{cat.label}</h2>
                         <div className="grid gap-6">
                             {sample.map((src, i) => (
-                                <button key={i} type="button" className="relative w-full aspect-[16/9] overflow-hidden rounded-xl surface-elevated"
+                                <button key={i} type="button" className="relative w-full aspect-[16/9] overflow-hidden rounded-xl surface-elevated hover-lift"
                                     onClick={() => open(src, i)}
                                 >
                                     <Image src={src} alt={`${cat.label} ${i+1}`} fill className="object-cover" loading="lazy" />

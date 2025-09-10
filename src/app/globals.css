@@ -374,7 +374,9 @@
   .menu-panel { opacity: 0; transform: translateY(8px) scale(0.98); transition: opacity 140ms ease, transform 180ms cubic-bezier(.22,1,.36,1); pointer-events: none; }
   .group:hover > .menu-panel, .group:focus-within > .menu-panel { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
   .menu-item { transition: background-color 140ms ease, color 140ms ease, transform 140ms ease; }
-  .menu-item:hover { background: rgba(0,0,0,0.04); transform: translateX(2px); }
+  .menu-item:hover { background: rgba(0,0,0,0.06); transform: translateX(2px); }
+  /* Invert text color if menu sits on light backgrounds */
+  .menu-panel, .menu-panel * { color: #0b0f14; }
 
   /* Surfaces and backgrounds */
   .bg-gradient-primary { background-image: var(--gradient-primary); background-size: 200% 200%; background-position: 0% 50%; }
