@@ -53,7 +53,7 @@ export default function GalleryPage() {
                         <Image src={lightbox.src} alt="Lightbox" fill className="object-contain" />
                     </div>
                     <button className="absolute right-3 top-1/2 -translate-y-1/2 text-white text-2xl" onClick={next} aria-label="Next">›</button>
-                    <button className="absolute top-3 right-3 text-white text-xl" onClick={close} aria-label="Close">✕</button>
+                    <button className="absolute top-3 right-3 text-white text-xl" onClick={close} aria-label="Close">×</button>
                 </div>
             )}
         </section>

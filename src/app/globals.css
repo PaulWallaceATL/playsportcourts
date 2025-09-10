@@ -372,7 +372,7 @@
 
   /* Menus */
   .menu-panel { opacity: 0; transform: translateY(8px) scale(0.98); transition: opacity 180ms ease, transform 220ms cubic-bezier(.22,1,.36,1); pointer-events: none; }
-  .group:hover > .menu-panel, .group:focus-within > .menu-panel, .menu-panel:hover { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+  /* visibility handled via hovered state in Header; keep transitions */
   .menu-item { transition: background-color 140ms ease, color 140ms ease, transform 140ms ease; }
   .menu-item:hover { background: rgba(0,0,0,0.06); transform: translateX(2px); }
   /* Invert text color if menu sits on light backgrounds */

@@ -22,6 +22,8 @@ export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
+  const [hovered, setHovered] = React.useState<null | "court" | "garage">(null);
+  const hoverTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const cartCount = 0; // TODO: wire to cart state
 
   React.useEffect(() => {
@@ -33,6 +35,7 @@ export function Header() {
 
   React.useEffect(() => {
     setOpen(false);
+    setHovered(null);
   }, [pathname]);
 
   return (
@@ -55,7 +58,20 @@ export function Header() {
           <nav className="hidden md:block">
             <ul className="flex items-center gap-6">
               {NAV_ITEMS.map((item) => (
-                <li key={item.href} className="relative group z-50">
+                <li
+                  key={item.href}
+                  className="relative z-50"
+                  onMouseEnter={() => {
+                    if (!item.dropdown) return;
+                    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+                    setHovered(item.dropdown);
+                  }}
+                  onMouseLeave={() => {
+                    if (!item.dropdown) return;
+                    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+                    hoverTimer.current = setTimeout(() => setHovered(null), 120);
+                  }}
+                >
                   <Link
                     href={item.href}
                     className={cn(
@@ -73,8 +89,18 @@ export function Header() {
                     {item.label}
                   </Link>
 
-                  {item.dropdown === "court" && (
-                    <div className="menu-panel absolute left-1/2 -translate-x-1/2 top-full w-[720px]">
+                  {item.dropdown === "court" && hovered === "court" && (
+                    <div
+                      className="menu-panel absolute left-1/2 -translate-x-1/2 top-full w-[720px]"
+                      onMouseEnter={() => {
+                        if (hoverTimer.current) clearTimeout(hoverTimer.current);
+                        setHovered("court");
+                      }}
+                      onMouseLeave={() => {
+                        if (hoverTimer.current) clearTimeout(hoverTimer.current);
+                        hoverTimer.current = setTimeout(() => setHovered(null), 120);
+                      }}
+                    >
                       <div className="rounded-xl border bg-white text-black shadow-layered p-4 grid grid-cols-2 gap-6">
                         <div>
                           <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">PlaySport Products</p>
@@ -114,8 +140,18 @@ export function Header() {
                     </div>
                   )}
 
-                  {item.dropdown === "garage" && (
-                    <div className="menu-panel absolute left-1/2 -translate-x-1/2 top-full w-[420px]">
+                  {item.dropdown === "garage" && hovered === "garage" && (
+                    <div
+                      className="menu-panel absolute left-1/2 -translate-x-1/2 top-full w-[420px]"
+                      onMouseEnter={() => {
+                        if (hoverTimer.current) clearTimeout(hoverTimer.current);
+                        setHovered("garage");
+                      }}
+                      onMouseLeave={() => {
+                        if (hoverTimer.current) clearTimeout(hoverTimer.current);
+                        hoverTimer.current = setTimeout(() => setHovered(null), 120);
+                      }}
+                    >
                       <div className="rounded-xl border bg-white text-black shadow-layered p-4 grid gap-2">
                         <ul className="grid gap-2">
                           {garageTiles.map((p) => (

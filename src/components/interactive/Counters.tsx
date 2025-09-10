@@ -50,7 +50,7 @@ export function Counters() {
 				<p className="text-caption">VersaCourt Dealer</p>
 			</div>
 			<div>
-				<p className="text-3xl font-bold">{d.value}★</p>
+				<p className="text-3xl font-bold">{d.value}.0</p>
 				<p className="text-caption">Customer Reviews</p>
 			</div>
 		</div>

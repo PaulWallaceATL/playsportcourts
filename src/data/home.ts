@@ -25,7 +25,7 @@ export const siteContent = {
 		trust: [
 			{ label: "Projects Completed", value: "500+" },
 			{ label: "VersaCourt Dealer", value: "Certified" },
-			{ label: "Customer Reviews", value: "5★" },
+			{ label: "Customer Reviews", value: "5.0" },
 		],
 	},
 	benefits: {
