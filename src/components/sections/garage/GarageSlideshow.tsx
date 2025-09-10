@@ -39,7 +39,7 @@ export function GarageSlideshow() {
 								<RotatingTile size={220} />
 							</div>
 						) : (
-							<Image src={current.heroImage} alt={current.name} fill className="object-contain p-6" />
+							<Image src={current.heroImage} alt={current.name} fill sizes="(max-width:768px) 100vw, (max-width:1280px) 70vw, 50vw" className="object-contain p-6" />
 						)}
 						{/* Product info overlay */}
 						<div className="absolute inset-x-0 bottom-0 p-4 backdrop-tint">

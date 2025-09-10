@@ -48,13 +48,13 @@ export default function ShopPage() {
 			</div>
 
 			{quick && (
-				<div className="fixed inset-0 z-50 bg-black/70 grid place-items-center p-4" onClick={() => setQuick(null)}>
+				<div className="fixed inset-0 z-50 bg-black/70 grid place-items-center p-4" role="dialog" aria-modal="true" aria-label={`${quick.name} quick view`} onClick={() => setQuick(null)}>
 					<div className="glass-card p-6 w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
 						<div className="relative aspect-[16/10] rounded-md bg-muted" />
 						<h3 className="heading-3 mt-3">{quick.name}</h3>
 						<p className="mt-1">${quick.price.toFixed(2)}</p>
 						<div className="mt-4 flex gap-2">
-							<button className="btn btn-primary">Add to Cart</button>
+							<button className="btn btn-primary" autoFocus>Add to Cart</button>
 							<a className="underline" href="#">View details</a>
 						</div>
 					</div>

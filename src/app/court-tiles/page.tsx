@@ -19,7 +19,7 @@ export default function CourtTilesIndexPage() {
                     <RotatingTile size={180} />
                   </div>
                 ) : (
-                  <Image src={p.heroImage} alt={p.name} fill className="object-contain p-4" />
+                  <Image src={p.heroImage} alt={p.name} fill sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw" className="object-contain p-4" />
                 )}
                 <span className="absolute right-2 top-2 rounded-full bg-black/70 text-white text-xs px-2 py-0.5">${p.price.toFixed(2)} {p.pricePerUnitLabel}</span>
               </div>

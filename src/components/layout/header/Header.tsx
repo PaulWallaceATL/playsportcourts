@@ -111,7 +111,7 @@ export function Header() {
                                 <li key={p.slug}>
                                   <Link href={`/court-tiles/${p.slug}`} className="menu-item flex items-center gap-3 rounded-md px-2 py-2 text-white">
                                     <span className="relative h-10 w-10 overflow-hidden rounded bg-gradient-primary">
-                                      <Image src={p.thumbnail} alt="" fill className="object-contain p-1" />
+                                      <Image src={p.thumbnail} alt="" fill sizes="40px" className="object-contain p-1" />
                                     </span>
                                     <span className="text-sm font-medium">{p.name}</span>
                                   </Link>
@@ -158,7 +158,7 @@ export function Header() {
                             <li key={p.slug}>
                               <Link href={`/garage-tiles/${p.slug}`} className="menu-item flex items-center gap-3 rounded-md px-2 py-2 text-white">
                                 <span className="relative h-10 w-10 overflow-hidden rounded bg-gradient-primary">
-                                  <Image src={p.thumbnail} alt="" fill className="object-contain p-1" />
+                                  <Image src={p.thumbnail} alt="" fill sizes="40px" className="object-contain p-1" />
                                 </span>
                                 <span className="text-sm font-medium">{p.name}</span>
                               </Link>
