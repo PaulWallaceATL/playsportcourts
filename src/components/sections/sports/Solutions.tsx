@@ -29,9 +29,11 @@ export function Solutions() {
 					const products = courtTiles.filter((p) => compat.includes(p.name));
 					const isOpen = openIndex === idx;
 					return (
-						<div key={item.title} className="card-item glass-card gradient-border-anim p-5 block" style={{ breakInside: "avoid" }}>
+						<div key={item.title} className="card-item glass-dark glass-border gradient-border-anim p-5 block" style={{ breakInside: "avoid" }}>
 							<Link href={item.href} className="block">
-								<div className="placeholder-card aspect-4-3 placeholder-gradient pattern-court-dense shadow-neon-blue" />
+								<div className="placeholder-card aspect-4-3 bg-gradient-primary pattern-court-dense shadow-neon-blue grid place-items-center">
+									<RotatingTile size={120} />
+								</div>
 								<div className="mt-3 flex items-center justify-between">
 									<p className="font-semibold text-white">{item.title}</p>
 									<button type="button" className="sport-badge" onClick={(e) => { e.preventDefault(); setOpenIndex(isOpen ? null : idx); }} style={{ boxShadow: `0 0 12px ${accentByIndex[idx % accentByIndex.length]}55`, borderColor: `${accentByIndex[idx % accentByIndex.length]}55` }}>

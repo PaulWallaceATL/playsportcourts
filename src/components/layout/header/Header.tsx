@@ -42,7 +42,7 @@ export function Header() {
     <header
       className={cn(
         "sticky top-0 z-50 w-full transition-colors",
-        isScrolled ? "glass-nav border-b" : "bg-transparent"
+        isScrolled ? "header-blur backdrop-tint border-b" : "bg-transparent"
       )}
     >
       <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
@@ -101,7 +101,7 @@ export function Header() {
                         hoverTimer.current = setTimeout(() => setHovered(null), 120);
                       }}
                     >
-                      <div className="rounded-xl border glass-card text-black p-4 grid grid-cols-2 gap-6">
+                      <div className="rounded-xl glass-dark glass-border text-white p-4 grid grid-cols-2 gap-6">
                         <div>
                           <p className="text-xs uppercase tracking-wide text-muted-foreground mb-2">PlaySport Products</p>
                           <ul className="grid gap-2">
@@ -109,7 +109,7 @@ export function Header() {
                               .filter((p) => p.brand !== "Versa Court")
                               .map((p) => (
                                 <li key={p.slug}>
-                                  <Link href={`/court-tiles/${p.slug}`} className="menu-item flex items-center gap-3 rounded-md px-2 py-2 text-black">
+                                  <Link href={`/court-tiles/${p.slug}`} className="menu-item flex items-center gap-3 rounded-md px-2 py-2 text-white">
                                     <span className="relative h-10 w-10 overflow-hidden rounded bg-gradient-primary">
                                       <Image src={p.thumbnail} alt="" fill className="object-contain p-1" />
                                     </span>
@@ -152,11 +152,11 @@ export function Header() {
                         hoverTimer.current = setTimeout(() => setHovered(null), 120);
                       }}
                     >
-                      <div className="rounded-xl border glass-card text-black p-4 grid gap-2">
+                      <div className="rounded-xl glass-dark glass-border text-white p-4 grid gap-2">
                         <ul className="grid gap-2">
                           {garageTiles.map((p) => (
                             <li key={p.slug}>
-                              <Link href={`/garage-tiles/${p.slug}`} className="menu-item flex items-center gap-3 rounded-md px-2 py-2">
+                              <Link href={`/garage-tiles/${p.slug}`} className="menu-item flex items-center gap-3 rounded-md px-2 py-2 text-white">
                                 <span className="relative h-10 w-10 overflow-hidden rounded bg-gradient-primary">
                                   <Image src={p.thumbnail} alt="" fill className="object-contain p-1" />
                                 </span>
