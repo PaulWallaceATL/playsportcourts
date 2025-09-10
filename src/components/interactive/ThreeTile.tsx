@@ -17,7 +17,6 @@ export function ThreeTile({ height = 260 }: { height?: number }) {
   return (
     <div style={{ height }}>
       <Canvas shadows dpr={[1, 2]} camera={{ position: [3, 2, 3], fov: 38 }}>
-        <color attach="background" args={[0, 0, 0]} />
         <Stage intensity={0.8} environment={"warehouse"}>
           <TileMesh />
         </Stage>
