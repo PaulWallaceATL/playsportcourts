@@ -32,8 +32,8 @@ export function Hero() {
               </div>
             ))}
             {/* 3D rotating tile */}
-            <div className="hidden lg:block justify-self-end w-[300px]">
-              <ThreeTile height={260} />
+            <div className="block justify-self-center sm:justify-self-end lg:justify-self-start w-[180px] sm:w-[220px] lg:w-[300px] sm:mt-2 lg:-ml-10">
+              <ThreeTile height={220} />
             </div>
           </div>
         </div>
