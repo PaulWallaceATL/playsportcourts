@@ -6,6 +6,7 @@ import { Recommendations } from "@/components/advanced/Recommendations";
 import { CostCalculator } from "@/components/advanced/CostCalculator";
 import { ShareButtons } from "@/components/advanced/ShareButtons";
 import { ARButton, VRButton } from "@/components/advanced/ARVR";
+import { TileCourt } from "@/components/icons";
 import { notFound } from "next/navigation";
 import { QuoteButton } from "@/components/advanced/QuoteButton";
 import { courtTiles } from "@/data/products";
@@ -49,7 +50,7 @@ export default async function CourtTilePage({ params }: { params: Promise<{ slug
           <div className="glass-card p-6">
             <h2 className="heading-3">Specifications</h2>
             <ul className="mt-4 grid gap-3 text-sm">
-              <li className="flex items-center gap-2"><Ruler className="h-4 w-4" /><span className="text-muted-foreground">Dimensions:</span><span className="font-medium text-foreground">{product.specs.dimensions}</span></li>
+              <li className="flex items-center gap-2"><TileCourt size={20} /><span className="text-muted-foreground">Dimensions:</span><span className="font-medium text-foreground">{product.specs.dimensions}</span></li>
               <li className="flex items-center gap-2"><Boxes className="h-4 w-4" /><span className="text-muted-foreground">Material:</span><span className="font-medium text-foreground">{product.specs.material}</span></li>
               {product.specs.thickness && <li className="flex items-center gap-2"><Droplets className="h-4 w-4" /><span className="text-muted-foreground">Thickness:</span><span className="font-medium text-foreground">{product.specs.thickness}</span></li>}
             </ul>
