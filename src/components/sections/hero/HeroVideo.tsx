@@ -23,7 +23,7 @@ interface HeroVideoProps {
 export function HeroVideo({ url }: HeroVideoProps) {
   // Temporary stock video if none provided
   const src = url ??
-    "https://storage.googleapis.com/coverr-main/mp4/Footwork-1.mp4"; // placeholder sports-style b-roll
+    "https://cdn.coverr.co/videos/coverr-basketball-practice-5831/1080p.mp4"; // sports courts b-roll
 
   return (
     <div className="absolute inset-0 -z-10 overflow-hidden">
