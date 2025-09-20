@@ -31,7 +31,7 @@ export function Hero() {
                 </Button>
               ))}
               <Button variant="ghost" asChild>
-                <a href="#garage-tiles" aria-label="Scroll to tiles">Explore Tiles →</a>
+                <a href="#sports" aria-label="Scroll to sports applications">Explore Sports →</a>
               </Button>
             </div>
 
@@ -78,7 +78,7 @@ export function Hero() {
 
         {/* Scroll cue */}
         <div className="mt-10">
-          <a href="#garage-tiles" className="scroll-cue inline-flex items-center gap-2 text-sm text-white/80 hover:text-white">Scroll to tiles
+          <a href="#sports" className="scroll-cue inline-flex items-center gap-2 text-sm text-white/80 hover:text-white">Scroll to sports
             <span aria-hidden className="inline-block h-3 w-3 border-b border-r rotate-45" />
           </a>
         </div>

@@ -20,8 +20,8 @@ export function Solutions() {
 		"Hockey/Skate Rinks": ["X Court"],
 	};
 
-	return (
-		<section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
+    return (
+        <section id="sports" className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
 			<h2 className="heading-2 mb-6">{s.title}</h2>
 			<div className="grid-scene grid-masonry">
 				{s.items.map((item, idx) => {

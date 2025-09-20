@@ -7,10 +7,10 @@ export default function Home() {
   return (
     <div>
       <Hero />
-      <GarageSlideshow />
-
       {/* Sports Applications Grid with expandable compatible tiles */}
       <Solutions />
+
+      <GarageSlideshow />
 
       {/* Resurfacing CTA */}
       <Resurfacing />
