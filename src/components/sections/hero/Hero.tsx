@@ -49,10 +49,21 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right: 3D tile aligned opposite the text */}
-          <div className="justify-self-end">
-            <HeroTile className="w-[220px] sm:w-[260px] lg:w-[420px]" />
+        {/* Right: 3D tile aligned opposite the text */}
+        <div className="relative justify-self-end">
+          <HeroTile className="w-[220px] sm:w-[260px] lg:w-[420px]" />
+
+          {/* Interaction lure: encourages users to play with the tile */}
+          <div className="pointer-events-none absolute -right-1 sm:right-2 top-4 hero-interact">
+            <div className="ring" />
+            <div className="label" aria-hidden>
+              <svg className="hand" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M6 12v-1c0-1.657 1.343-3 3-3m0 0V6a1 1 0 1 1 2 0v2m-2 0h2m0 0V6a1 1 0 1 1 2 0v2m0 0h2m0 0V7a1 1 0 1 1 2 0v5c0 3.866-3.134 7-7 7h-1.5c-1.657 0-3-1.343-3-3V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              <span>Drag to spin</span>
+            </div>
           </div>
+        </div>
         </div>
 
         {/* Trust metrics row below, full width */}

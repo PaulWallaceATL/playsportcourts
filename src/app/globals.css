@@ -675,5 +675,13 @@
 .grid-scene:hover .card-item { opacity: 0.85; transform: translateY(1px) scale(0.99); }
 .grid-scene:hover .card-item:hover { opacity: 1; transform: translateY(-2px) scale(1.01); z-index: 2; }
 
+/* Hero interaction lure */
+.hero-interact { position: relative; display: inline-flex; align-items: center; gap: 8px; color: #eaf7ff; text-shadow: 0 0 10px rgba(0,212,255,0.45); }
+.hero-interact .ring { position: absolute; right: calc(100% + 6px); top: 50%; transform: translateY(-50%); width: 26px; height: 26px; border-radius: 9999px; box-shadow: 0 0 0 2px rgba(0,212,255,0.35), 0 0 20px rgba(0,212,255,0.35); animation: ring-pulse 1.8s ease-out infinite; }
+.hero-interact .label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; padding: 6px 10px; border-radius: 9999px; background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(6px) saturate(1.2); -webkit-backdrop-filter: blur(6px) saturate(1.2); }
+.hero-interact .label .hand { filter: drop-shadow(0 0 6px rgba(0,212,255,0.45)); animation: hand-wave 1.6s ease-in-out infinite; }
+@keyframes ring-pulse { 0% { transform: translateY(-50%) scale(0.9); opacity: 0.6 } 60% { transform: translateY(-50%) scale(1.12); opacity: 1 } 100% { transform: translateY(-50%) scale(0.9); opacity: 0.6 } }
+@keyframes hand-wave { 0%,100% { transform: translateX(0) rotate(0deg) } 50% { transform: translateX(3px) rotate(2deg) } }
+
 /* Holo badge */
 .sport-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: 9999px; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); }
