@@ -5,6 +5,7 @@ import { Button, type ButtonProps } from "@/components/ui/button";
 import { HeroTile } from "@/components/sections/hero/HeroTile";
 import { HeroVideo } from "@/components/sections/hero/HeroVideo";
 import { siteContent } from "@/data/home";
+import { TileCourt, TileGarage, Palette } from "@/components/icons";
 
 export function Hero() {
   return (
@@ -19,7 +20,7 @@ export function Hero() {
           {/* Left: headline + CTA */}
           <div className="text-foreground anim-slide-up">
             <p className="text-xs uppercase tracking-wide text-muted-foreground">PlaySport Atlanta</p>
-            <h1 className="heading-display text-white">
+            <h1 className="heading-display text-gradient-hero text-glow-strong">
               {siteContent.hero.title}
             </h1>
             <p className="mt-4 text-body-lg text-muted-foreground max-w-prose">{siteContent.hero.subtitle}</p>
@@ -32,6 +33,19 @@ export function Hero() {
               <Button variant="ghost" asChild>
                 <a href="#garage-tiles" aria-label="Scroll to tiles">Explore Tiles →</a>
               </Button>
+            </div>
+
+            {/* Quick action bar */}
+            <div className="mt-5 flex flex-wrap gap-2">
+              <Link href="/court-tiles" className="quick-pill" aria-label="Browse court tiles">
+                <TileCourt size={18} /> Court Tiles
+              </Link>
+              <Link href="/garage-tiles" className="quick-pill" aria-label="Browse garage tiles">
+                <TileGarage size={18} /> Garage Tiles
+              </Link>
+              <Link href="#" className="quick-pill" aria-label="Open color designer">
+                <Palette size={18} /> Try Colors
+              </Link>
             </div>
           </div>
 

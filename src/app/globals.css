@@ -511,6 +511,15 @@
   .nav-underline::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -6px; height: 2px; background: var(--gradient-accent); box-shadow: 0 0 12px rgba(255,107,53,0.5); transition: right 260ms cubic-bezier(.22,1,.36,1); }
   .nav-underline:hover::after, .nav-underline[aria-current="page"]::after { right: 0; }
   .scroll-cue span { border-color: currentColor; width: 8px; height: 8px; }
+
+  /* Quick action pills */
+  .quick-pill {
+    display: inline-flex; align-items: center; gap: 8px; font-size: 12px;
+    padding: 6px 10px; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.06);
+    transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+  }
+  .quick-pill:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.24); transform: translateY(-1px); }
   .nav-led { position: relative; }
   .nav-led[aria-current="page"]::before { content: ""; position: absolute; left: -10px; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 9999px; background: #00d4ff; box-shadow: 0 0 8px #00d4ff, 0 0 16px rgba(0,212,255,0.6); }
 
