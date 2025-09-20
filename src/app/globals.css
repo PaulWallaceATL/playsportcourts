@@ -510,6 +510,7 @@
   .nav-underline { position: relative; }
   .nav-underline::after { content: ""; position: absolute; left: 0; right: 100%; bottom: -6px; height: 2px; background: var(--gradient-accent); box-shadow: 0 0 12px rgba(255,107,53,0.5); transition: right 260ms cubic-bezier(.22,1,.36,1); }
   .nav-underline:hover::after, .nav-underline[aria-current="page"]::after { right: 0; }
+  .scroll-cue span { border-color: currentColor; width: 8px; height: 8px; }
   .nav-led { position: relative; }
   .nav-led[aria-current="page"]::before { content: ""; position: absolute; left: -10px; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 9999px; background: #00d4ff; box-shadow: 0 0 8px #00d4ff, 0 0 16px rgba(0,212,255,0.6); }
 

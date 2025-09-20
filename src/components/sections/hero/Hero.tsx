@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Button, type ButtonProps } from "@/components/ui/button";
-// removed unused import
 import { HeroTile } from "@/components/sections/hero/HeroTile";
 import { HeroVideo } from "@/components/sections/hero/HeroVideo";
 import { siteContent } from "@/data/home";
@@ -19,14 +18,20 @@ export function Hero() {
         <div className="grid items-center gap-8 lg:grid-cols-2">
           {/* Left: headline + CTA */}
           <div className="text-foreground anim-slide-up">
-            <h1 className="heading-display text-white">{siteContent.hero.title}</h1>
-            <p className="mt-4 text-body-lg text-muted-foreground">{siteContent.hero.subtitle}</p>
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">PlaySport Atlanta</p>
+            <h1 className="heading-display text-white">
+              {siteContent.hero.title}
+            </h1>
+            <p className="mt-4 text-body-lg text-muted-foreground max-w-prose">{siteContent.hero.subtitle}</p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
               {siteContent.hero.ctas.map((c, i) => (
                 <Button key={c.label} size="lg" variant={c.variant as ButtonProps["variant"]} className={i === 0 ? "cta-pulse" : undefined} asChild>
                   <Link href={c.href}>{c.label}</Link>
                 </Button>
               ))}
+              <Button variant="ghost" asChild>
+                <a href="#garage-tiles" aria-label="Scroll to tiles">Explore Tiles →</a>
+              </Button>
             </div>
           </div>
 
@@ -44,6 +49,13 @@ export function Hero() {
               <p className="text-caption">{t.label}</p>
             </div>
           ))}
+        </div>
+
+        {/* Scroll cue */}
+        <div className="mt-10">
+          <a href="#garage-tiles" className="scroll-cue inline-flex items-center gap-2 text-sm text-white/80 hover:text-white">Scroll to tiles
+            <span aria-hidden className="inline-block h-3 w-3 border-b border-r rotate-45" />
+          </a>
         </div>
       </div>
     </section>
