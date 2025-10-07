@@ -1,12 +1,21 @@
 "use client";
 import Link from "next/link";
 import * as React from "react";
-import { getCurrentUser, login, logout, signup, isDealer, saveOrder, type MockOrder } from "@/lib/mock-auth";
+import { getCurrentUser, login, logout, signup, isDealer, saveOrder, listOrders, type MockOrder } from "@/lib/mock-auth";
 
 export default function DealerPortalPage() {
   const [user, setUser] = React.useState(getCurrentUser());
   const [error, setError] = React.useState<string | null>(null);
   const [form, setForm] = React.useState({ dealerEmail: "", projectName: "", shipTo: "", city: "", state: "", zip: "", contact: "", phone: "", notes: "" });
+  const [savedMsg, setSavedMsg] = React.useState<string | null>(null);
+  const [orders, setOrders] = React.useState<MockOrder[]>([]);
+
+  React.useEffect(() => {
+    if (isDealer(user)) {
+      const all = listOrders();
+      setOrders(all.filter(o => o.dealerEmail === user!.email).sort((a,b)=>b.createdAt-a.createdAt));
+    }
+  }, [user]);
 
   function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -47,8 +56,10 @@ export default function DealerPortalPage() {
       createdAt: Date.now(),
     };
     saveOrder(order);
+    setOrders(prev => [order, ...prev]);
     setForm({ dealerEmail: user!.email, projectName: "", shipTo: "", city: "", state: "", zip: "", contact: "", phone: "", notes: "" });
-    alert("Order saved (local placeholder)");
+    setSavedMsg("Order saved. Admin can view it in /admin (placeholder storage).");
+    setTimeout(() => setSavedMsg(null), 2600);
   }
 
   return (
@@ -108,20 +119,45 @@ export default function DealerPortalPage() {
 
           {isDealer(user) && (
             <form onSubmit={submitOrder} className="grid gap-3">
+              {savedMsg && <div className="rounded-lg border border-[var(--border)] bg-emerald-500/10 text-emerald-300 px-3 py-2 text-sm">{savedMsg}</div>}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <input className="field-input" placeholder="Project Name" value={form.projectName} onChange={(e)=>setForm({...form, projectName:e.target.value})} />
-                <input className="field-input" placeholder="Contact Name" value={form.contact} onChange={(e)=>setForm({...form, contact:e.target.value})} />
+                <div>
+                  <label className="text-caption">Project Name</label>
+                  <input className="field-input" placeholder="Backyard Multi-Sport" value={form.projectName} onChange={(e)=>setForm({...form, projectName:e.target.value})} />
+                </div>
+                <div>
+                  <label className="text-caption">Contact Name</label>
+                  <input className="field-input" placeholder="First Last" value={form.contact} onChange={(e)=>setForm({...form, contact:e.target.value})} />
+                </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <input className="field-input" placeholder="Ship To Address" value={form.shipTo} onChange={(e)=>setForm({...form, shipTo:e.target.value})} />
-                <input className="field-input" placeholder="City" value={form.city} onChange={(e)=>setForm({...form, city:e.target.value})} />
-                <input className="field-input" placeholder="State" value={form.state} onChange={(e)=>setForm({...form, state:e.target.value})} />
+                <div>
+                  <label className="text-caption">Ship To Address</label>
+                  <input className="field-input" placeholder="123 Court St" value={form.shipTo} onChange={(e)=>setForm({...form, shipTo:e.target.value})} />
+                </div>
+                <div>
+                  <label className="text-caption">City</label>
+                  <input className="field-input" placeholder="City" value={form.city} onChange={(e)=>setForm({...form, city:e.target.value})} />
+                </div>
+                <div>
+                  <label className="text-caption">State</label>
+                  <input className="field-input" placeholder="GA" value={form.state} onChange={(e)=>setForm({...form, state:e.target.value})} />
+                </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <input className="field-input" placeholder="Zip Code" value={form.zip} onChange={(e)=>setForm({...form, zip:e.target.value})} />
-                <input className="field-input" placeholder="Phone" value={form.phone} onChange={(e)=>setForm({...form, phone:e.target.value})} />
+                <div>
+                  <label className="text-caption">Zip Code</label>
+                  <input className="field-input" placeholder="30004" value={form.zip} onChange={(e)=>setForm({...form, zip:e.target.value})} />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="text-caption">Phone</label>
+                  <input className="field-input" placeholder="(770) 555-0101" value={form.phone} onChange={(e)=>setForm({...form, phone:e.target.value})} />
+                </div>
               </div>
-              <textarea className="field-input" placeholder="Notes" value={form.notes} onChange={(e)=>setForm({...form, notes:e.target.value})} rows={4}></textarea>
+              <div>
+                <label className="text-caption">Notes</label>
+                <textarea className="field-input" placeholder="Line colors, logo placement, delivery constraints..." value={form.notes} onChange={(e)=>setForm({...form, notes:e.target.value})} rows={4}></textarea>
+              </div>
               <div className="flex items-center gap-2">
                 <button className="btn-neon glass-dark rounded-md px-4 py-2 text-sm" type="submit">Submit Request</button>
                 <button type="button" className="glass-dark rounded-md px-3 py-2 text-sm" onClick={handleLogout}>Logout</button>
@@ -129,6 +165,29 @@ export default function DealerPortalPage() {
             </form>
           )}
         </article>
+
+        {isDealer(user) && (
+          <article className="surface-elevated rounded-xl p-5 md:col-span-2 anim-slide-up">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="heading-3">Your Recent Orders</h3>
+              <span className="sport-badge">{orders.length} total</span>
+            </div>
+            <div className="grid gap-3">
+              {orders.map(o => (
+                <div key={o.id} className="rounded-lg border border-border p-3 grid gap-1 md:grid-cols-5">
+                  <p className="text-sm"><span className="text-muted-foreground">Project:</span> {o.projectName || "Untitled"}</p>
+                  <p className="text-sm"><span className="text-muted-foreground">Ship To:</span> {o.shipTo}</p>
+                  <p className="text-sm"><span className="text-muted-foreground">City:</span> {o.city}</p>
+                  <p className="text-sm"><span className="text-muted-foreground">Contact:</span> {o.contact}</p>
+                  <p className="text-sm"><span className="text-muted-foreground">Created:</span> {new Date(o.createdAt).toLocaleDateString()}</p>
+                </div>
+              ))}
+              {orders.length === 0 && (
+                <p className="text-sm text-muted-foreground">No orders yet. Submit your first order above.</p>
+              )}
+            </div>
+          </article>
+        )}
       </div>
     </section>
   );
