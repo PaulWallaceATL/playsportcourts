@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function DealerPortalPage() {
   return (
     <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
@@ -7,7 +9,7 @@ export default function DealerPortalPage() {
       <div className="mt-6 grid gap-6 md:grid-cols-2">
         <article className="surface-elevated rounded-xl p-5">
           <h2 className="heading-2 mb-2">Introduction</h2>
-          <p className="text-body">As a Certified Swisstrax Dealer, [Dealer Name] provides a variety of modular tile flooring options from Swisstrax. Known for premium garage flooring solutions, Swisstrax flooring can be used for both residential and commercial applications. <a href="/garage-tiles" className="holo-link">Learn more about the tile options</a>.</p>
+          <p className="text-body">As a Certified Swisstrax Dealer, [Dealer Name] provides a variety of modular tile flooring options from Swisstrax. Known for premium garage flooring solutions, Swisstrax flooring can be used for both residential and commercial applications. <Link href="/garage-tiles" className="holo-link">Learn more about the tile options</Link>.</p>
           <div className="mt-4 grid gap-3">
             <div>
               <h3 className="heading-3">Residential Applications Include</h3>

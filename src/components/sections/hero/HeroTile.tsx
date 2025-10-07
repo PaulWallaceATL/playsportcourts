@@ -16,7 +16,7 @@ export function HeroTile({ className }: HeroTileProps) {
   const [isVisible, setIsVisible] = React.useState(false);
   const [supportsMotion, setSupportsMotion] = React.useState(true);
   const [tilt, setTilt] = React.useState({ x: 0, y: 0 });
-  const [parallaxY, setParallaxY] = React.useState(0);
+  const [parallaxY] = React.useState(0);
 
   React.useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
