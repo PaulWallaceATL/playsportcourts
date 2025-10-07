@@ -12,12 +12,12 @@ export function Solutions() {
 	const s = siteContent.solutions;
 	const [openIndex, setOpenIndex] = React.useState<number | null>(null);
 	const compatibleBySport: Record<string, string[]> = {
-		Basketball: ["Elite Pro", "True Tile", "X Court", "Game Tile"],
-		Pickleball: ["Elite Pro", "True Tile", "Game Tile"],
-		Shuffleboard: ["True Tile", "Game Tile"],
-		Tennis: ["Game Tile"],
-		"Multi-Sport Game Courts": ["Elite Pro", "True Tile", "X Court", "Game Tile"],
-		"Hockey/Skate Rinks": ["X Court"],
+		Basketball: ["CORE Tile", "TRUE Tile", "X COURT Tile", "Versa Court Game Tile"],
+		Pickleball: ["CORE Tile", "TRUE Tile", "Versa Court Game Tile"],
+		Shuffleboard: ["TRUE Tile", "Versa Court Game Tile"],
+		Tennis: ["Versa Court Game Tile"],
+		"Multi-Sport Game Courts": ["CORE Tile", "TRUE Tile", "X COURT Tile", "Versa Court Game Tile"],
+		"Hockey/Skate Rinks": ["X COURT Tile"],
 	};
 
     return (

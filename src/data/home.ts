@@ -14,9 +14,9 @@ export const siteContent = {
 		{ label: "Shop", href: "/shop" },
 	],
 	hero: {
-		title: "BUILD THE COURT YOU CAN’T STOP PLAYING ON",
+		title: "BUILDING BETTER COURTS",
 		subtitle:
-			"Premium tiles. Pro‑grade performance. Designed, installed, and dialed to your game.",
+			"THE FUTURE OF COURT DESIGN IS HERE",
 		ctas: [
 			{ label: "COURT TILES", href: "/court-tiles", variant: "secondary" },
 			{ label: "GARAGE TILES", href: "/garage-tiles", variant: "outline" },

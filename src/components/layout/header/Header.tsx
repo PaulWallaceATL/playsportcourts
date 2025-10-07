@@ -14,8 +14,10 @@ const NAV_ITEMS = [
   { href: "/", label: "Home" },
   { href: "/court-tiles", label: "Court Tiles", dropdown: "court" as const },
   { href: "/garage-tiles", label: "Garage Tiles", dropdown: "garage" as const },
+  { href: "/resurfacing", label: "Resurfacing" },
   { href: "/gallery", label: "Gallery" },
   { href: "/shop", label: "Shop" },
+  { href: "/dealer-portal", label: "Dealer Portal" },
 ];
 
 export function Header() {
@@ -184,11 +186,11 @@ export function Header() {
               )}
             </Button>
             <div className="hidden sm:flex gap-2">
-              <Button variant="outline" asChild>
-                <Link href="/resurfacing">Resurfacing</Link>
-              </Button>
               <Button asChild>
                 <Link href="/shop">Shop</Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/dealer-portal">Dealer Portal</Link>
               </Button>
             </div>
             <Button variant="glass" size="icon" className="md:hidden shadow-neon-blue" aria-label="Toggle menu" onClick={() => setOpen((v) => !v)}>

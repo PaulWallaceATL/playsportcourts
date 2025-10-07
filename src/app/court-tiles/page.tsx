@@ -41,7 +41,12 @@ export default function CourtTilesIndexPage() {
         <h2 className="heading-2 text-white">Explore Tiles</h2>
         <p className="mt-2 text-body text-muted-foreground">Choose the surface that fits your sport and budget.</p>
         <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {courtTiles.map((p) => (
+          {courtTiles
+            .sort((a, b) => {
+              const order = ["TRUE Tile", "CORE Tile", "X COURT Tile", "Versa Court Game Tile"];
+              return order.indexOf(a.name) - order.indexOf(b.name);
+            })
+            .map((p) => (
             <ProductCard key={p.slug} href={`/court-tiles/${p.slug}`} name={p.name} price={`$${p.price.toFixed(2)} ${p.pricePerUnitLabel}`} image={p.heroImage} />
           ))}
         </div>

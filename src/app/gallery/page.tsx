@@ -3,12 +3,7 @@ import * as React from "react";
 import Image from "next/image";
 //
 
-const categories = [
-    { key: "basketball", label: "Basketball" },
-    { key: "pickleball", label: "Pickleball" },
-    { key: "tennis", label: "Tennis" },
-    { key: "garage", label: "Garage" },
-];
+// Simplified gallery: single continuous gallery, 12 slots
 
 // Temporary stock-like placeholders; replace with real project URLs
 const sample = [
@@ -18,9 +13,8 @@ const sample = [
 ];
 
 export default function GalleryPage() {
-    const [active, setActive] = React.useState<string>(categories[0].key);
     const [lightbox, setLightbox] = React.useState<{ src: string; idx: number } | null>(null);
-    const images = sample; // per category would map differently in real data
+    const images = [...sample, ...sample, ...sample, ...sample].slice(0, 12);
     const open = (src: string, idx: number) => setLightbox({ src, idx });
     const close = () => setLightbox(null);
     const next = () => lightbox && setLightbox({ src: images[(lightbox.idx + 1) % images.length], idx: (lightbox.idx + 1) % images.length });
@@ -29,13 +23,7 @@ export default function GalleryPage() {
     return (
         <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
             <h1 className="heading-1 text-white">Gallery</h1>
-            <p className="mt-2 text-body text-muted-foreground">Explore recent installs by category.</p>
-
-            <div className="mt-6 flex flex-wrap gap-2">
-                {categories.map((c) => (
-                    <button key={c.key} className={`sport-badge ${active===c.key? 'ring-1 ring-[var(--primary)]' : ''}`} onClick={()=>setActive(c.key)}>{c.label}</button>
-                ))}
-            </div>
+            <p className="mt-2 text-body text-muted-foreground">A continuous stream of our favorite installs—courts and garages in one place.</p>
 
             <div className="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {images.map((src, i) => (
