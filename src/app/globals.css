@@ -520,6 +520,16 @@
     transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
   }
   .quick-pill:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.24); transform: translateY(-1px); }
+
+  /* Form field inputs (full width) */
+  .field-input {
+    width: 100%; min-height: 42px; padding: 10px 12px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.04);
+    color: var(--foreground);
+    transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+  }
+  .field-input::placeholder { color: var(--muted-foreground); }
+  .field-input:focus-visible { outline: none; border-color: color-mix(in oklch, var(--primary) 55%, transparent); box-shadow: 0 0 0 3px color-mix(in oklch, var(--primary) 22%, transparent); background: rgba(255,255,255,0.06); }
   .nav-led { position: relative; }
   .nav-led[aria-current="page"]::before { content: ""; position: absolute; left: -10px; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 9999px; background: #00d4ff; box-shadow: 0 0 8px #00d4ff, 0 0 16px rgba(0,212,255,0.6); }
 

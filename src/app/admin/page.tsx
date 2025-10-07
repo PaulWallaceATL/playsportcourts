@@ -23,7 +23,7 @@ export default function AdminPage() {
     <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
       <h1 className="heading-1 text-white">Admin</h1>
       {!isAdmin(user) ? (
-        <div className="mt-6 surface-elevated rounded-xl p-5 max-w-md">
+        <div className="mt-6 surface-elevated rounded-xl p-5 max-w-md anim-slide-up">
           <p className="text-caption mb-2">Login as admin (admin@gmail.com / password123)</p>
           {error && <p className="text-sm text-red-400 mb-2">{error}</p>}
           <form onSubmit={handleLogin} className="grid gap-2">
@@ -33,7 +33,7 @@ export default function AdminPage() {
           </form>
         </div>
       ) : (
-        <div className="mt-6 grid gap-6">
+        <div className="mt-6 grid gap-6 anim-slide-up">
           <div className="flex items-center justify-between">
             <p className="text-caption">Signed in as {user?.email}</p>
             <button className="glass-dark rounded-md px-3 py-2 text-sm" onClick={handleLogout}>Logout</button>

@@ -57,7 +57,7 @@ export default function DealerPortalPage() {
       <p className="mt-2 text-body text-muted-foreground">Resources, applications, and an order request form for certified dealers.</p>
 
       <div className="mt-6 grid gap-6 md:grid-cols-2">
-        <article className="surface-elevated rounded-xl p-5">
+        <article className="surface-elevated rounded-xl p-5 anim-slide-up">
           <h2 className="heading-2 mb-2">Introduction</h2>
           <p className="text-body">As a Certified Swisstrax Dealer, [Dealer Name] provides a variety of modular tile flooring options from Swisstrax. Known for premium garage flooring solutions, Swisstrax flooring can be used for both residential and commercial applications. <Link href="/garage-tiles" className="holo-link">Learn more about the tile options</Link>.</p>
           <div className="mt-4 grid gap-3">
@@ -86,21 +86,21 @@ export default function DealerPortalPage() {
           </div>
         </article>
 
-        <article className="surface-elevated rounded-xl p-5">
+        <article className="surface-elevated rounded-xl p-5 anim-slide-up">
           <h2 className="heading-2 mb-2">{isDealer(user) ? "Order Request" : "Dealer Access"}</h2>
           {error && <p className="text-sm text-red-400 mb-2">{error}</p>}
           {!user && (
             <div className="grid gap-6">
               <form onSubmit={handleLogin} className="grid gap-2">
                 <p className="text-caption">Login (use dealer@gmail.com / password123)</p>
-                <input name="email" className="control glass-dark p-2" placeholder="Email" />
-                <input name="password" type="password" className="control glass-dark p-2" placeholder="Password" />
+                <input name="email" className="field-input" placeholder="Email" />
+                <input name="password" type="password" className="field-input" placeholder="Password" />
                 <button className="btn-neon glass-dark rounded-md px-4 py-2 text-sm" type="submit">Login</button>
               </form>
               <form onSubmit={handleSignup} className="grid gap-2">
                 <p className="text-caption">New dealer? Sign up</p>
-                <input name="email" className="control glass-dark p-2" placeholder="Email" />
-                <input name="password" type="password" className="control glass-dark p-2" placeholder="Password" />
+                <input name="email" className="field-input" placeholder="Email" />
+                <input name="password" type="password" className="field-input" placeholder="Password" />
                 <button className="btn-neon glass-dark rounded-md px-4 py-2 text-sm" type="submit">Create Account</button>
               </form>
             </div>
@@ -109,19 +109,19 @@ export default function DealerPortalPage() {
           {isDealer(user) && (
             <form onSubmit={submitOrder} className="grid gap-3">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <input className="control glass-dark p-2" placeholder="Project Name" value={form.projectName} onChange={(e)=>setForm({...form, projectName:e.target.value})} />
-                <input className="control glass-dark p-2" placeholder="Contact Name" value={form.contact} onChange={(e)=>setForm({...form, contact:e.target.value})} />
+                <input className="field-input" placeholder="Project Name" value={form.projectName} onChange={(e)=>setForm({...form, projectName:e.target.value})} />
+                <input className="field-input" placeholder="Contact Name" value={form.contact} onChange={(e)=>setForm({...form, contact:e.target.value})} />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <input className="control glass-dark p-2" placeholder="Ship To Address" value={form.shipTo} onChange={(e)=>setForm({...form, shipTo:e.target.value})} />
-                <input className="control glass-dark p-2" placeholder="City" value={form.city} onChange={(e)=>setForm({...form, city:e.target.value})} />
-                <input className="control glass-dark p-2" placeholder="State" value={form.state} onChange={(e)=>setForm({...form, state:e.target.value})} />
+                <input className="field-input" placeholder="Ship To Address" value={form.shipTo} onChange={(e)=>setForm({...form, shipTo:e.target.value})} />
+                <input className="field-input" placeholder="City" value={form.city} onChange={(e)=>setForm({...form, city:e.target.value})} />
+                <input className="field-input" placeholder="State" value={form.state} onChange={(e)=>setForm({...form, state:e.target.value})} />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <input className="control glass-dark p-2" placeholder="Zip Code" value={form.zip} onChange={(e)=>setForm({...form, zip:e.target.value})} />
-                <input className="control glass-dark p-2" placeholder="Phone" value={form.phone} onChange={(e)=>setForm({...form, phone:e.target.value})} />
+                <input className="field-input" placeholder="Zip Code" value={form.zip} onChange={(e)=>setForm({...form, zip:e.target.value})} />
+                <input className="field-input" placeholder="Phone" value={form.phone} onChange={(e)=>setForm({...form, phone:e.target.value})} />
               </div>
-              <textarea className="control glass-dark p-2" placeholder="Notes" value={form.notes} onChange={(e)=>setForm({...form, notes:e.target.value})}></textarea>
+              <textarea className="field-input" placeholder="Notes" value={form.notes} onChange={(e)=>setForm({...form, notes:e.target.value})} rows={4}></textarea>
               <div className="flex items-center gap-2">
                 <button className="btn-neon glass-dark rounded-md px-4 py-2 text-sm" type="submit">Submit Request</button>
                 <button type="button" className="glass-dark rounded-md px-3 py-2 text-sm" onClick={handleLogout}>Logout</button>
