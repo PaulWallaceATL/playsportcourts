@@ -30,7 +30,7 @@ export default function GalleryPage() {
                     <button key={i} type="button" className="relative aspect-[16/10] overflow-hidden rounded-xl surface-elevated hover-lift"
                         onClick={() => open(src, i)}
                     >
-                        <Image src={src} alt={`${active} ${i+1}`} fill sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw" className="object-cover" loading="lazy" />
+                        <Image src={src} alt={`Gallery image ${i+1}`} fill sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw" className="object-cover" loading="lazy" />
                     </button>
                 ))}
             </div>
