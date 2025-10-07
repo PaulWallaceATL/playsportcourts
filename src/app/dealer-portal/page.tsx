@@ -1,6 +1,56 @@
+"use client";
 import Link from "next/link";
+import * as React from "react";
+import { getCurrentUser, login, logout, signup, isDealer, saveOrder, type MockOrder } from "@/lib/mock-auth";
 
 export default function DealerPortalPage() {
+  const [user, setUser] = React.useState(getCurrentUser());
+  const [error, setError] = React.useState<string | null>(null);
+  const [form, setForm] = React.useState({ dealerEmail: "", projectName: "", shipTo: "", city: "", state: "", zip: "", contact: "", phone: "", notes: "" });
+
+  function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const email = String(fd.get("email"));
+    const password = String(fd.get("password"));
+    const u = login(email, password);
+    if (!u) return setError("Invalid credentials");
+    setUser(u); setError(null);
+  }
+
+  function handleSignup(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const email = String(fd.get("email"));
+    const password = String(fd.get("password"));
+    const u = signup(email, password);
+    if (!u) return setError("Email already registered");
+    setUser(u); setError(null);
+  }
+
+  function handleLogout() { logout(); setUser(null); }
+
+  function submitOrder(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!isDealer(user)) { setError("Dealer login required"); return; }
+    const order: MockOrder = {
+      id: Math.random().toString(36).slice(2),
+      dealerEmail: user!.email,
+      projectName: form.projectName,
+      shipTo: form.shipTo,
+      city: form.city,
+      state: form.state,
+      zip: form.zip,
+      contact: form.contact,
+      phone: form.phone,
+      notes: form.notes,
+      createdAt: Date.now(),
+    };
+    saveOrder(order);
+    setForm({ dealerEmail: user!.email, projectName: "", shipTo: "", city: "", state: "", zip: "", contact: "", phone: "", notes: "" });
+    alert("Order saved (local placeholder)");
+  }
+
   return (
     <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
       <h1 className="heading-1 text-white">Swisstrax Dealer Portal</h1>
@@ -37,25 +87,47 @@ export default function DealerPortalPage() {
         </article>
 
         <article className="surface-elevated rounded-xl p-5">
-          <h2 className="heading-2 mb-2">Order Request</h2>
-          <form className="grid gap-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <input className="control glass-dark p-2" placeholder="Dealer Name" />
-              <input className="control glass-dark p-2" placeholder="Project Name" />
+          <h2 className="heading-2 mb-2">{isDealer(user) ? "Order Request" : "Dealer Access"}</h2>
+          {error && <p className="text-sm text-red-400 mb-2">{error}</p>}
+          {!user && (
+            <div className="grid gap-6">
+              <form onSubmit={handleLogin} className="grid gap-2">
+                <p className="text-caption">Login (use dealer@gmail.com / password123)</p>
+                <input name="email" className="control glass-dark p-2" placeholder="Email" />
+                <input name="password" type="password" className="control glass-dark p-2" placeholder="Password" />
+                <button className="btn-neon glass-dark rounded-md px-4 py-2 text-sm" type="submit">Login</button>
+              </form>
+              <form onSubmit={handleSignup} className="grid gap-2">
+                <p className="text-caption">New dealer? Sign up</p>
+                <input name="email" className="control glass-dark p-2" placeholder="Email" />
+                <input name="password" type="password" className="control glass-dark p-2" placeholder="Password" />
+                <button className="btn-neon glass-dark rounded-md px-4 py-2 text-sm" type="submit">Create Account</button>
+              </form>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <input className="control glass-dark p-2" placeholder="Ship To Address" />
-              <input className="control glass-dark p-2" placeholder="City" />
-              <input className="control glass-dark p-2" placeholder="State" />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <input className="control glass-dark p-2" placeholder="Zip Code" />
-              <input className="control glass-dark p-2" placeholder="Contact Name" />
-              <input className="control glass-dark p-2" placeholder="Phone" />
-            </div>
-            <textarea className="control glass-dark p-2" placeholder="Notes"></textarea>
-            <button className="btn-neon glass-dark rounded-md px-4 py-2 text-sm" type="submit">Submit Request</button>
-          </form>
+          )}
+
+          {isDealer(user) && (
+            <form onSubmit={submitOrder} className="grid gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input className="control glass-dark p-2" placeholder="Project Name" value={form.projectName} onChange={(e)=>setForm({...form, projectName:e.target.value})} />
+                <input className="control glass-dark p-2" placeholder="Contact Name" value={form.contact} onChange={(e)=>setForm({...form, contact:e.target.value})} />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <input className="control glass-dark p-2" placeholder="Ship To Address" value={form.shipTo} onChange={(e)=>setForm({...form, shipTo:e.target.value})} />
+                <input className="control glass-dark p-2" placeholder="City" value={form.city} onChange={(e)=>setForm({...form, city:e.target.value})} />
+                <input className="control glass-dark p-2" placeholder="State" value={form.state} onChange={(e)=>setForm({...form, state:e.target.value})} />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <input className="control glass-dark p-2" placeholder="Zip Code" value={form.zip} onChange={(e)=>setForm({...form, zip:e.target.value})} />
+                <input className="control glass-dark p-2" placeholder="Phone" value={form.phone} onChange={(e)=>setForm({...form, phone:e.target.value})} />
+              </div>
+              <textarea className="control glass-dark p-2" placeholder="Notes" value={form.notes} onChange={(e)=>setForm({...form, notes:e.target.value})}></textarea>
+              <div className="flex items-center gap-2">
+                <button className="btn-neon glass-dark rounded-md px-4 py-2 text-sm" type="submit">Submit Request</button>
+                <button type="button" className="glass-dark rounded-md px-3 py-2 text-sm" onClick={handleLogout}>Logout</button>
+              </div>
+            </form>
+          )}
         </article>
       </div>
     </section>

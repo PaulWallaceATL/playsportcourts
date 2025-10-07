@@ -192,6 +192,9 @@ export function Header() {
               <Button variant="outline" asChild>
                 <Link href="/dealer-portal">Dealer Portal</Link>
               </Button>
+              <Button variant="ghost" asChild>
+                <Link href="/admin">Admin</Link>
+              </Button>
             </div>
             <Button variant="glass" size="icon" className="md:hidden shadow-neon-blue" aria-label="Toggle menu" onClick={() => setOpen((v) => !v)}>
               {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
