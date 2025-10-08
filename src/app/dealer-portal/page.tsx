@@ -5,6 +5,10 @@ import { getCurrentUser, login, logout, signup, isDealer, saveOrder, listOrders,
 import { FeatureCard } from "@/components/dealer/FeatureCard";
 import { ApplicationsGrid } from "@/components/dealer/ApplicationsGrid";
 import { BenefitsGrid } from "@/components/dealer/BenefitsGrid";
+import { SectionHeader } from "@/components/dealer/SectionHeader";
+import { StatBar } from "@/components/dealer/StatBar";
+import { Stepper } from "@/components/dealer/Stepper";
+import { ColorPalettePreview } from "@/components/dealer/ColorPalettePreview";
 
 function MarketingHero({ onLogout, showLogout }: { onLogout: () => void; showLogout: boolean }) {
   return (
@@ -153,6 +157,7 @@ export default function DealerPortalPage() {
   return (
     <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
       <MarketingHero onLogout={handleLogout} showLogout={!!user} />
+      <div className="mt-6"><StatBar /></div>
 
       <div className="mt-6 grid gap-6">
         <FeatureCard title="Introduction" description="As a certified dealer, you provide a variety of modular tile flooring options suitable for both residential and commercial applications. Explore tile options and configure orders below." />
@@ -164,7 +169,7 @@ export default function DealerPortalPage() {
         </FeatureCard>
 
         <article className="surface-elevated rounded-xl p-5 anim-slide-up">
-          <h2 className="heading-2 mb-2">{isDealer(user) ? "Order Request" : "Dealer Access"}</h2>
+          <SectionHeader overline="Start an Order" title={isDealer(user) ? "Order Request" : "Dealer Access"} right={<Stepper steps={["Details","Shipping","Items","Review"]} active={0} />} />
           {error && <p className="text-sm text-red-400 mb-2">{error}</p>}
           {!user && (
             <div className="grid gap-6">
@@ -227,8 +232,8 @@ export default function DealerPortalPage() {
 
               {/* Options & Colors (admin-managed placeholder) */}
               <div className="surface-elevated rounded-lg p-4">
-                <h3 className="heading-3 mb-2">Options & Colors</h3>
-                <p className="text-caption mb-3">Admin-managed catalog and color palettes will appear here. This placeholder mirrors your reference spec.</p>
+                <SectionHeader title="Options & Colors" caption="Admin-managed catalog and color palettes will appear here." />
+                <div className="mt-3"><ColorPalettePreview /></div>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                   {["Game Tile", "Speed Outdoor Tile", "Compete Tile", "Active Tile", "Boost Tile", "Pro Tile"].map((n) => (
                     <div key={n} className="rounded-md border border-border p-3">
