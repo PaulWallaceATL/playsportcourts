@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { ShoppingCart, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { siteContent } from "@/data/home";
+import { getCurrentUser, isDealer } from "@/lib/mock-auth";
 import { cn } from "@/lib/utils";
 import { courtTiles, garageTiles } from "@/data/products";
 import Image from "next/image";
@@ -25,6 +26,7 @@ export function Header() {
   const [open, setOpen] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [hovered, setHovered] = React.useState<null | "court" | "garage">(null);
+  const [dealer, setDealer] = React.useState(() => getCurrentUser());
   const hoverTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const cartCount = 0; // TODO: wire to cart state
 
@@ -59,7 +61,7 @@ export function Header() {
           {/* Desktop nav */}
           <nav className="hidden md:block">
             <ul className="flex items-center gap-6">
-              {NAV_ITEMS.map((item) => (
+              {NAV_ITEMS.filter((item) => item.label !== "Admin").map((item) => (
                 <li
                   key={item.href}
                   className="relative z-50"
@@ -172,6 +174,18 @@ export function Header() {
                   )}
                 </li>
               ))}
+              {/* Dealer CTA: dynamic label */}
+              <li>
+                <Link
+                  href={isDealer(dealer) ? "/dealer-portal" : "/dealer-portal"}
+                  className={cn(
+                    "text-sm font-medium transition-colors nav-underline holo-link",
+                    pathname === "/dealer-portal" ? "text-[var(--primary)]" : "text-foreground/80"
+                  )}
+                >
+                  {isDealer(dealer) ? "Dealer Portal" : "Become a Dealer"}
+                </Link>
+              </li>
             </ul>
           </nav>
 
@@ -190,10 +204,7 @@ export function Header() {
                 <Link href="/shop">Shop</Link>
               </Button>
               <Button variant="outline" asChild>
-                <Link href="/dealer-portal">Dealer Portal</Link>
-              </Button>
-              <Button variant="ghost" asChild>
-                <Link href="/admin">Admin</Link>
+                <Link href="/dealer-portal">{isDealer(dealer) ? "Dealer Portal" : "Become a Dealer"}</Link>
               </Button>
             </div>
             <Button variant="glass" size="icon" className="md:hidden shadow-neon-blue" aria-label="Toggle menu" onClick={() => setOpen((v) => !v)}>

@@ -21,14 +21,17 @@ export default function AdminPage() {
 
   return (
     <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
-      <h1 className="heading-1 text-white">Admin</h1>
+      <div className="surface-elevated rounded-2xl p-6 bg-gradient-primary bg-mesh-soft anim-slide-up">
+        <h1 className="heading-display text-gradient-hero text-glow-strong">Admin</h1>
+        <p className="text-body mt-1 text-muted-foreground">Secure area for managing dealers, items, and orders.</p>
+      </div>
       {!isAdmin(user) ? (
         <div className="mt-6 surface-elevated rounded-xl p-5 max-w-md anim-slide-up">
           <p className="text-caption mb-2">Login as admin (admin@gmail.com / password123)</p>
           {error && <p className="text-sm text-red-400 mb-2">{error}</p>}
           <form onSubmit={handleLogin} className="grid gap-2">
-            <input name="email" className="control glass-dark p-2" placeholder="Email" />
-            <input name="password" type="password" className="control glass-dark p-2" placeholder="Password" />
+            <input name="email" className="field-input" placeholder="Email" />
+            <input name="password" type="password" className="field-input" placeholder="Password" />
             <button className="btn-neon glass-dark rounded-md px-4 py-2 text-sm" type="submit">Login</button>
           </form>
         </div>
