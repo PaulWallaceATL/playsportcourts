@@ -50,20 +50,6 @@ export async function fetchMyOrders() {
   return res.data?.map(r => ({ id: r.id, projectName: r.project_name, shipTo: r.ship_to, city: r.city, state: r.state, zip: r.zip, contact: r.contact, phone: r.phone, notes: r.notes, createdAt: new Date(r.created_at).getTime(), dealerEmail: authUser.user!.email! })) ?? [];
 }
 
-type SupabaseOrderRow = {
-  id: string;
-  project_name: string | null;
-  ship_to: string | null;
-  city: string | null;
-  state: string | null;
-  zip: string | null;
-  contact: string | null;
-  phone: string | null;
-  notes: string | null;
-  created_at: string;
-  dealers?: { email: string | null } | null;
-};
-
 export async function adminFetchAllOrders() {
   const sb = getSupabaseBrowser();
   if (!sb) return listOrders();
@@ -72,18 +58,31 @@ export async function adminFetchAllOrders() {
     .select("id, project_name, ship_to, city, state, zip, contact, phone, notes, created_at, dealers(email)")
     .order("created_at", { ascending: false });
   if (res.error) throw res.error;
-  const rows = (res.data ?? []) as SupabaseOrderRow[];
-  return rows.map((r) => ({
-    id: r.id,
-    projectName: r.project_name ?? "",
-    shipTo: r.ship_to ?? "",
-    city: r.city ?? "",
-    state: r.state ?? "",
-    zip: r.zip ?? "",
-    contact: r.contact ?? "",
-    phone: r.phone ?? "",
-    notes: r.notes ?? "",
-    createdAt: new Date(r.created_at).getTime(),
-    dealerEmail: r.dealers?.email ?? "",
-  }));
+  const rowsUnknown = (res.data ?? []) as unknown[];
+  return rowsUnknown.map((row) => {
+    const r = row as Record<string, unknown>;
+    // dealers can be an object or array depending on relationship resolution
+    const dealers = r["dealers"] as unknown;
+    let dealerEmail = "";
+    if (Array.isArray(dealers) && dealers.length > 0) {
+      const d0 = dealers[0] as Record<string, unknown>;
+      dealerEmail = typeof d0.email === "string" ? d0.email : "";
+    } else if (dealers && typeof dealers === "object") {
+      const d = dealers as Record<string, unknown>;
+      dealerEmail = typeof d.email === "string" ? d.email : "";
+    }
+    return {
+      id: String(r["id"] ?? ""),
+      projectName: typeof r["project_name"] === "string" ? (r["project_name"] as string) : "",
+      shipTo: typeof r["ship_to"] === "string" ? (r["ship_to"] as string) : "",
+      city: typeof r["city"] === "string" ? (r["city"] as string) : "",
+      state: typeof r["state"] === "string" ? (r["state"] as string) : "",
+      zip: typeof r["zip"] === "string" ? (r["zip"] as string) : "",
+      contact: typeof r["contact"] === "string" ? (r["contact"] as string) : "",
+      phone: typeof r["phone"] === "string" ? (r["phone"] as string) : "",
+      notes: typeof r["notes"] === "string" ? (r["notes"] as string) : "",
+      createdAt: new Date(String(r["created_at"] ?? new Date().toISOString())).getTime(),
+      dealerEmail,
+    };
+  });
 }
