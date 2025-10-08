@@ -18,7 +18,7 @@ export default function ResurfacingPage() {
 
 			{/* Before / After */}
 			<section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
-				<BeforeAfter before="/window.svg" after="/globe.svg" />
+				<BeforeAfter before="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=1600&auto=format&fit=crop" after="https://images.unsplash.com/photo-1502877338535-766e1452684a?q=80&w=1600&auto=format&fit=crop" />
 			</section>
 
 			{/* Copy + highlights */}
