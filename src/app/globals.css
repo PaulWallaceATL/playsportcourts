@@ -204,9 +204,10 @@
   --input: rgba(255,255,255,0.08);
   --ring: #00d4ff;
 
-  --brand-primary: #00d4ff; /* electric blue */
-  --brand-secondary: #00a651; /* performance green */
-  --brand-accent: #ff6a00; /* kinetic orange */
+  /* Revamped brand (deep graphite, electric cyan, kinetic orange) */
+  --brand-primary: #06b6d4; /* cyan */
+  --brand-secondary: #22c55e; /* green */
+  --brand-accent: #fb923c; /* orange */
 
   --primary: var(--brand-primary);
   --primary-foreground: #0a0a0b;
@@ -215,7 +216,7 @@
   --accent: var(--brand-accent);
   --accent-foreground: #0a0a0b;
 
-  --gradient-primary: linear-gradient(135deg, #0a0a0b 0%, #0f172a 40%, #0b4da2 70%, #00d4ff 100%);
+  --gradient-primary: radial-gradient(900px 400px at 10% 20%, rgba(6,182,212,0.14), transparent 60%), radial-gradient(800px 360px at 90% 10%, rgba(251,146,60,0.12), transparent 60%), linear-gradient(135deg, #0a0a0b 0%, #0f172a 55%, #0b1220 100%);
 }
 
 @layer base {
