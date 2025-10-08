@@ -176,6 +176,7 @@ export default function DealerPortalPage() {
         </div>
       )}
       {isDealer(user) && (
+      <>
       <MarketingHero onLogout={handleLogout} showLogout={!!user} />
       <div className="mt-6"><StatBar /></div>
 
@@ -302,6 +303,7 @@ export default function DealerPortalPage() {
           </article>
         )}
       </div>
+      </>
       )}
     </section>
   );
