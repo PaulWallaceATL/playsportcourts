@@ -50,10 +50,40 @@ export async function fetchMyOrders() {
   return res.data?.map(r => ({ id: r.id, projectName: r.project_name, shipTo: r.ship_to, city: r.city, state: r.state, zip: r.zip, contact: r.contact, phone: r.phone, notes: r.notes, createdAt: new Date(r.created_at).getTime(), dealerEmail: authUser.user!.email! })) ?? [];
 }
 
+type SupabaseOrderRow = {
+  id: string;
+  project_name: string | null;
+  ship_to: string | null;
+  city: string | null;
+  state: string | null;
+  zip: string | null;
+  contact: string | null;
+  phone: string | null;
+  notes: string | null;
+  created_at: string;
+  dealers?: { email: string | null } | null;
+};
+
 export async function adminFetchAllOrders() {
   const sb = getSupabaseBrowser();
   if (!sb) return listOrders();
-  const res = await sb.from("orders").select("id, project_name, ship_to, city, state, zip, contact, phone, notes, created_at, dealers(email)").order("created_at", { ascending: false });
+  const res = await sb
+    .from("orders")
+    .select("id, project_name, ship_to, city, state, zip, contact, phone, notes, created_at, dealers(email)")
+    .order("created_at", { ascending: false });
   if (res.error) throw res.error;
-  return res.data?.map((r: any) => ({ id: r.id, projectName: r.project_name, shipTo: r.ship_to, city: r.city, state: r.state, zip: r.zip, contact: r.contact, phone: r.phone, notes: r.notes, createdAt: new Date(r.created_at).getTime(), dealerEmail: r.dealers?.email ?? "" })) ?? [];
+  const rows = (res.data ?? []) as SupabaseOrderRow[];
+  return rows.map((r) => ({
+    id: r.id,
+    projectName: r.project_name ?? "",
+    shipTo: r.ship_to ?? "",
+    city: r.city ?? "",
+    state: r.state ?? "",
+    zip: r.zip ?? "",
+    contact: r.contact ?? "",
+    phone: r.phone ?? "",
+    notes: r.notes ?? "",
+    createdAt: new Date(r.created_at).getTime(),
+    dealerEmail: r.dealers?.email ?? "",
+  }));
 }
