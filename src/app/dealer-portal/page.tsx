@@ -2,6 +2,9 @@
 import Link from "next/link";
 import * as React from "react";
 import { getCurrentUser, login, logout, signup, isDealer, saveOrder, listOrders, type MockOrder } from "@/lib/mock-auth";
+import { FeatureCard } from "@/components/dealer/FeatureCard";
+import { ApplicationsGrid } from "@/components/dealer/ApplicationsGrid";
+import { BenefitsGrid } from "@/components/dealer/BenefitsGrid";
 
 function MarketingHero({ onLogout, showLogout }: { onLogout: () => void; showLogout: boolean }) {
   return (
@@ -152,9 +155,13 @@ export default function DealerPortalPage() {
       <MarketingHero onLogout={handleLogout} showLogout={!!user} />
 
       <div className="mt-6 grid gap-6">
-        <IntroSection />
-        <ApplicationsSection />
-        <BenefitsSection />
+        <FeatureCard title="Introduction" description="As a certified dealer, you provide a variety of modular tile flooring options suitable for both residential and commercial applications. Explore tile options and configure orders below." />
+        <FeatureCard title="Applications">
+          <ApplicationsGrid />
+        </FeatureCard>
+        <FeatureCard title="Benefits">
+          <BenefitsGrid />
+        </FeatureCard>
 
         <article className="surface-elevated rounded-xl p-5 anim-slide-up">
           <h2 className="heading-2 mb-2">{isDealer(user) ? "Order Request" : "Dealer Access"}</h2>
