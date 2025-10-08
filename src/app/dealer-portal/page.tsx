@@ -64,8 +64,17 @@ export default function DealerPortalPage() {
 
   return (
     <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
-      <h1 className="heading-1 text-white">Swisstrax Dealer Portal</h1>
-      <p className="mt-2 text-body text-muted-foreground">Resources, applications, and an order request form for certified dealers.</p>
+      <div className="surface-elevated rounded-2xl p-6 bg-gradient-primary bg-mesh-soft anim-slide-up">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="heading-display text-gradient-hero text-glow-strong">Swisstrax Dealer Portal</h1>
+            <p className="mt-2 text-body-lg text-muted-foreground max-w-prose">Resources, applications, and a streamlined order workflow for certified dealers.</p>
+          </div>
+          {user && (
+            <button onClick={handleLogout} className="glass-dark rounded-md px-4 py-2 text-sm">Logout</button>
+          )}
+        </div>
+      </div>
 
       <div className="mt-6 grid gap-6 md:grid-cols-2">
         <article className="surface-elevated rounded-xl p-5 anim-slide-up">
@@ -157,6 +166,28 @@ export default function DealerPortalPage() {
               <div>
                 <label className="text-caption">Notes</label>
                 <textarea className="field-input" placeholder="Line colors, logo placement, delivery constraints..." value={form.notes} onChange={(e)=>setForm({...form, notes:e.target.value})} rows={4}></textarea>
+              </div>
+
+              {/* Options & Colors (admin-managed placeholder) */}
+              <div className="surface-elevated rounded-lg p-4">
+                <h3 className="heading-3 mb-2">Options & Colors</h3>
+                <p className="text-caption mb-3">Admin-managed catalog and color palettes will appear here. This placeholder mirrors your reference spec.</p>
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {["Game Tile", "Speed Outdoor Tile", "Compete Tile", "Active Tile", "Boost Tile", "Pro Tile"].map((n) => (
+                    <div key={n} className="rounded-md border border-border p-3">
+                      <p className="text-sm font-medium">{n}</p>
+                      <div className="mt-2 grid grid-cols-6 gap-1">
+                        {Array.from({ length: 6 }).map((_, i) => (
+                          <span key={i} className="h-5 w-5 rounded-full" style={{ background: `hsl(${(i*60)%360} 80% 50%)` }} />
+                        ))}
+                      </div>
+                      <div className="mt-2 grid grid-cols-2 gap-2">
+                        <input type="number" min={0} className="field-input" placeholder="Qty" />
+                        <button type="button" className="glass-dark rounded px-2 py-1 text-xs">Add to order</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <button className="btn-neon glass-dark rounded-md px-4 py-2 text-sm" type="submit">Submit Request</button>
