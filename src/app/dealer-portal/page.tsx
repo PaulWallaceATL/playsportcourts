@@ -3,6 +3,91 @@ import Link from "next/link";
 import * as React from "react";
 import { getCurrentUser, login, logout, signup, isDealer, saveOrder, listOrders, type MockOrder } from "@/lib/mock-auth";
 
+function MarketingHero({ onLogout, showLogout }: { onLogout: () => void; showLogout: boolean }) {
+  return (
+    <div className="surface-elevated rounded-2xl p-6 bg-gradient-primary bg-mesh-soft anim-slide-up">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="heading-display text-gradient-hero text-glow-strong">Dealer Portal</h1>
+          <p className="mt-2 text-body-lg text-muted-foreground max-w-prose">Resources, applications, and a streamlined order workflow for certified dealers.</p>
+        </div>
+        {showLogout && (
+          <button onClick={onLogout} className="glass-dark rounded-md px-4 py-2 text-sm">Logout</button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function IntroSection() {
+  return (
+    <section className="surface-elevated rounded-xl p-5 anim-slide-up">
+      <h2 className="heading-2 mb-2">Introduction</h2>
+      <p className="text-body">As a certified dealer, you provide a variety of modular tile flooring options suitable for both residential and commercial applications. Explore tile options and configure orders below.</p>
+    </section>
+  );
+}
+
+function ApplicationsSection() {
+  return (
+    <section className="surface-elevated rounded-xl p-5 anim-slide-up">
+      <h2 className="heading-2 mb-4">Applications</h2>
+      <div className="grid gap-6 md:grid-cols-2">
+        <div>
+          <h3 className="heading-3">Residential</h3>
+          <ul className="list-disc pl-5 text-body mt-2">
+            <li>Garage</li>
+            <li>Home Gym</li>
+            <li>Patio & Deck</li>
+            <li>Craft Areas</li>
+            <li>Unfinished Basement</li>
+            <li>Sheds</li>
+            <li>Home Office</li>
+          </ul>
+        </div>
+        <div>
+          <h3 className="heading-3">Commercial</h3>
+          <ul className="list-disc pl-5 text-body mt-2">
+            <li>Retail stores</li>
+            <li>Offices</li>
+            <li>Showrooms</li>
+            <li>Car Dealership Showrooms</li>
+            <li>Outdoor Events</li>
+            <li>Dance Floors</li>
+            <li>Commercial Garages</li>
+            <li>Airplane Hangars</li>
+            <li>Corporate Events</li>
+            <li>Gym Flooring</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function BenefitsSection() {
+  const items = [
+    { t: "Customizable", d: "Pick tiles, colors, and layouts tailored to the space." },
+    { t: "Durable", d: "Protects against impact and chemicals for years." },
+    { t: "Covers Imperfections", d: "Hide stained or cracked floors quickly." },
+    { t: "Warranty-Backed", d: "Industry-leading coverage for peace of mind." },
+    { t: "Fast Install", d: "Finish in hours—not days—with minimal prep." },
+  ];
+  return (
+    <section className="surface-elevated rounded-xl p-5 anim-slide-up">
+      <h2 className="heading-2 mb-4">Benefits</h2>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map(({ t, d }) => (
+          <div key={t} className="rounded-lg border border-border p-4">
+            <p className="font-semibold">{t}</p>
+            <p className="text-body mt-1 text-muted-foreground">{d}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export default function DealerPortalPage() {
   const [user, setUser] = React.useState(getCurrentUser());
   const [error, setError] = React.useState<string | null>(null);
@@ -64,47 +149,12 @@ export default function DealerPortalPage() {
 
   return (
     <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
-      <div className="surface-elevated rounded-2xl p-6 bg-gradient-primary bg-mesh-soft anim-slide-up">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h1 className="heading-display text-gradient-hero text-glow-strong">Swisstrax Dealer Portal</h1>
-            <p className="mt-2 text-body-lg text-muted-foreground max-w-prose">Resources, applications, and a streamlined order workflow for certified dealers.</p>
-          </div>
-          {user && (
-            <button onClick={handleLogout} className="glass-dark rounded-md px-4 py-2 text-sm">Logout</button>
-          )}
-        </div>
-      </div>
+      <MarketingHero onLogout={handleLogout} showLogout={!!user} />
 
-      <div className="mt-6 grid gap-6 md:grid-cols-2">
-        <article className="surface-elevated rounded-xl p-5 anim-slide-up">
-          <h2 className="heading-2 mb-2">Introduction</h2>
-          <p className="text-body">As a Certified Swisstrax Dealer, [Dealer Name] provides a variety of modular tile flooring options from Swisstrax. Known for premium garage flooring solutions, Swisstrax flooring can be used for both residential and commercial applications. <Link href="/garage-tiles" className="holo-link">Learn more about the tile options</Link>.</p>
-          <div className="mt-4 grid gap-3">
-            <div>
-              <h3 className="heading-3">Residential Applications Include</h3>
-              <ul className="list-disc pl-5 text-body">
-                <li>Garage</li><li>Home Gym</li><li>Patio & Deck</li><li>Craft Areas</li><li>Unfinished Basement</li><li>Sheds</li><li>Home Office</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="heading-3">Commercial Applications Include</h3>
-              <ul className="list-disc pl-5 text-body">
-                <li>Retail stores</li><li>Offices</li><li>Showrooms</li><li>Car Dealership Showrooms</li><li>Outdoor Events</li><li>Dance Floors</li><li>Commercial Garages</li><li>Airplane Hangars</li><li>Corporate Events</li><li>Gym Flooring</li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="heading-3">Benefits</h3>
-              <ul className="list-disc pl-5 text-body">
-                <li>Customize your floors with specific tiles & designs</li>
-                <li>Protect floors from impact and chemicals</li>
-                <li>Cover stained or cracked flooring</li>
-                <li>Industry leading warranty</li>
-                <li>No prep required; finish in hours, not days</li>
-              </ul>
-            </div>
-          </div>
-        </article>
+      <div className="mt-6 grid gap-6">
+        <IntroSection />
+        <ApplicationsSection />
+        <BenefitsSection />
 
         <article className="surface-elevated rounded-xl p-5 anim-slide-up">
           <h2 className="heading-2 mb-2">{isDealer(user) ? "Order Request" : "Dealer Access"}</h2>
