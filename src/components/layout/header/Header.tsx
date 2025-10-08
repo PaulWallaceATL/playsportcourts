@@ -27,6 +27,11 @@ export function Header() {
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [hovered, setHovered] = React.useState<null | "court" | "garage">(null);
   const [dealer, setDealer] = React.useState(() => getCurrentUser());
+  React.useEffect(() => {
+    const listener = () => setDealer(getCurrentUser());
+    window.addEventListener("mock-auth-change", listener);
+    return () => window.removeEventListener("mock-auth-change", listener);
+  }, []);
   const hoverTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const cartCount = 0; // TODO: wire to cart state
 
@@ -175,17 +180,31 @@ export function Header() {
                 </li>
               ))}
               {/* Dealer CTA: dynamic label */}
-              <li>
-                <Link
-                  href={isDealer(dealer) ? "/dealer-portal" : "/dealer-portal"}
-                  className={cn(
-                    "text-sm font-medium transition-colors nav-underline holo-link",
-                    pathname === "/dealer-portal" ? "text-[var(--primary)]" : "text-foreground/80"
-                  )}
-                >
-                  {isDealer(dealer) ? "Dealer Portal" : "Become a Dealer"}
-                </Link>
-              </li>
+              {isDealer(dealer) ? (
+                <li>
+                  <Link
+                    href="/dealer-portal"
+                    className={cn(
+                      "text-sm font-medium transition-colors nav-underline holo-link",
+                      pathname === "/dealer-portal" ? "text-[var(--primary)]" : "text-foreground/80"
+                    )}
+                  >
+                    Dealer Portal
+                  </Link>
+                </li>
+              ) : (
+                <li>
+                  <Link
+                    href="/contact"
+                    className={cn(
+                      "text-sm font-medium transition-colors nav-underline holo-link",
+                      pathname === "/contact" ? "text-[var(--primary)]" : "text-foreground/80"
+                    )}
+                  >
+                    Become a Dealer
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
 
@@ -204,7 +223,7 @@ export function Header() {
                 <Link href="/shop">Shop</Link>
               </Button>
               <Button variant="outline" asChild>
-                <Link href="/dealer-portal">{isDealer(dealer) ? "Dealer Portal" : "Become a Dealer"}</Link>
+                <Link href={isDealer(dealer) ? "/dealer-portal" : "/contact"}>{isDealer(dealer) ? "Dealer Portal" : "Become a Dealer"}</Link>
               </Button>
             </div>
             <Button variant="glass" size="icon" className="md:hidden shadow-neon-blue" aria-label="Toggle menu" onClick={() => setOpen((v) => !v)}>

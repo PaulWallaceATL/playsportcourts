@@ -39,7 +39,10 @@ export function signup(email: string, password: string): MockUser | null {
   users.push({ email, password, role: "dealer" });
   saveUsers(users);
   const user: MockUser = { email, role: "dealer" };
-  if (typeof window !== "undefined") localStorage.setItem(STORAGE_KEYS.currentUser, JSON.stringify(user));
+  if (typeof window !== "undefined") {
+    localStorage.setItem(STORAGE_KEYS.currentUser, JSON.stringify(user));
+    window.dispatchEvent(new Event("mock-auth-change"));
+  }
   return user;
 }
 
@@ -48,13 +51,17 @@ export function login(email: string, password: string): MockUser | null {
   const hit = users.find((u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
   if (!hit) return null;
   const user: MockUser = { email: hit.email, role: hit.role };
-  if (typeof window !== "undefined") localStorage.setItem(STORAGE_KEYS.currentUser, JSON.stringify(user));
+  if (typeof window !== "undefined") {
+    localStorage.setItem(STORAGE_KEYS.currentUser, JSON.stringify(user));
+    window.dispatchEvent(new Event("mock-auth-change"));
+  }
   return user;
 }
 
 export function logout() {
   if (typeof window === "undefined") return;
   localStorage.removeItem(STORAGE_KEYS.currentUser);
+  window.dispatchEvent(new Event("mock-auth-change"));
 }
 
 export function getCurrentUser(): MockUser | null {

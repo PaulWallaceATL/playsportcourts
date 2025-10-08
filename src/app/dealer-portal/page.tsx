@@ -156,6 +156,26 @@ export default function DealerPortalPage() {
 
   return (
     <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
+      {!isDealer(user) && (
+        <div className="surface-elevated rounded-xl p-6 anim-slide-up">
+          <h1 className="heading-2">Dealer access required</h1>
+          <p className="text-body mt-2 text-muted-foreground">You need a dealer account to view this page. Log in or request access.</p>
+          <div className="mt-4 grid gap-2 max-w-md">
+            <form onSubmit={handleLogin} className="grid gap-2">
+              <input name="email" className="field-input" placeholder="Email" />
+              <input name="password" type="password" className="field-input" placeholder="Password" />
+              <button className="btn-neon glass-dark rounded-md px-4 py-2 text-sm" type="submit">Login</button>
+            </form>
+            <form onSubmit={handleSignup} className="grid gap-2">
+              <p className="text-caption">New? Create a dealer account</p>
+              <input name="email" className="field-input" placeholder="Email" />
+              <input name="password" type="password" className="field-input" placeholder="Password" />
+              <button className="glass-dark rounded-md px-4 py-2 text-sm" type="submit">Create Account</button>
+            </form>
+          </div>
+        </div>
+      )}
+      {isDealer(user) && (
       <MarketingHero onLogout={handleLogout} showLogout={!!user} />
       <div className="mt-6"><StatBar /></div>
 
@@ -282,6 +302,7 @@ export default function DealerPortalPage() {
           </article>
         )}
       </div>
+      )}
     </section>
   );
 }
