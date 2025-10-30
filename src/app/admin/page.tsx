@@ -26,9 +26,11 @@ export default function AdminPage() {
 
   // State for products
   const [products, setProducts] = React.useState<Product[]>(() => {
-    // Initialize from catalog
+    // Initialize from catalog with mutable arrays
     return Object.values(PRODUCT_CATALOG).map((p) => ({
       ...p,
+      colors: [...p.colors], // Convert readonly array to mutable
+      features: [...p.features], // Convert readonly array to mutable
       active: true,
     }));
   });
