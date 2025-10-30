@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { commercialContent as c } from "@/data/commercial";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Commercial Courts",
+  description: "Professional sport court solutions for schools, recreation centers, gyms, and commercial facilities. Durable, customizable, warranty-backed.",
+};
 
 export default function CommercialPage() {
 	return (

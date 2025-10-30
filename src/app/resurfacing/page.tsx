@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { resurfacingContent as c } from "@/data/resurfacing";
 import { BeforeAfter } from "@/components/resurfacing/BeforeAfter";
 import { ProcessSteps } from "@/components/resurfacing/ProcessSteps";
 import { CTAContact } from "@/components/resurfacing/CTAContact";
+
+export const metadata: Metadata = {
+  title: "Court Resurfacing",
+  description: "Professional court resurfacing services. Repair, restore, and upgrade your existing sport courts with premium solutions.",
+};
 
 export default function ResurfacingPage() {
 	return (

@@ -1,10 +1,14 @@
-// removed unused imports
+import type { Metadata } from "next";
 import Link from "next/link";
 import { courtTiles } from "@/data/products";
-// removed unused imports
 import { ProductCard } from "@/components/ui/ProductCard";
 import { Button } from "@/components/ui/button";
 import { HeroVideo } from "@/components/sections/hero/HeroVideo";
+
+export const metadata: Metadata = {
+  title: "Court Tiles",
+  description: "Premium modular court tiles for basketball, tennis, pickleball, and multi-sport applications. Professional-grade performance.",
+};
 
 export default function CourtTilesIndexPage() {
   return (

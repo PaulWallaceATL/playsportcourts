@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { residentialContent as c } from "@/data/residential";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "Residential Courts",
+  description: "Premium sport court tiles for homes. Transform your backyard, garage, or basement into a professional-grade athletic space.",
+};
 
 export default function ResidentialPage() {
 	return (

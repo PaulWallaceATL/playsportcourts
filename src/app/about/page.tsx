@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { aboutContent as c } from "@/data/about";
 import { siteContent } from "@/data/home";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description: "Learn about PlaySport Courts - your premier provider of modular sport court tiles and professional installation services.",
+};
 
 export default function AboutPage() {
 	return (

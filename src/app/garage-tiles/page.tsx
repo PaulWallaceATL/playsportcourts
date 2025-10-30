@@ -1,7 +1,11 @@
-// removed unused imports
+import type { Metadata } from "next";
 import { garageTiles } from "@/data/products";
-// removed unused imports
 import { ProductCard } from "@/components/ui/ProductCard";
+
+export const metadata: Metadata = {
+  title: "Garage Tiles",
+  description: "Premium garage flooring tiles. Transform your garage into a showroom with durable, customizable modular tiles.",
+};
 
 export default function GarageTilesIndexPage() {
   return (

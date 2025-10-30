@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import { CourtBuilder } from "@/components/interactive/CourtBuilder";
+
+export const metadata: Metadata = {
+  title: "Design Your Court",
+  description: "Interactive court designer. Visualize your custom sport court with our 3D design tool. Choose colors, layouts, and configurations.",
+};
 
 export default function DesignPage() {
 	return (

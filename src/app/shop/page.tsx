@@ -4,6 +4,11 @@ import * as React from "react";
 import { courtTiles, garageTiles } from "@/data/products";
 import { ProductCard } from "@/components/ui/ProductCard";
 
+export const metadata = {
+  title: "Shop",
+  description: "Browse our complete catalog of premium sport court tiles, garage tiles, and accessories. Shop online with secure checkout.",
+};
+
 export default function ShopPage() {
 	const [filter, setFilter] = React.useState<string>(c.categories[0]);
 	const items = [

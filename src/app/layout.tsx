@@ -23,8 +23,25 @@ const display = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "PlaySport Atlanta — Premium Residential & Commercial Courts",
-  description: "Design, installation, and supply of premium athletic court systems across Greater Atlanta.",
+  title: {
+    default: "PlaySport Courts",
+    template: "%s | PlaySport Courts",
+  },
+  description: "Premium modular sport court tiles and flooring solutions. Professional installation, custom designs, and superior quality for residential and commercial applications.",
+  keywords: ["sport courts", "court tiles", "athletic flooring", "modular tiles", "basketball courts", "tennis courts", "pickleball courts", "game tiles"],
+  authors: [{ name: "PlaySport Courts" }],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "PlaySport Courts",
+    title: "PlaySport Courts - Premium Sport Court Tiles",
+    description: "Premium modular sport court tiles and flooring solutions for residential and commercial applications.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PlaySport Courts - Premium Sport Court Tiles",
+    description: "Premium modular sport court tiles and flooring solutions.",
+  },
 };
 
 export default function RootLayout({
