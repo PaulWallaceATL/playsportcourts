@@ -51,15 +51,6 @@ alter table public.orders enable row level security;
 alter table public.order_items enable row level security;
 alter table public.items enable row level security;
 
--- Admin role via JWT claim `role` = 'admin' or email match
-create policy dealers_select on public.dealers for select
-  using (auth.role() = 'authenticated');
-
-create policy dealers_self on public.dealers for all
-  using (auth.uid() = user_id) with check (auth.uid() = user_id);
-
-create policy items_read on public.items for select using (true);
-
 create policy orders_read on public.orders for select using (
   exists (select 1 from public.dealers d where d.id = orders.dealer_id and d.user_id = auth.uid())
 );
