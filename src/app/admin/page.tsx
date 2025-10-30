@@ -9,8 +9,10 @@ import {
   ShoppingCart,
   LogOut,
   Shield,
+  Lock,
+  Mail,
 } from "lucide-react";
-import { getCurrentUser, isAdmin, logout } from "@/lib/mock-auth";
+import { getCurrentUser, isAdmin, logout, login } from "@/lib/mock-auth";
 import { PRODUCT_CATALOG } from "@/lib/stripe";
 import { ProductManager, Product } from "@/components/admin/ProductManager";
 import { UserManager, AppUser } from "@/components/admin/UserManager";
@@ -149,37 +151,24 @@ export default function AdminPage() {
     },
   ]);
 
-  // Redirect if not admin
-  React.useEffect(() => {
-    if (!isAdmin(user)) {
-      router.push("/dealer-portal");
-    }
-  }, [user, router]);
-
+  // Show admin login if not logged in as admin
   if (!isAdmin(user)) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="glass-dark rounded-xl p-8 text-center">
-          <Shield className="w-16 h-16 mx-auto mb-4 text-red-400" />
-          <h1 className="heading-2 mb-2">Access Denied</h1>
-          <p className="text-body text-muted-foreground mb-4">
-            You need admin privileges to access this page.
-          </p>
-          <button
-            onClick={() => router.push("/dealer-portal")}
-            className="btn-neon glass-dark rounded-lg px-4 py-2"
-          >
-            Go to Dealer Portal
-          </button>
-        </div>
-      </div>
-    );
+    return <AdminLogin onLogin={handleLogin} error={error} />;
   }
+
+  const handleLogin = (email: string, password: string) => {
+    const u = login(email, password);
+    if (!u || !isAdmin(u)) {
+      setError("Admin credentials required");
+      return;
+    }
+    setUser(u);
+    setError(null);
+  };
 
   const handleLogout = () => {
     logout();
     setUser(null);
-    router.push("/dealer-portal");
   };
 
   // Product handlers
@@ -401,5 +390,115 @@ export default function AdminPage() {
         </div>
       </div>
     </section>
+  );
+}
+
+// Admin Login Component
+interface AdminLoginProps {
+  onLogin: (email: string, password: string) => void;
+  error: string | null;
+}
+
+function AdminLogin({ onLogin, error }: AdminLoginProps) {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onLogin(email, password);
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Logo/Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-primary mb-4 shadow-neon-blue">
+            <Shield className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="heading-1 text-gradient-hero mb-2">Admin Dashboard</h1>
+          <p className="text-body text-muted-foreground">
+            Secure access for administrators only
+          </p>
+        </div>
+
+        {/* Login Card */}
+        <div className="glass-dark rounded-2xl p-8 shadow-layered">
+          <h2 className="heading-2 mb-6 text-center">Admin Sign In</h2>
+
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm flex items-start gap-2">
+              <div className="mt-0.5">⚠️</div>
+              <div>{error}</div>
+            </div>
+          )}
+
+          {/* Demo Credentials */}
+          <div className="mb-6 p-4 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-300 text-sm">
+            <p className="font-semibold mb-1">Admin Credentials:</p>
+            <p className="text-xs">Email: admin@gmail.com or admin2@playsport.com</p>
+            <p className="text-xs">Password: password123 or admin2024!</p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Email Field */}
+            <div>
+              <label className="text-caption block mb-2">Admin Email</label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="admin@example.com"
+                  required
+                  className="field-input w-full pl-11"
+                />
+              </div>
+            </div>
+
+            {/* Password Field */}
+            <div>
+              <label className="text-caption block mb-2">Password</label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  required
+                  className="field-input w-full pl-11"
+                />
+              </div>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="btn-neon glass-dark rounded-lg px-6 py-3 w-full text-base font-bold hover-lift transition-all"
+            >
+              <Shield className="w-5 h-5 inline mr-2" />
+              Access Dashboard
+            </button>
+          </form>
+
+          {/* Footer */}
+          <div className="mt-6 text-center text-caption text-muted-foreground">
+            <p className="flex items-center justify-center gap-2">
+              <Lock className="w-4 h-4" />
+              Admin access only • Unauthorized access is prohibited
+            </p>
+          </div>
+        </div>
+
+        {/* Security Notice */}
+        <div className="mt-6 text-center text-caption text-muted-foreground">
+          <p>All admin actions are logged and monitored</p>
+        </div>
+      </div>
+    </div>
   );
 }
