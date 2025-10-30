@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   LayoutDashboard,
@@ -21,7 +22,7 @@ import { OrdersTable, Order } from "@/components/dealer/OrdersTable";
 
 type TabType = "dashboard" | "catalog" | "cart" | "orders";
 
-export default function DealerPortalPage() {
+function DealerPortalContent() {
   const searchParams = useSearchParams();
   const [user, setUser] = React.useState(getCurrentUser());
   const [error, setError] = React.useState<string | null>(null);
@@ -332,5 +333,20 @@ export default function DealerPortalPage() {
         </div>
       </div>
     </section>
+  );
+}
+
+export default function DealerPortalPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="glass-dark rounded-xl p-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--brand-primary)] mx-auto"></div>
+          <p className="text-body text-muted-foreground mt-4">Loading...</p>
+        </div>
+      </div>
+    }>
+      <DealerPortalContent />
+    </Suspense>
   );
 }
