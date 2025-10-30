@@ -28,10 +28,10 @@ export async function POST(req: NextRequest) {
       clientSecret: paymentIntent.client_secret,
       amount,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Payment intent error:", error);
     return NextResponse.json(
-      { error: error?.message || "Internal server error" },
+      { error: (error as Error)?.message || "Internal server error" },
       { status: 500 }
     );
   }

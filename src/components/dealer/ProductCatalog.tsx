@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { PRODUCT_CATALOG, ProductId } from "@/lib/stripe";
-import { Plus, Check, Info } from "lucide-react";
+import { Plus, Check } from "lucide-react";
 
 interface ProductCatalogProps {
   onAddToCart: (productId: ProductId, color: string, quantity: number) => void;

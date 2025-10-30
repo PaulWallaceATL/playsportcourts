@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe, PRODUCT_CATALOG, CartItem, calculateCartTotal } from "@/lib/stripe";
+import { stripe, PRODUCT_CATALOG, CartItem } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
   try {
@@ -58,10 +58,10 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ sessionId: session.id, url: session.url });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Stripe checkout error:", error);
     return NextResponse.json(
-      { error: error?.message || "Internal server error" },
+      { error: (error as Error)?.message || "Internal server error" },
       { status: 500 }
     );
   }

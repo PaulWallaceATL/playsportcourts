@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Users, Edit2, Trash2, Mail, Shield, User, Search } from "lucide-react";
+import { Users, Trash2, Shield, User, Search } from "lucide-react";
 import { UserRole } from "@/lib/mock-auth";
 
 export interface AppUser {
@@ -100,7 +100,7 @@ export function UserManager({ users, onUpdateUser, onDeleteUser }: UserManagerPr
           {/* Role Filter */}
           <select
             value={filterRole}
-            onChange={(e) => setFilterRole(e.target.value as any)}
+            onChange={(e) => setFilterRole(e.target.value as "all" | UserRole)}
             className="field-input min-w-[150px]"
           >
             <option value="all">All Roles</option>

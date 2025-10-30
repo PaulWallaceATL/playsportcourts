@@ -168,7 +168,7 @@ export default function DealerPortalPage() {
             <div>
               <p className="font-semibold text-yellow-300 mb-1">Checkout Cancelled</p>
               <p className="text-sm text-muted-foreground">
-                Your cart items are still saved. Complete checkout when you're ready.
+                Your cart items are still saved. Complete checkout when you&apos;re ready.
               </p>
             </div>
           </div>

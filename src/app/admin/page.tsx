@@ -9,7 +9,6 @@ import {
   ShoppingCart,
   LogOut,
   Shield,
-  Settings,
 } from "lucide-react";
 import { getCurrentUser, isAdmin, logout } from "@/lib/mock-auth";
 import { PRODUCT_CATALOG } from "@/lib/stripe";

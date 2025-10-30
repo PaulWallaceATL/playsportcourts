@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Package, Search, Filter, Download, CheckCircle, XCircle, Clock } from "lucide-react";
+import { Package, Search, Download, CheckCircle, XCircle, Clock } from "lucide-react";
 import { format } from "date-fns";
 
 export interface AdminOrder {
@@ -108,7 +108,7 @@ export function OrderManager({ orders, onUpdateStatus, onUpdatePaymentStatus }: 
           {/* Status Filter */}
           <select
             value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value as any)}
+            onChange={(e) => setFilterStatus(e.target.value as "all" | AdminOrder["status"])}
             className="field-input min-w-[150px]"
           >
             <option value="all">All Status</option>
@@ -121,7 +121,7 @@ export function OrderManager({ orders, onUpdateStatus, onUpdatePaymentStatus }: 
           {/* Payment Filter */}
           <select
             value={filterPayment}
-            onChange={(e) => setFilterPayment(e.target.value as any)}
+            onChange={(e) => setFilterPayment(e.target.value as "all" | AdminOrder["paymentStatus"])}
             className="field-input min-w-[150px]"
           >
             <option value="all">All Payments</option>
@@ -156,7 +156,6 @@ export function OrderManager({ orders, onUpdateStatus, onUpdatePaymentStatus }: 
             <tbody className="divide-y divide-border">
               {filteredOrders.map((order) => {
                 const config = statusConfig[order.status];
-                const StatusIcon = config.icon;
 
                 return (
                   <tr
@@ -200,7 +199,7 @@ export function OrderManager({ orders, onUpdateStatus, onUpdatePaymentStatus }: 
                         value={order.status}
                         onChange={(e) => {
                           e.stopPropagation();
-                          onUpdateStatus(order.id, e.target.value as any);
+                          onUpdateStatus(order.id, e.target.value as AdminOrder["status"]);
                         }}
                         className={`field-input py-1 text-sm bg-${config.color}-500/10 border-${config.color}-500/30 text-${config.color}-400`}
                       >
@@ -217,7 +216,7 @@ export function OrderManager({ orders, onUpdateStatus, onUpdatePaymentStatus }: 
                         value={order.paymentStatus}
                         onChange={(e) => {
                           e.stopPropagation();
-                          onUpdatePaymentStatus(order.id, e.target.value as any);
+                          onUpdatePaymentStatus(order.id, e.target.value as AdminOrder["paymentStatus"]);
                         }}
                         className={`field-input py-1 text-sm ${
                           order.paymentStatus === "paid"

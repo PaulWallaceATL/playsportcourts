@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { Plus, Edit2, Trash2, Save, X, DollarSign, Package } from "lucide-react";
-import { ProductId } from "@/lib/stripe";
 
 export interface Product {
   id: string;

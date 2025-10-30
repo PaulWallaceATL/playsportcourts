@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Lock, Mail, User, LogIn, UserPlus } from "lucide-react";
+import { Lock, Mail, LogIn, UserPlus } from "lucide-react";
 
 interface AuthUIProps {
   onLogin: (email: string, password: string) => void;
@@ -140,8 +140,8 @@ export function AuthUI({ onLogin, onSignup, error }: AuthUIProps) {
           {/* Footer */}
           <div className="mt-6 text-center text-caption text-muted-foreground">
             {mode === "login" ? (
-              <p>
-                Don't have an account?{" "}
+            <p>
+              Don&apos;t have an account?{" "}
                 <button
                   type="button"
                   onClick={() => setMode("signup")}

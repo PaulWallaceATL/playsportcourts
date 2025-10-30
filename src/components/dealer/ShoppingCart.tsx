@@ -60,9 +60,10 @@ export function ShoppingCart({
       if (stripeError) {
         throw stripeError;
       }
-    } catch (err: any) {
-      console.error("Checkout error:", err);
-      setError(err.message || "An error occurred during checkout");
+    } catch (err) {
+      const error = err as Error;
+      console.error("Checkout error:", error);
+      setError(error.message || "An error occurred during checkout");
     } finally {
       setIsLoading(false);
     }
