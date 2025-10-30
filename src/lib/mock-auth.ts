@@ -6,6 +6,9 @@ export interface MockUser { email: string; role: UserRole; }
 const SEED_USERS: Array<{ email: string; password: string; role: UserRole }> = [
   { email: "dealer@gmail.com", password: "password123", role: "dealer" },
   { email: "admin@gmail.com", password: "password123", role: "admin" },
+  // New test users
+  { email: "admin2@playsport.com", password: "admin2024!", role: "admin" },
+  { email: "dealer-test@playsport.com", password: "dealer2024!", role: "dealer" },
 ];
 
 const STORAGE_KEYS = {
