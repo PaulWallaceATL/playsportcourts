@@ -8,7 +8,7 @@ interface Stat {
   value: string | number;
   change?: number;
   trend?: "up" | "down";
-  icon: React.ElementType;
+  icon: React.ComponentType<{ className?: string }>;
   color: string;
 }
 
