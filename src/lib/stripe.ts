@@ -16,9 +16,6 @@ export const getStripeInstance = () => {
   return stripeInstance;
 };
 
-// Export for backward compatibility
-export const stripe = getStripeInstance();
-
 // Product catalog with pricing
 export const PRODUCT_CATALOG = {
   "game-tile": {
