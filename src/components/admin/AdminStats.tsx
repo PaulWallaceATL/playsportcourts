@@ -63,7 +63,7 @@ export function AdminStats({ stats }: AdminStatsProps) {
       {statCards.map((stat) => {
         const Icon = stat.icon;
         const TrendIcon = stat.trend === "up" ? TrendingUp : TrendingDown;
-        const colorMap = {
+        const colorMap: Record<string, string> = {
           emerald: "text-emerald-400",
           blue: "text-blue-400",
           purple: "text-purple-400",
@@ -92,7 +92,7 @@ export function AdminStats({ stats }: AdminStatsProps) {
                 )}
               </div>
               <div
-                className={`glass-surface rounded-xl p-3 ${colorMap[stat.color as keyof typeof colorMap]}`}
+                className={`glass-surface rounded-xl p-3 ${colorMap[stat.color]}`}
               >
                 <Icon className="w-8 h-8" />
               </div>
