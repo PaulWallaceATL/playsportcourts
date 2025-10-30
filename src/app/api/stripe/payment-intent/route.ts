@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe, calculateCartTotal, CartItem } from "@/lib/stripe";
+import { getStripeInstance, calculateCartTotal, CartItem } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,6 +14,9 @@ export async function POST(req: NextRequest) {
     }
 
     const amount = Math.round(calculateCartTotal(items) * 100); // Convert to cents
+
+    // Get Stripe instance
+    const stripe = getStripeInstance();
 
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({

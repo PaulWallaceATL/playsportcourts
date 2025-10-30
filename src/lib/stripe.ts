@@ -1,10 +1,23 @@
 import Stripe from "stripe";
 
-// Server-side Stripe instance
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2025-10-29.clover",
-  typescript: true,
-});
+// Lazy-load Stripe instance to avoid build-time initialization
+let stripeInstance: Stripe | null = null;
+
+export const getStripeInstance = () => {
+  if (!stripeInstance) {
+    if (!process.env.STRIPE_SECRET_KEY) {
+      throw new Error("STRIPE_SECRET_KEY is not set");
+    }
+    stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: "2025-10-29.clover",
+      typescript: true,
+    });
+  }
+  return stripeInstance;
+};
+
+// Export for backward compatibility
+export const stripe = getStripeInstance();
 
 // Product catalog with pricing
 export const PRODUCT_CATALOG = {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe, PRODUCT_CATALOG, CartItem } from "@/lib/stripe";
+import { getStripeInstance, PRODUCT_CATALOG, CartItem } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,6 +16,9 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Get Stripe instance
+    const stripe = getStripeInstance();
 
     // Create line items for Stripe
     const lineItems = items.map((item) => {

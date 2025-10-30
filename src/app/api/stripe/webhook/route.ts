@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { stripe } from "@/lib/stripe";
+import { getStripeInstance } from "@/lib/stripe";
 import Stripe from "stripe";
 
 // Disable body parsing, need raw body for webhook verification
@@ -17,6 +17,9 @@ export async function POST(req: NextRequest) {
   }
 
   let event: Stripe.Event;
+
+  // Get Stripe instance
+  const stripe = getStripeInstance();
 
   try {
     event = stripe.webhooks.constructEvent(
