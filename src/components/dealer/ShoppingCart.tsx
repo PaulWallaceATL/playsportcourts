@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { PRODUCT_CATALOG, CartItem, calculateCartTotal } from "@/lib/stripe";
-import { getStripe } from "@/lib/stripe-client";
 import { Trash2, ShoppingCart as CartIcon, CreditCard, Loader2 } from "lucide-react";
 
 interface ShoppingCartProps {
@@ -49,16 +48,11 @@ export function ShoppingCart({
         throw new Error(data.error || "Failed to create checkout session");
       }
 
-      // Redirect to Stripe Checkout
-      const stripe = await getStripe();
-      if (!stripe) throw new Error("Stripe not loaded");
-
-      const { error: stripeError } = await stripe.redirectToCheckout({
-        sessionId: data.sessionId,
-      });
-
-      if (stripeError) {
-        throw stripeError;
+      // Redirect to Stripe Checkout URL
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("No checkout URL returned");
       }
     } catch (err) {
       const error = err as Error;
