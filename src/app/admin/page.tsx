@@ -22,9 +22,9 @@ import { AdminStats, RecentActivity } from "@/components/admin/AdminStats";
 type TabType = "dashboard" | "products" | "users" | "orders";
 
 export default function AdminPage() {
-  const router = useRouter();
   const [user, setUser] = React.useState(getCurrentUser());
   const [activeTab, setActiveTab] = React.useState<TabType>("dashboard");
+  const [error, setError] = React.useState<string | null>(null);
 
   // State for products
   const [products, setProducts] = React.useState<Product[]>(() => {
@@ -151,11 +151,7 @@ export default function AdminPage() {
     },
   ]);
 
-  // Show admin login if not logged in as admin
-  if (!isAdmin(user)) {
-    return <AdminLogin onLogin={handleLogin} error={error} />;
-  }
-
+  // Handler functions
   const handleLogin = (email: string, password: string) => {
     const u = login(email, password);
     if (!u || !isAdmin(u)) {
@@ -170,6 +166,11 @@ export default function AdminPage() {
     logout();
     setUser(null);
   };
+
+  // Show admin login if not logged in as admin
+  if (!isAdmin(user)) {
+    return <AdminLogin onLogin={handleLogin} error={error} />;
+  }
 
   // Product handlers
   const handleSaveProduct = (product: Product) => {
