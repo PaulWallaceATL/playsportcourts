@@ -11,6 +11,8 @@ import {
   LogOut,
   CheckCircle,
   XCircle,
+  Sparkles,
+  TrendingUp,
 } from "lucide-react";
 import { getCurrentUser, login, logout, signup, isDealer } from "@/lib/mock-auth";
 import { CartItem, ProductId } from "@/lib/stripe";
@@ -19,6 +21,7 @@ import { DashboardMetrics } from "@/components/dealer/DashboardMetrics";
 import { ProductCatalog } from "@/components/dealer/ProductCatalog";
 import { ShoppingCart } from "@/components/dealer/ShoppingCart";
 import { OrdersTable, Order } from "@/components/dealer/OrdersTable";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 type TabType = "dashboard" | "catalog" | "cart" | "orders";
 
@@ -49,7 +52,7 @@ function DealerPortalContent() {
     }
   }, [searchParams]);
 
-  // Mock orders data (in production, fetch from API)
+  // Mock orders data
   React.useEffect(() => {
     if (isDealer(user)) {
       setOrders([
@@ -113,7 +116,6 @@ function DealerPortalContent() {
 
   const handleAddToCart = (productId: ProductId, color: string, quantity: number) => {
     setCart((prev) => [...prev, { productId, color, quantity }]);
-    // Auto-switch to cart tab to show the added item
     setTimeout(() => setActiveTab("cart"), 300);
   };
 
@@ -147,13 +149,15 @@ function DealerPortalContent() {
 
   return (
     <section className="min-h-screen bg-[var(--background)]">
-      {/* Success/Cancel Notifications */}
+      {/* Success/Cancel Notifications - Enhanced */}
       {showSuccess && (
-        <div className="fixed top-4 right-4 z-50 glass-dark rounded-xl p-4 shadow-layered border-2 border-emerald-500/40 anim-slide-down max-w-md">
-          <div className="flex items-start gap-3">
-            <CheckCircle className="w-6 h-6 text-emerald-400 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-semibold text-emerald-300 mb-1">Payment Successful!</p>
+        <div className="fixed top-6 right-6 z-50 card-premium border-premium-animated max-w-md anim-slide-down shadow-2xl">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center shrink-0">
+              <CheckCircle className="w-6 h-6 text-emerald-400" />
+            </div>
+            <div className="flex-1">
+              <p className="font-bold text-emerald-300 mb-1">Payment Successful!</p>
               <p className="text-sm text-muted-foreground">
                 Your order has been placed and payment processed. Check your email for confirmation.
               </p>
@@ -163,11 +167,13 @@ function DealerPortalContent() {
       )}
 
       {showCancelled && (
-        <div className="fixed top-4 right-4 z-50 glass-dark rounded-xl p-4 shadow-layered border-2 border-yellow-500/40 anim-slide-down max-w-md">
-          <div className="flex items-start gap-3">
-            <XCircle className="w-6 h-6 text-yellow-400 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-semibold text-yellow-300 mb-1">Checkout Cancelled</p>
+        <div className="fixed top-6 right-6 z-50 card-premium max-w-md anim-slide-down shadow-2xl">
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-yellow-500/20 flex items-center justify-center shrink-0">
+              <XCircle className="w-6 h-6 text-yellow-400" />
+            </div>
+            <div className="flex-1">
+              <p className="font-bold text-yellow-300 mb-1">Checkout Cancelled</p>
               <p className="text-sm text-muted-foreground">
                 Your cart items are still saved. Complete checkout when you&apos;re ready.
               </p>
@@ -177,100 +183,132 @@ function DealerPortalContent() {
       )}
 
       <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
+        {/* Premium Header */}
         <div className="mb-8">
-          <div className="glass-dark rounded-2xl p-6 flex items-center justify-between">
-            <div>
-              <h1 className="heading-display text-gradient-hero mb-2">Dealer Portal</h1>
-              <p className="text-body text-muted-foreground">
-                Welcome back, <span className="text-[var(--brand-primary)] font-semibold">{user?.email}</span>
-              </p>
+          <div className="card-premium border-premium-animated">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-primary flex items-center justify-center text-black">
+                    <Sparkles className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h1 className="heading-1 text-gradient-hero">Dealer Portal</h1>
+                    <p className="text-sm text-muted-foreground">
+                      Welcome back, <span className="text-[var(--brand-primary)] font-semibold">{user?.email}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="btn-premium-secondary flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </button>
             </div>
-            <button
-              onClick={handleLogout}
-              className="glass-surface rounded-lg px-4 py-2 text-sm font-semibold hover-lift transition-all flex items-center gap-2"
-            >
-              <LogOut className="w-4 h-4" />
-              Sign Out
-            </button>
           </div>
         </div>
 
-        {/* Tab Navigation */}
+        {/* Premium Tab Navigation */}
         <div className="mb-8">
-          <div className="glass-dark rounded-xl p-2 flex gap-2 overflow-x-auto">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
+          <div className="card-premium p-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
 
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 min-w-[140px] flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
-                    isActive
-                      ? "bg-gradient-primary text-white shadow-primary"
-                      : "text-muted-foreground hover:text-foreground hover:bg-white/[0.03]"
-                  }`}
-                >
-                  <Icon className="w-5 h-5" />
-                  {tab.label}
-                  {tab.badge !== undefined && tab.badge > 0 && (
-                    <span
-                      className={`min-w-[20px] h-5 px-1.5 rounded-full text-xs flex items-center justify-center font-bold ${
-                        isActive
-                          ? "bg-white/20 text-white"
-                          : "bg-[var(--brand-primary)]/20 text-[var(--brand-primary)]"
-                      }`}
-                    >
-                      {tab.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`relative flex items-center justify-center gap-2 px-6 py-4 rounded-lg font-semibold text-sm transition-all ${
+                      isActive
+                        ? "bg-gradient-primary text-black shadow-primary"
+                        : "text-muted-foreground hover:text-white hover:bg-white/[0.03]"
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span className="hidden sm:inline">{tab.label}</span>
+                    <span className="sm:hidden">{tab.label.split(" ")[0]}</span>
+                    {tab.badge !== undefined && tab.badge > 0 && (
+                      <span
+                        className={`absolute -top-1 -right-1 min-w-[22px] h-5 px-1.5 rounded-full text-xs flex items-center justify-center font-bold ${
+                          isActive
+                            ? "bg-black/30 text-white"
+                            : "bg-[var(--brand-primary)]/30 text-[var(--brand-primary)]"
+                        }`}
+                      >
+                        {tab.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        {/* Tab Content */}
+        {/* Tab Content with Enhanced Animations */}
         <div className="anim-fade-in">
           {activeTab === "dashboard" && (
             <div className="space-y-8">
+              {/* Welcome Banner */}
+              <div className="card-premium border-premium-animated text-center py-12">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-primary/20 mb-6 text-[var(--brand-primary)]">
+                  <TrendingUp className="w-10 h-10" />
+                </div>
+                <h2 className="heading-2 text-gradient-hero mb-3">
+                  Your Performance Dashboard
+                </h2>
+                <p className="text-body text-muted-foreground max-w-2xl mx-auto">
+                  Track your orders, revenue, and business growth all in one place
+                </p>
+              </div>
+
               <DashboardMetrics />
               
-              {/* Quick Actions */}
-              <div className="glass-dark rounded-xl p-6">
-                <h2 className="heading-2 mb-4">Quick Actions</h2>
-                <div className="grid gap-4 md:grid-cols-3">
+              {/* Quick Actions - Enhanced */}
+              <div className="card-premium">
+                <h2 className="heading-2 mb-6">Quick Actions</h2>
+                <div className="grid md:grid-cols-3 gap-6">
                   <button
                     onClick={() => setActiveTab("catalog")}
-                    className="glass-surface rounded-xl p-6 text-left hover-lift transition-all group"
+                    className="card-premium border-premium text-left hover:scale-105 transition-transform"
                   >
-                    <ShoppingBag className="w-10 h-10 text-[var(--brand-primary)] mb-3 group-hover:scale-110 transition-transform" />
-                    <h3 className="font-semibold mb-1">Browse Catalog</h3>
-                    <p className="text-caption text-muted-foreground">
+                    <ShoppingBag className="w-12 h-12 text-[var(--brand-primary)] mb-4" />
+                    <h3 className="font-bold text-lg mb-2">Browse Catalog</h3>
+                    <p className="text-sm text-muted-foreground">
                       Explore our full range of premium tiles
                     </p>
                   </button>
 
                   <button
                     onClick={() => setActiveTab("cart")}
-                    className="glass-surface rounded-xl p-6 text-left hover-lift transition-all group"
+                    className="card-premium border-premium text-left hover:scale-105 transition-transform"
                   >
-                    <CartIcon className="w-10 h-10 text-[var(--brand-accent)] mb-3 group-hover:scale-110 transition-transform" />
-                    <h3 className="font-semibold mb-1">View Cart</h3>
-                    <p className="text-caption text-muted-foreground">
+                    <div className="relative inline-block">
+                      <CartIcon className="w-12 h-12 text-[var(--brand-accent)] mb-4" />
+                      {cart.length > 0 && (
+                        <span className="absolute -top-1 -right-1 w-6 h-6 bg-[var(--brand-accent)] rounded-full flex items-center justify-center text-xs font-bold text-black">
+                          {cart.length}
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="font-bold text-lg mb-2">View Cart</h3>
+                    <p className="text-sm text-muted-foreground">
                       {cart.length} items ready for checkout
                     </p>
                   </button>
 
                   <button
                     onClick={() => setActiveTab("orders")}
-                    className="glass-surface rounded-xl p-6 text-left hover-lift transition-all group"
+                    className="card-premium border-premium text-left hover:scale-105 transition-transform"
                   >
-                    <Package className="w-10 h-10 text-[var(--brand-secondary)] mb-3 group-hover:scale-110 transition-transform" />
-                    <h3 className="font-semibold mb-1">Order History</h3>
-                    <p className="text-caption text-muted-foreground">
+                    <Package className="w-12 h-12 text-[var(--brand-secondary)] mb-4" />
+                    <h3 className="font-bold text-lg mb-2">Order History</h3>
+                    <p className="text-sm text-muted-foreground">
                       Track your {orders.length} orders
                     </p>
                   </button>
@@ -280,13 +318,14 @@ function DealerPortalContent() {
               {/* Recent Orders Preview */}
               {orders.length > 0 && (
                 <div>
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-6">
                     <h2 className="heading-2">Recent Orders</h2>
                     <button
                       onClick={() => setActiveTab("orders")}
-                      className="text-sm text-[var(--brand-primary)] hover:underline font-semibold"
+                      className="text-sm text-[var(--brand-primary)] hover:text-[var(--brand-accent)] font-semibold transition-colors flex items-center gap-1"
                     >
-                      View all →
+                      View all
+                      <span className="text-lg">→</span>
                     </button>
                   </div>
                   <OrdersTable orders={orders.slice(0, 3)} />
@@ -297,10 +336,10 @@ function DealerPortalContent() {
 
           {activeTab === "catalog" && (
             <div>
-              <div className="mb-6">
+              <div className="mb-8 card-premium">
                 <h2 className="heading-2 mb-2">Product Catalog</h2>
                 <p className="text-body text-muted-foreground">
-                  Select from our premium line of modular sport court tiles
+                  Select from our premium line of modular sport court tiles. All products backed by industry-leading warranties.
                 </p>
               </div>
               <ProductCatalog onAddToCart={handleAddToCart} />
@@ -321,10 +360,10 @@ function DealerPortalContent() {
 
           {activeTab === "orders" && (
             <div>
-              <div className="mb-6">
+              <div className="mb-8 card-premium">
                 <h2 className="heading-2 mb-2">Order Management</h2>
                 <p className="text-body text-muted-foreground">
-                  Track and manage all your orders in one place
+                  Track and manage all your orders in one place. Real-time status updates and payment tracking.
                 </p>
               </div>
               <OrdersTable orders={orders} />
@@ -339,12 +378,7 @@ function DealerPortalContent() {
 export default function DealerPortalPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="glass-dark rounded-xl p-8">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--brand-primary)] mx-auto"></div>
-          <p className="text-body text-muted-foreground mt-4">Loading...</p>
-        </div>
-      </div>
+      <LoadingSpinner size="lg" text="Loading dealer portal..." fullScreen />
     }>
       <DealerPortalContent />
     </Suspense>

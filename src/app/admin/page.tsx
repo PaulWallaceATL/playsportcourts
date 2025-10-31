@@ -10,6 +10,8 @@ import {
   Shield,
   Lock,
   Mail,
+  Activity,
+  TrendingUp,
 } from "lucide-react";
 import { getCurrentUser, isAdmin, logout, login } from "@/lib/mock-auth";
 import { PRODUCT_CATALOG } from "@/lib/stripe";
@@ -263,61 +265,73 @@ export default function AdminPage() {
   return (
     <section className="min-h-screen bg-[var(--background)]">
       <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
+        {/* Premium Header with Shield */}
         <div className="mb-8">
-          <div className="glass-dark rounded-2xl p-6 flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <Shield className="w-10 h-10 text-[var(--brand-accent)]" />
-                <h1 className="heading-display text-gradient-hero">Admin Dashboard</h1>
+          <div className="card-premium border-premium-animated">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div>
+                <div className="flex items-center gap-4 mb-2">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-[var(--brand-accent)] blur-xl opacity-50" />
+                    <div className="relative w-14 h-14 rounded-2xl bg-gradient-accent flex items-center justify-center shadow-glow-orange">
+                      <Shield className="w-7 h-7 text-white" />
+                    </div>
+                  </div>
+                  <div>
+                    <h1 className="heading-display text-gradient-hero">Admin Dashboard</h1>
+                    <p className="text-sm text-muted-foreground">
+                      Full platform oversight • <span className="text-[var(--brand-accent)] font-semibold">{user?.email}</span>
+                    </p>
+                  </div>
+                </div>
               </div>
-              <p className="text-body text-muted-foreground">
-                Welcome back, <span className="text-[var(--brand-primary)] font-semibold">{user?.email}</span>
-              </p>
+              <button
+                onClick={handleLogout}
+                className="btn-premium-secondary flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign Out
+              </button>
             </div>
-            <button
-              onClick={handleLogout}
-              className="glass-surface rounded-lg px-4 py-2 text-sm font-semibold hover-lift transition-all flex items-center gap-2"
-            >
-              <LogOut className="w-4 h-4" />
-              Sign Out
-            </button>
           </div>
         </div>
 
-        {/* Tab Navigation */}
+        {/* Premium Tab Navigation */}
         <div className="mb-8">
-          <div className="glass-dark rounded-xl p-2 flex gap-2 overflow-x-auto">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
+          <div className="card-premium p-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
 
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 min-w-[140px] flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-semibold text-sm transition-all ${
-                    isActive
-                      ? "bg-gradient-primary text-white shadow-primary"
-                      : "text-muted-foreground hover:text-foreground hover:bg-white/[0.03]"
-                  }`}
-                >
-                  <Icon className="w-5 h-5" />
-                  {tab.label}
-                  {tab.badge !== undefined && (
-                    <span
-                      className={`min-w-[20px] h-5 px-1.5 rounded-full text-xs flex items-center justify-center font-bold ${
-                        isActive
-                          ? "bg-white/20 text-white"
-                          : "bg-[var(--brand-primary)]/20 text-[var(--brand-primary)]"
-                      }`}
-                    >
-                      {tab.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`relative flex items-center justify-center gap-2 px-6 py-4 rounded-lg font-semibold text-sm transition-all ${
+                      isActive
+                        ? "bg-gradient-accent text-white shadow-glow-orange"
+                        : "text-muted-foreground hover:text-white hover:bg-white/[0.03]"
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span className="hidden sm:inline">{tab.label}</span>
+                    <span className="sm:hidden">{tab.label.split(" ")[0]}</span>
+                    {tab.badge !== undefined && (
+                      <span
+                        className={`absolute -top-1 -right-1 min-w-[22px] h-5 px-1.5 rounded-full text-xs flex items-center justify-center font-bold ${
+                          isActive
+                            ? "bg-white/30 text-white"
+                            : "bg-[var(--brand-accent)]/30 text-[var(--brand-accent)]"
+                        }`}
+                      >
+                        {tab.badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -325,36 +339,52 @@ export default function AdminPage() {
         <div className="anim-fade-in">
           {activeTab === "dashboard" && (
             <div className="space-y-8">
+              {/* Welcome Section */}
+              <div className="card-premium border-premium-animated text-center py-12">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-accent/20 mb-6 text-[var(--brand-accent)]">
+                  <Activity className="w-10 h-10" />
+                </div>
+                <h2 className="heading-2 text-gradient-hero mb-3">
+                  Platform Overview & Analytics
+                </h2>
+                <p className="text-body text-muted-foreground max-w-2xl mx-auto">
+                  Complete visibility into orders, revenue, users, and products across your entire platform
+                </p>
+              </div>
+
               <AdminStats stats={stats} />
               
-              <div className="grid gap-6 lg:grid-cols-2">
+              <div className="grid gap-8 lg:grid-cols-2">
                 <RecentActivity activities={recentActivities} />
                 
-                {/* Quick Stats */}
-                <div className="glass-dark rounded-xl p-6">
-                  <h2 className="heading-2 mb-4">Quick Overview</h2>
+                {/* Quick Overview */}
+                <div className="card-premium">
+                  <h2 className="heading-2 mb-6 flex items-center gap-2">
+                    <TrendingUp className="w-6 h-6 text-[var(--brand-primary)]" />
+                    Quick Overview
+                  </h2>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between pb-3 border-b border-border">
+                    <div className="flex items-center justify-between p-4 rounded-xl glass-tier-1 hover-lift transition-all">
                       <span className="text-sm text-muted-foreground">Pending Orders</span>
-                      <span className="font-bold text-yellow-400">
+                      <span className="font-bold text-2xl text-yellow-400">
                         {orders.filter((o) => o.status === "pending").length}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between pb-3 border-b border-border">
+                    <div className="flex items-center justify-between p-4 rounded-xl glass-tier-1 hover-lift transition-all">
                       <span className="text-sm text-muted-foreground">Processing Orders</span>
-                      <span className="font-bold text-blue-400">
+                      <span className="font-bold text-2xl text-blue-400">
                         {orders.filter((o) => o.status === "processing").length}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between pb-3 border-b border-border">
+                    <div className="flex items-center justify-between p-4 rounded-xl glass-tier-1 hover-lift transition-all">
                       <span className="text-sm text-muted-foreground">Active Dealers</span>
-                      <span className="font-bold text-emerald-400">
+                      <span className="font-bold text-2xl text-emerald-400">
                         {users.filter((u) => u.role === "dealer" && u.status === "active").length}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between p-4 rounded-xl glass-tier-1 hover-lift transition-all">
                       <span className="text-sm text-muted-foreground">Active Products</span>
-                      <span className="font-bold text-orange-400">
+                      <span className="font-bold text-2xl text-orange-400">
                         {products.filter((p) => p.active).length}
                       </span>
                     </div>
@@ -393,7 +423,7 @@ export default function AdminPage() {
   );
 }
 
-// Admin Login Component
+// Admin Login Component - Enhanced
 interface AdminLoginProps {
   onLogin: (email: string, password: string) => void;
   error: string | null;
@@ -410,58 +440,66 @@ function AdminLogin({ onLogin, error }: AdminLoginProps) {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+      <div className="absolute inset-0 grid-pattern-premium opacity-20" />
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-gradient-radial from-[var(--brand-accent)]/10 to-transparent blur-3xl" />
+      
+      <div className="relative w-full max-w-md">
         {/* Logo/Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-primary mb-4 shadow-neon-blue">
-            <Shield className="w-8 h-8 text-white" />
+          <div className="relative inline-block mb-6">
+            <div className="absolute inset-0 bg-[var(--brand-accent)] blur-2xl opacity-50" />
+            <div className="relative w-20 h-20 rounded-3xl bg-gradient-accent flex items-center justify-center shadow-glow-orange">
+              <Shield className="w-10 h-10 text-white" />
+            </div>
           </div>
-          <h1 className="heading-1 text-gradient-hero mb-2">Admin Dashboard</h1>
+          <h1 className="heading-1 text-gradient-hero mb-3">Admin Dashboard</h1>
           <p className="text-body text-muted-foreground">
-            Secure access for administrators only
+            Secure access for authorized administrators
           </p>
         </div>
 
         {/* Login Card */}
-        <div className="glass-dark rounded-2xl p-8 shadow-layered">
-          <h2 className="heading-2 mb-6 text-center">Admin Sign In</h2>
+        <div className="card-premium border-premium-animated">
+          <h2 className="heading-3 mb-6 text-center">Administrator Sign In</h2>
 
           {/* Error Message */}
           {error && (
-            <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-sm flex items-start gap-2">
+            <div className="mb-6 p-4 rounded-lg state-error flex items-start gap-2">
               <div className="mt-0.5">⚠️</div>
-              <div>{error}</div>
+              <div className="text-sm">{error}</div>
             </div>
           )}
 
           {/* Demo Credentials */}
-          <div className="mb-6 p-4 rounded-lg bg-blue-500/10 border border-blue-500/30 text-blue-300 text-sm">
-            <p className="font-semibold mb-1">Admin Credentials:</p>
-            <p className="text-xs">Email: admin@gmail.com or admin2@playsport.com</p>
-            <p className="text-xs">Password: password123 or admin2024!</p>
+          <div className="mb-6 p-4 rounded-lg state-info">
+            <p className="font-semibold mb-2 text-sm">Admin Test Credentials:</p>
+            <div className="space-y-1 text-xs font-mono">
+              <p>admin@gmail.com / password123</p>
+              <p>admin2@playsport.com / admin2024!</p>
+            </div>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email Field */}
             <div>
-              <label className="text-caption block mb-2">Admin Email</label>
+              <label className="text-caption block mb-2 font-semibold">Admin Email</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@example.com"
+                  placeholder="admin@playsport.com"
                   required
-                  className="field-input w-full pl-11"
+                  className="input-premium pl-11"
                 />
               </div>
             </div>
 
             {/* Password Field */}
             <div>
-              <label className="text-caption block mb-2">Password</label>
+              <label className="text-caption block mb-2 font-semibold">Password</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
@@ -470,7 +508,7 @@ function AdminLogin({ onLogin, error }: AdminLoginProps) {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="field-input w-full pl-11"
+                  className="input-premium pl-11"
                 />
               </div>
             </div>
@@ -478,25 +516,27 @@ function AdminLogin({ onLogin, error }: AdminLoginProps) {
             {/* Submit Button */}
             <button
               type="submit"
-              className="btn-neon glass-dark rounded-lg px-6 py-3 w-full text-base font-bold hover-lift transition-all"
+              className="btn-premium btn-premium-primary w-full flex items-center justify-center gap-2"
             >
-              <Shield className="w-5 h-5 inline mr-2" />
+              <Shield className="w-5 h-5" />
               Access Dashboard
             </button>
           </form>
 
           {/* Footer */}
-          <div className="mt-6 text-center text-caption text-muted-foreground">
-            <p className="flex items-center justify-center gap-2">
+          <div className="mt-6 pt-6 border-t border-white/10 text-center">
+            <p className="text-xs text-muted-foreground flex items-center justify-center gap-2">
               <Lock className="w-4 h-4" />
-              Admin access only • Unauthorized access is prohibited
+              Admin access only • All actions are logged
             </p>
           </div>
         </div>
 
         {/* Security Notice */}
-        <div className="mt-6 text-center text-caption text-muted-foreground">
-          <p>All admin actions are logged and monitored</p>
+        <div className="mt-6 text-center">
+          <p className="text-xs text-muted-foreground">
+            Unauthorized access attempts will be monitored and reported
+          </p>
         </div>
       </div>
     </div>
