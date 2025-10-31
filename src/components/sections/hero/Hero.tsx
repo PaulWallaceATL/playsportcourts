@@ -73,7 +73,7 @@ export function Hero() {
 
         {/* Trust metrics row below, full width - enhanced */}
         <div className="mt-12 grid grid-cols-2 sm:grid-cols-3 gap-8 max-w-4xl">
-          {siteContent.hero.trust.map((t, idx) => (
+          {siteContent.hero.trust.map((t) => (
             <div key={t.label} className="group">
               <div className="mb-1 flex items-baseline gap-2">
                 <p className="text-4xl font-black text-gradient-hero">{t.value}</p>

@@ -118,6 +118,7 @@ export default function GalleryPage() {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lightbox]);
 
   const categories: { id: Category; label: string }[] = [
@@ -167,11 +168,9 @@ export default function GalleryPage() {
                 }`}
               >
                 {cat.label}
-                {cat.id !== "all" && (
-                  <span className="ml-2 text-xs opacity-60">
-                    ({cat.id === "all" ? allImages.length : galleryImages[cat.id]?.length || 0})
-                  </span>
-                )}
+                <span className="ml-2 text-xs opacity-60">
+                  ({cat.id === "all" ? allImages.length : galleryImages[cat.id]?.length || 0})
+                </span>
               </button>
             ))}
           </div>

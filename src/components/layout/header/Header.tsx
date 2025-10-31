@@ -17,8 +17,7 @@ const NAV_ITEMS = [
   { href: "/garage-tiles", label: "Garage Tiles", dropdown: "garage" as const },
   { href: "/resurfacing", label: "Resurfacing" },
   { href: "/gallery", label: "Gallery" },
-  { href: "/shop", label: "Shop" },
-  { href: "/dealer-portal", label: "Dealer Portal" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function Header() {
@@ -217,22 +216,20 @@ export function Header() {
           </nav>
 
           {/* Actions */}
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" aria-label="Cart" className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              {cartCount > 0 && (
-                <span className="absolute -right-1 -top-1 rounded-full bg-[var(--accent)] px-1.5 py-0.5 text-[10px] font-semibold text-[var(--accent-foreground)]">
-                  {cartCount}
-                </span>
+          <div className="flex items-center gap-3">
+            <div className="hidden lg:flex gap-2">
+              <Link href="/shop" className="btn-premium-secondary px-5 py-2 text-sm rounded-lg">
+                Shop
+              </Link>
+              {isDealer(dealer) ? (
+                <Link href="/dealer-portal" className="btn-premium-primary px-5 py-2 text-sm rounded-lg">
+                  Portal
+                </Link>
+              ) : (
+                <Link href="/contact" className="btn-premium-primary px-5 py-2 text-sm rounded-lg">
+                  Get Quote
+                </Link>
               )}
-            </Button>
-            <div className="hidden sm:flex gap-2">
-              <Button asChild>
-                <Link href="/shop">Shop</Link>
-              </Button>
-              <Button variant="outline" asChild>
-                <Link href={isDealer(dealer) ? "/dealer-portal" : "/contact"}>{isDealer(dealer) ? "Dealer Portal" : "Become a Dealer"}</Link>
-              </Button>
             </div>
             <Button variant="glass" size="icon" className="md:hidden shadow-neon-blue" aria-label="Toggle menu" onClick={() => setOpen((v) => !v)}>
               {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
