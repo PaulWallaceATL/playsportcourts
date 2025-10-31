@@ -9,12 +9,17 @@ import { TileCourt, TileGarage, Palette } from "@/components/icons";
 
 export function Hero() {
   return (
-    <section className="relative isolate overflow-hidden">
+    <section className="relative isolate overflow-hidden min-h-[90vh] flex items-center">
       {/* Cinematic background video */}
       <HeroVideo />
-      {/* Ambient corner flares */}
-      <div className="pointer-events-none absolute -top-16 -left-16 w-[480px] h-[480px] rounded-full" style={{ background: "radial-gradient(closest-side, rgba(0,212,255,0.12), transparent 70%)" }} />
-      <div className="pointer-events-none absolute -bottom-24 -right-24 w-[520px] h-[520px] rounded-full" style={{ background: "radial-gradient(closest-side, rgba(255,107,53,0.12), transparent 70%)" }} />
+      
+      {/* Enhanced mesh overlay */}
+      <div className="absolute inset-0 pointer-events-none" style={{ background: "var(--mesh-premium)" }} />
+      
+      {/* Ambient corner flares - enhanced */}
+      <div className="pointer-events-none absolute -top-24 -left-24 w-[600px] h-[600px] rounded-full opacity-60" style={{ background: "radial-gradient(closest-side, rgba(0,212,255,0.15), transparent 70%)" }} />
+      <div className="pointer-events-none absolute -bottom-32 -right-32 w-[640px] h-[640px] rounded-full opacity-60" style={{ background: "radial-gradient(closest-side, rgba(251,146,60,0.15), transparent 70%)" }} />
+      <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-40" style={{ background: "radial-gradient(closest-side, rgba(167,139,250,0.10), transparent 75%)" }} />
       <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
         <div className="grid items-center gap-8 lg:grid-cols-2">
           {/* Left: headline + CTA */}
@@ -66,12 +71,18 @@ export function Hero() {
         </div>
         </div>
 
-        {/* Trust metrics row below, full width */}
-        <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 gap-6 max-w-4xl">
-          {siteContent.hero.trust.map((t) => (
-            <div key={t.label}>
-              <p className="text-3xl font-bold text-foreground">{t.value}</p>
-              <p className="text-caption">{t.label}</p>
+        {/* Trust metrics row below, full width - enhanced */}
+        <div className="mt-12 grid grid-cols-2 sm:grid-cols-3 gap-8 max-w-4xl">
+          {siteContent.hero.trust.map((t, idx) => (
+            <div key={t.label} className="group">
+              <div className="mb-1 flex items-baseline gap-2">
+                <p className="text-4xl font-black text-gradient-hero">{t.value}</p>
+                <span className="text-[var(--brand-primary)] opacity-0 group-hover:opacity-100 transition-opacity">
+                  +
+                </span>
+              </div>
+              <p className="text-caption text-muted-foreground">{t.label}</p>
+              <div className="mt-2 h-1 w-16 bg-gradient-primary rounded-full opacity-30 group-hover:opacity-60 transition-opacity" />
             </div>
           ))}
         </div>
