@@ -50,17 +50,25 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-colors",
-        isScrolled ? "header-blur backdrop-tint border-b" : "bg-transparent"
+        "sticky top-0 z-50 w-full transition-all duration-300",
+        isScrolled 
+          ? "header-blur backdrop-tint border-b border-white/10 shadow-lg" 
+          : "bg-transparent"
       )}
     >
       <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-3">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 neon-logo">
-            <span className="dot" aria-hidden />
-            <span className="sr-only">PlaySport Atlanta</span>
-            <span className="hidden font-semibold sm:inline">PlaySport Atlanta</span>
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-primary blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
+              <div className="relative w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center font-bold text-black shadow-neon-blue">
+                PS
+              </div>
+            </div>
+            <span className="hidden font-bold text-lg sm:inline text-gradient-hero">
+              PlaySport Courts
+            </span>
           </Link>
 
           {/* Desktop nav */}
