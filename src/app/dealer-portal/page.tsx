@@ -13,6 +13,7 @@ import {
   XCircle,
   Sparkles,
   TrendingUp,
+  FileText,
 } from "lucide-react";
 import { getCurrentUser, login, logout, signup, isDealer } from "@/lib/mock-auth";
 import { CartItem, ProductId } from "@/lib/stripe";
@@ -21,9 +22,10 @@ import { DashboardMetrics } from "@/components/dealer/DashboardMetrics";
 import { ProductCatalog } from "@/components/dealer/ProductCatalog";
 import { ShoppingCart } from "@/components/dealer/ShoppingCart";
 import { OrdersTable, Order } from "@/components/dealer/OrdersTable";
+import { OrderForm } from "@/components/dealer/OrderForm";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
-type TabType = "dashboard" | "catalog" | "cart" | "orders";
+type TabType = "dashboard" | "catalog" | "cart" | "orders" | "order-form";
 
 function DealerPortalContent() {
   const searchParams = useSearchParams();
@@ -143,6 +145,7 @@ function DealerPortalContent() {
   const tabs = [
     { id: "dashboard" as TabType, label: "Dashboard", icon: LayoutDashboard },
     { id: "catalog" as TabType, label: "Product Catalog", icon: ShoppingBag },
+    { id: "order-form" as TabType, label: "Order Form", icon: FileText },
     { id: "cart" as TabType, label: "Shopping Cart", icon: CartIcon, badge: cart.length },
     { id: "orders" as TabType, label: "Orders", icon: Package, badge: orders.length },
   ];
@@ -214,7 +217,7 @@ function DealerPortalContent() {
         {/* Premium Tab Navigation */}
         <div className="mb-8">
           <div className="card-premium p-2">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
@@ -272,7 +275,7 @@ function DealerPortalContent() {
               {/* Quick Actions - Enhanced */}
               <div className="card-premium">
                 <h2 className="heading-2 mb-6">Quick Actions</h2>
-                <div className="grid md:grid-cols-3 gap-6">
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <button
                     onClick={() => setActiveTab("catalog")}
                     className="card-premium border-premium text-left hover:scale-105 transition-transform"
@@ -281,6 +284,17 @@ function DealerPortalContent() {
                     <h3 className="font-bold text-lg mb-2">Browse Catalog</h3>
                     <p className="text-sm text-muted-foreground">
                       Explore our full range of premium tiles
+                    </p>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab("order-form")}
+                    className="card-premium border-premium text-left hover:scale-105 transition-transform"
+                  >
+                    <FileText className="w-12 h-12 text-emerald-400 mb-4" />
+                    <h3 className="font-bold text-lg mb-2">Create Order</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Build a custom order with details
                     </p>
                   </button>
 
@@ -343,6 +357,18 @@ function DealerPortalContent() {
                 </p>
               </div>
               <ProductCatalog onAddToCart={handleAddToCart} />
+            </div>
+          )}
+
+          {activeTab === "order-form" && (
+            <div>
+              <div className="mb-8 card-premium">
+                <h2 className="heading-2 mb-2">Custom Order Form</h2>
+                <p className="text-body text-muted-foreground">
+                  Create a detailed custom order with specific dimensions, colors, and game line configurations.
+                </p>
+              </div>
+              <OrderForm />
             </div>
           )}
 
