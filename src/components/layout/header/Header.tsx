@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ShoppingCart, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { siteContent } from "@/data/home";
 import { getCurrentUser, isDealer } from "@/lib/mock-auth";
@@ -32,7 +32,6 @@ export function Header() {
     return () => window.removeEventListener("mock-auth-change", listener);
   }, []);
   const hoverTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-  const cartCount = 0; // TODO: wire to cart state
 
   React.useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 8);

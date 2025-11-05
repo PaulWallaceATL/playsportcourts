@@ -5,10 +5,8 @@ import {
   Package,
   Ruler,
   Palette,
-  Upload,
   Calculator,
   CheckCircle,
-  AlertCircle,
 } from "lucide-react";
 
 // Available tile types with pricing
@@ -192,7 +190,7 @@ export function OrderForm() {
     }, 3000);
   };
 
-  const updateFormData = (field: keyof OrderFormData, value: any) => {
+  const updateFormData = (field: keyof OrderFormData, value: string | number | boolean | string[]) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -217,7 +215,7 @@ export function OrderForm() {
             <div className="flex-1">
               <p className="font-bold text-emerald-300 mb-1">Order Submitted Successfully!</p>
               <p className="text-sm text-muted-foreground">
-                Your order has been received. We'll contact you shortly with next steps.
+                Your order has been received. We&apos;ll contact you shortly with next steps.
               </p>
             </div>
           </div>

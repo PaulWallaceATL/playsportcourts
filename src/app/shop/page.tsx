@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ShoppingBag, Search, Filter, TrendingUp, Star, Package, Grid3x3 } from "lucide-react";
+import { ShoppingBag, Search, TrendingUp, Star, Package, Grid3x3 } from "lucide-react";
 import Image from "next/image";
 
 interface Product {
