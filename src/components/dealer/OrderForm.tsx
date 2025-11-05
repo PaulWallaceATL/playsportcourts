@@ -8,6 +8,7 @@ import {
   Calculator,
   CheckCircle,
 } from "lucide-react";
+import { CourtVisualizer } from "./CourtVisualizer";
 
 // Available tile types with pricing
 const TILE_TYPES = [
@@ -388,6 +389,25 @@ export function OrderForm() {
             </div>
           </div>
         </div>
+
+        {/* Court Visualizer */}
+        {squareFeet > 0 && (
+          <CourtVisualizer
+            courtLength={parseFloat(formData.courtLength) || 0}
+            courtWidth={parseFloat(formData.courtWidth) || 0}
+            gameLines={formData.gameLines}
+            pickleballInnerCourtColor={formData.pickleballInnerCourtColor}
+            pickleballOuterCourtColor={formData.pickleballOuterCourtColor}
+            pickleballKitchenColor={formData.pickleballKitchenColor}
+            basketballCourtColor={formData.basketballCourtColor}
+            basketballLaneColor={formData.basketballLaneColor}
+            basketballBorderColor={formData.basketballBorderColor}
+            shuffleboardCourtColor={formData.shuffleboardCourtColor}
+            shuffleboardShootingAreaColor={formData.shuffleboardShootingAreaColor}
+            shuffleboardBorderColor={formData.shuffleboardBorderColor}
+            linePaintingColor={formData.linePainting ? formData.linePaintingColor : undefined}
+          />
+        )}
 
         {/* Game Lines */}
         <div className="card-premium">
