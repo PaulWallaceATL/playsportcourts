@@ -936,13 +936,15 @@ function drawBasketball(
   );
   
   // Left 3-point line
-  if (basketX + arcRadius < width / 2) {
+  if (basketX + arcRadius < width / 2 && cornerXPos < width) {
     ctx.beginPath();
-    // Corner straight from baseline (VERTICAL, parallel to baseline)
+    
+    // Start at top-left corner of court at 3-point corner distance
     ctx.moveTo((x + cornerXPos) * tileSize, y * tileSize);
+    // Straight down (parallel to baseline) until arc starts
     ctx.lineTo((x + cornerXPos) * tileSize, (y + height / 2 - straightHeight) * tileSize);
     
-    // Arc around basket
+    // Arc around basket (semicircle)
     ctx.arc(
       (x + basketX) * tileSize,
       (y + height / 2) * tileSize,
@@ -951,7 +953,7 @@ function drawBasketball(
       Math.PI / 2
     );
     
-    // Bottom corner straight
+    // Straight up (parallel to baseline) from arc to bottom
     ctx.lineTo((x + cornerXPos) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
