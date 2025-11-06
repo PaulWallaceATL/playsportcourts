@@ -3,13 +3,6 @@
 import * as React from "react";
 import { X, FileText, Download, Printer } from "lucide-react";
 
-interface TileBreakdown {
-  color: string;
-  quantity: number;
-  pricePerTile: number;
-  total: number;
-}
-
 interface OrderSummaryProps {
   formData: {
     dealerName: string;
@@ -272,7 +265,7 @@ Generated: ${new Date().toLocaleString()}
                     <div className="w-8 h-8 rounded border-2 border-white/20" style={{ backgroundColor: getColorHex(tile.color) }} />
                     <div>
                       <div className="font-semibold">{tile.color}</div>
-                      <div className="text-xs text-muted-foreground">{tile.quantity.toLocaleString()} tiles (12" × 12")</div>
+                      <div className="text-xs text-muted-foreground">{tile.quantity.toLocaleString()} tiles (12&quot; × 12&quot;)</div>
                     </div>
                   </div>
                   <div className="text-right">
@@ -342,7 +335,7 @@ Generated: ${new Date().toLocaleString()}
                   <div className="font-semibold">Custom Logo</div>
                   {formData.logoUpload && (
                     <div className="text-xs text-muted-foreground">
-                      Size: {formData.logoHeight}" × {formData.logoWidth}"
+                      Size: {formData.logoHeight}&quot; × {formData.logoWidth}&quot;
                     </div>
                   )}
                 </div>

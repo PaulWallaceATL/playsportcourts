@@ -4,8 +4,6 @@ import * as React from "react";
 import {
   Package,
   Ruler,
-  Palette,
-  Calculator,
   CheckCircle,
   X,
   Send,
