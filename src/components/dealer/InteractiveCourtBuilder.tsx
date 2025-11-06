@@ -913,73 +913,43 @@ function drawBasketball(
     }
   }
 
-  // 3-point lines - SCALED TO FIT COURT
-  // Don't use actual regulation distance if court is too small
-  // Instead, position it nicely within the available space
+  // 3-point lines - simple and contained
+  // Position just beyond the lane
+  const threePointLine = baselineOffset + laneLength + 3; // 3 tiles beyond lane
   
-  const basketPos = baselineOffset + 5;
-  // Scale 3-point distance to fit court (use at most 40% of court width)
-  const maxThreePoint = Math.floor(width * 0.4);
-  const threePointDistance = Math.min(Math.floor(specs.threePoint), maxThreePoint);
-  const threePointPos = basketPos + threePointDistance;
-  
-  // Corner distance - keep it simple
-  const cornerDist = threePointPos;
-  
-  // Height where arc meets corners (stay well within court height)
-  const arcTop = 3; // 3 tiles from top
-  const arcBottom = height - 3; // 3 tiles from bottom
-  
-  // Left 3-point line
-  if (threePointPos < width / 2) {
+  // Only draw if we have space
+  if (threePointLine < width / 2 - 5) {
+    // Left 3-point line (simple vertical line with small curve)
+    const curveDepth = 2; // How much the line curves toward basket
     ctx.beginPath();
-    // Top corner
-    ctx.moveTo((x + cornerDist) * tileSize, y * tileSize);
-    ctx.lineTo((x + cornerDist) * tileSize, (y + arcTop) * tileSize);
-    
-    // Simple arc - radius based on the geometry
-    const arcRadius = Math.sqrt(
-      Math.pow(threePointDistance, 2) + 
-      Math.pow((arcBottom - arcTop) / 2, 2)
-    );
-    
-    ctx.arc(
-      (x + basketPos) * tileSize,
+    ctx.moveTo((x + threePointLine) * tileSize, y * tileSize);
+    ctx.lineTo((x + threePointLine) * tileSize, (y + 3) * tileSize);
+    // Gentle curve
+    ctx.quadraticCurveTo(
+      (x + threePointLine - curveDepth) * tileSize,
       (y + height / 2) * tileSize,
-      arcRadius * tileSize,
-      -Math.PI / 2,
-      Math.PI / 2
+      (x + threePointLine) * tileSize,
+      (y + height - 3) * tileSize
     );
-    
-    // Bottom corner
-    ctx.lineTo((x + cornerDist) * tileSize, (y + height) * tileSize);
+    ctx.lineTo((x + threePointLine) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
 
   if (!isHalfCourt) {
     // Right 3-point line
-    const rightBasketPos = width - basketPos;
-    const rightThreePointPos = width - threePointPos;
-    
-    if (rightThreePointPos > width / 2) {
+    const rightThreePointLine = width - threePointLine;
+    if (rightThreePointLine > width / 2 + 5) {
+      const curveDepth = 2;
       ctx.beginPath();
-      ctx.moveTo((x + rightThreePointPos) * tileSize, y * tileSize);
-      ctx.lineTo((x + rightThreePointPos) * tileSize, (y + arcTop) * tileSize);
-      
-      const arcRadius = Math.sqrt(
-        Math.pow(threePointDistance, 2) + 
-        Math.pow((arcBottom - arcTop) / 2, 2)
-      );
-      
-      ctx.arc(
-        (x + rightBasketPos) * tileSize,
+      ctx.moveTo((x + rightThreePointLine) * tileSize, y * tileSize);
+      ctx.lineTo((x + rightThreePointLine) * tileSize, (y + 3) * tileSize);
+      ctx.quadraticCurveTo(
+        (x + rightThreePointLine + curveDepth) * tileSize,
         (y + height / 2) * tileSize,
-        arcRadius * tileSize,
-        Math.PI / 2,
-        (3 * Math.PI) / 2
+        (x + rightThreePointLine) * tileSize,
+        (y + height - 3) * tileSize
       );
-      
-      ctx.lineTo((x + rightThreePointPos) * tileSize, (y + height) * tileSize);
+      ctx.lineTo((x + rightThreePointLine) * tileSize, (y + height) * tileSize);
       ctx.stroke();
     }
   }
