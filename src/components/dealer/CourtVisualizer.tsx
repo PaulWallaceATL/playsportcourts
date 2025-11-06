@@ -252,8 +252,8 @@ export function CourtVisualizer({
       <div className="bg-[#0a0a0a] rounded-lg overflow-hidden border border-border">
         <canvas
           ref={canvasRef}
-          className="w-full h-auto"
-          style={{ maxWidth: "100%" }}
+          className="w-full h-auto pointer-events-none"
+          style={{ maxWidth: "100%", touchAction: "none" }}
         />
       </div>
       {gameLines.length > 0 && (
