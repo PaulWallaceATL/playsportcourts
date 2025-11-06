@@ -400,20 +400,31 @@ export function OrderFormSidebar() {
                   Game Lines
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {GAME_LINES.map((line) => (
-                    <label
-                      key={line}
-                      className="flex items-center gap-2 cursor-pointer p-2 rounded-lg border border-border hover:border-[var(--brand-primary)] transition-colors text-xs"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formData.gameLines.includes(line)}
-                        onChange={() => toggleGameLine(line)}
-                        className="w-3.5 h-3.5"
-                      />
-                      {line}
-                    </label>
-                  ))}
+                  {GAME_LINES.map((line) => {
+                    // Disable Basketball - Full if court is too small
+                    const isDisabled = line === "Basketball - Full" && parseFloat(formData.courtLength) < 95;
+                    
+                    return (
+                      <label
+                        key={line}
+                        className={`flex items-center gap-2 p-2 rounded-lg border border-border transition-colors text-xs ${
+                          isDisabled 
+                            ? "opacity-50 cursor-not-allowed" 
+                            : "cursor-pointer hover:border-[var(--brand-primary)]"
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={formData.gameLines.includes(line)}
+                          onChange={() => !isDisabled && toggleGameLine(line)}
+                          disabled={isDisabled}
+                          className="w-3.5 h-3.5"
+                        />
+                        {line}
+                        {isDisabled && <span className="text-xs text-red-400">(Requires 95ft+)</span>}
+                      </label>
+                    );
+                  })}
                 </div>
               </div>
 

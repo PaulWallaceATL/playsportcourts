@@ -916,53 +916,55 @@ function drawBasketball(
     }
   }
 
-  // 3-point line - only draw if it won't overlap center circle
-  const threePointX = baselineOffset + laneLength + 5; // 5 tiles beyond lane
-  const centerX = width / 2;
+  // 3-point line - SUPER SIMPLE D-shape
+  const threePointDist = baselineOffset + laneLength + 5;
+  const cornerStraightY = 3; // How far from top/bottom sideline
   
-  // Only draw 3-point line if it stays clear of center (for full court)
-  const drawThreePoint = isHalfCourt || (threePointX < centerX - 8);
+  // Check if it fits
+  const fits = isHalfCourt || (threePointDist < width / 2 - 10);
   
-  if (drawThreePoint && threePointX < (isHalfCourt ? width - 5 : centerX - 8)) {
+  if (fits && threePointDist < width - 5) {
     // Left 3-point line
-    const cornerDist = 3; // 3 tiles from baseline (corner straight)
-    
     ctx.beginPath();
-    // Vertical straight in corner
-    ctx.moveTo((x + cornerDist) * tileSize, y * tileSize);
-    ctx.lineTo((x + cornerDist) * tileSize, (y + height * 0.15) * tileSize);
+    // Top corner straight (vertical line near baseline)
+    ctx.moveTo((x + cornerStraightY) * tileSize, y * tileSize);
+    ctx.lineTo((x + cornerStraightY) * tileSize, (y + height * 0.2) * tileSize);
     
-    // Smooth curve using quadratic
-    ctx.quadraticCurveTo(
-      (x + threePointX) * tileSize,
+    // Arc wrapping around the key
+    ctx.arc(
+      (x + threePointDist) * tileSize,
       (y + height / 2) * tileSize,
-      (x + cornerDist) * tileSize,
-      (y + height * 0.85) * tileSize
+      threePointDist - cornerStraightY,
+      Math.PI,
+      0,
+      true // Draw counter-clockwise
     );
     
-    // Vertical straight in bottom corner
-    ctx.lineTo((x + cornerDist) * tileSize, (y + height) * tileSize);
+    // Bottom corner straight
+    ctx.lineTo((x + cornerStraightY) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
 
-  if (!isHalfCourt && drawThreePoint) {
+  if (!isHalfCourt && fits) {
     // Right 3-point line
-    const rightThreePointX = width - threePointX;
-    const rightCornerDist = width - 3;
+    const rightThreePointDist = width - threePointDist;
+    const rightCorner = width - cornerStraightY;
     
-    if (rightThreePointX > centerX + 8) {
+    if (rightThreePointDist > width / 2 + 10) {
       ctx.beginPath();
-      ctx.moveTo((x + rightCornerDist) * tileSize, y * tileSize);
-      ctx.lineTo((x + rightCornerDist) * tileSize, (y + height * 0.15) * tileSize);
+      ctx.moveTo((x + rightCorner) * tileSize, y * tileSize);
+      ctx.lineTo((x + rightCorner) * tileSize, (y + height * 0.2) * tileSize);
       
-      ctx.quadraticCurveTo(
-        (x + rightThreePointX) * tileSize,
+      ctx.arc(
+        (x + rightThreePointDist) * tileSize,
         (y + height / 2) * tileSize,
-        (x + rightCornerDist) * tileSize,
-        (y + height * 0.85) * tileSize
+        rightCorner - rightThreePointDist,
+        0,
+        Math.PI,
+        true
       );
       
-      ctx.lineTo((x + rightCornerDist) * tileSize, (y + height) * tileSize);
+      ctx.lineTo((x + rightCorner) * tileSize, (y + height) * tileSize);
       ctx.stroke();
     }
   }
