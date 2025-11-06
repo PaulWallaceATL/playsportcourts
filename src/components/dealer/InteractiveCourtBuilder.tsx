@@ -537,15 +537,25 @@ export function InteractiveCourtBuilder({
     const tileY = Math.floor((y - offsetY) / tileSize);
 
     // Check if clicking on an element
-    const clickedElement = elements.find(el => 
+    // Find all elements at this position
+    const clickedElements = elements.filter(el => 
       tileX >= el.x && tileX < el.x + el.width &&
       tileY >= el.y && tileY < el.y + el.height
     );
+
+    // Prioritize smaller elements (4square, cornhole, hopscotch, battersbox)
+    // by sorting by area (smallest first)
+    const clickedElement = clickedElements.sort((a, b) => 
+      (a.width * a.height) - (b.width * b.height)
+    )[0];
 
     if (clickedElement) {
       setSelectedElement(clickedElement.id);
       setIsDragging(true);
       setDragStart({ x: tileX - clickedElement.x, y: tileY - clickedElement.y });
+    } else {
+      // Clicked on empty space - deselect
+      setSelectedElement(null);
     }
   };
 
