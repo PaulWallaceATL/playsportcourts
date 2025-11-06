@@ -820,27 +820,30 @@ function drawBasketball(
   // Backboard is 4ft from baseline (regulation), overhang extends forward
   const baselineOffset = overhang; // Overhang pushes baseline inward
   
-  // Paint/Lane area - use regulation key width
-  const laneLength = Math.min(specs.laneLength, Math.floor(width * 0.4));
-  const laneWidth = Math.min(specs.keyWidth, Math.floor(height * 0.5));
-  const laneY = Math.floor((height - laneWidth) / 2);
+  // Paint/Lane area - extends from baseline toward center
+  // Lane is 19ft long (from baseline), key width varies by regulation
+  const laneLength = Math.min(specs.laneLength, Math.floor(width * 0.4)); // How far from baseline (horizontal)
+  const laneWidth = Math.min(specs.keyWidth, Math.floor(height * 0.5)); // Width of key (vertical)
+  const laneX = baselineOffset; // Start at baseline
+  const laneY = Math.floor((height - laneWidth) / 2); // Center vertically
   
   ctx.fillStyle = colors.laneColor;
   
-  // Left lane
+  // Left lane (extends from left baseline toward center)
   for (let ty = laneY; ty < laneY + laneWidth; ty++) {
-    for (let tx = baselineOffset; tx < Math.min(baselineOffset + laneLength, width); tx++) {
-      if (tx >= 0 && tx < width) {
+    for (let tx = laneX; tx < Math.min(laneX + laneLength, width); tx++) {
+      if (tx >= 0 && tx < width && ty >= 0 && ty < height) {
         ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
       }
     }
   }
   
-  // Right lane (full court only)
+  // Right lane (full court only - extends from right baseline toward center)
   if (!isHalfCourt) {
+    const rightLaneX = width - laneLength - baselineOffset;
     for (let ty = laneY; ty < laneY + laneWidth; ty++) {
-      for (let tx = Math.max(0, width - laneLength - baselineOffset); tx < width - baselineOffset; tx++) {
-        if (tx >= 0 && tx < width) {
+      for (let tx = rightLaneX; tx < width - baselineOffset; tx++) {
+        if (tx >= 0 && tx < width && ty >= 0 && ty < height) {
           ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
         }
       }
