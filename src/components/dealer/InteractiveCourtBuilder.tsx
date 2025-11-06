@@ -18,6 +18,18 @@ interface InteractiveCourtBuilderProps {
   courtWidth: number; // in feet (tiles)
   gameLines: string[];
   baseTileColor: string;
+  // Basketball colors
+  basketballCourtColor?: string;
+  basketballLaneColor?: string;
+  basketballBorderColor?: string;
+  // Pickleball colors
+  pickleballInnerCourtColor?: string;
+  pickleballOuterCourtColor?: string;
+  pickleballKitchenColor?: string;
+  // Shuffleboard colors
+  shuffleboardCourtColor?: string;
+  shuffleboardShootingAreaColor?: string;
+  shuffleboardBorderColor?: string;
   onElementsChange?: (elements: GameElement[]) => void;
 }
 
@@ -40,6 +52,15 @@ export function InteractiveCourtBuilder({
   courtWidth,
   gameLines,
   baseTileColor,
+  basketballCourtColor = "Navy Blue",
+  basketballLaneColor = "Royal Blue",
+  basketballBorderColor = "Orange",
+  pickleballInnerCourtColor = "Graphite",
+  pickleballOuterCourtColor = "Titanium",
+  pickleballKitchenColor = "Royal Blue",
+  shuffleboardCourtColor = "Black",
+  shuffleboardShootingAreaColor = "Royal Blue",
+  shuffleboardBorderColor = "Yellow",
   onElementsChange,
 }: InteractiveCourtBuilderProps) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -321,15 +342,27 @@ export function InteractiveCourtBuilder({
       } else if (element.type === "badminton") {
         drawBadminton(ctx, element, tileSize);
       } else if (element.type === "basketball-full" || element.type === "basketball-half") {
-        drawBasketball(ctx, element, tileSize, element.type === "basketball-half");
+        drawBasketball(ctx, element, tileSize, element.type === "basketball-half", {
+          courtColor: COLOR_MAP[basketballCourtColor],
+          laneColor: COLOR_MAP[basketballLaneColor],
+          borderColor: COLOR_MAP[basketballBorderColor],
+        });
       } else if (element.type === "tennis") {
         drawTennis(ctx, element, tileSize);
       } else if (element.type === "pickleball") {
-        drawPickleball(ctx, element, tileSize);
+        drawPickleball(ctx, element, tileSize, {
+          innerColor: COLOR_MAP[pickleballInnerCourtColor],
+          outerColor: COLOR_MAP[pickleballOuterCourtColor],
+          kitchenColor: COLOR_MAP[pickleballKitchenColor],
+        });
       } else if (element.type === "volleyball") {
         drawVolleyball(ctx, element, tileSize);
       } else if (element.type === "shuffleboard") {
-        drawShuffleboard(ctx, element, tileSize);
+        drawShuffleboard(ctx, element, tileSize, {
+          courtColor: COLOR_MAP[shuffleboardCourtColor],
+          shootingColor: COLOR_MAP[shuffleboardShootingAreaColor],
+          borderColor: COLOR_MAP[shuffleboardBorderColor],
+        });
       } else if (element.type === "soccer") {
         drawSoccer(ctx, element, tileSize);
       } else if (element.type === "futsal") {
@@ -400,7 +433,7 @@ export function InteractiveCourtBuilder({
 
   React.useEffect(() => {
     drawCourt();
-  }, [drawCourt]);
+  }, [drawCourt, basketballCourtColor, basketballLaneColor, basketballBorderColor, pickleballInnerCourtColor, pickleballOuterCourtColor, pickleballKitchenColor, shuffleboardCourtColor, shuffleboardShootingAreaColor, shuffleboardBorderColor]);
 
   // Handle canvas interactions
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -752,11 +785,17 @@ function drawBadminton(ctx: CanvasRenderingContext2D, element: GameElement, tile
   ctx.stroke();
 }
 
-function drawBasketball(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number, isHalfCourt: boolean) {
+function drawBasketball(
+  ctx: CanvasRenderingContext2D, 
+  element: GameElement, 
+  tileSize: number, 
+  isHalfCourt: boolean,
+  colors: { courtColor: string; laneColor: string; borderColor: string }
+) {
   const { x, y, width, height } = element;
   
   // Base court color
-  ctx.fillStyle = "#1E3A8A"; // Navy Blue
+  ctx.fillStyle = colors.courtColor;
   for (let ty = 0; ty < height; ty++) {
     for (let tx = 0; tx < width; tx++) {
       ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
@@ -768,7 +807,7 @@ function drawBasketball(ctx: CanvasRenderingContext2D, element: GameElement, til
   const laneWidth = 12; // 12 tiles
   const laneY = Math.floor((height - laneWidth) / 2);
   
-  ctx.fillStyle = "#2563EB"; // Royal Blue for lane
+  ctx.fillStyle = colors.laneColor;
   
   // Left lane
   for (let ty = laneY; ty < laneY + laneWidth; ty++) {
@@ -830,11 +869,16 @@ function drawBasketball(ctx: CanvasRenderingContext2D, element: GameElement, til
   }
 }
 
-function drawPickleball(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+function drawPickleball(
+  ctx: CanvasRenderingContext2D, 
+  element: GameElement, 
+  tileSize: number,
+  colors: { innerColor: string; outerColor: string; kitchenColor: string }
+) {
   const { x, y, width, height } = element;
   
   // Outer court
-  ctx.fillStyle = "#6B7280"; // Titanium
+  ctx.fillStyle = colors.outerColor;
   for (let ty = 0; ty < height; ty++) {
     for (let tx = 0; tx < width; tx++) {
       ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
@@ -843,7 +887,7 @@ function drawPickleball(ctx: CanvasRenderingContext2D, element: GameElement, til
 
   // Kitchen/Non-volley zones (7 feet from net)
   const kitchenDepth = Math.min(7, Math.floor(width * 0.16));
-  ctx.fillStyle = "#2563EB"; // Royal Blue for kitchen
+  ctx.fillStyle = colors.kitchenColor;
   
   for (let ty = 0; ty < height; ty++) {
     for (let tx = 0; tx < kitchenDepth; tx++) {
@@ -956,11 +1000,16 @@ function drawVolleyball(ctx: CanvasRenderingContext2D, element: GameElement, til
   ctx.stroke();
 }
 
-function drawShuffleboard(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+function drawShuffleboard(
+  ctx: CanvasRenderingContext2D, 
+  element: GameElement, 
+  tileSize: number,
+  colors: { courtColor: string; shootingColor: string; borderColor: string }
+) {
   const { x, y, width, height } = element;
   
   // Base court
-  ctx.fillStyle = "#000000"; // Black
+  ctx.fillStyle = colors.courtColor;
   for (let ty = 0; ty < height; ty++) {
     for (let tx = 0; tx < width; tx++) {
       ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
@@ -969,7 +1018,7 @@ function drawShuffleboard(ctx: CanvasRenderingContext2D, element: GameElement, t
 
   // Shooting areas (6.5 feet from each end)
   const shootingDepth = Math.min(Math.floor(width * 0.125), 7);
-  ctx.fillStyle = "#2563EB"; // Royal Blue
+  ctx.fillStyle = colors.shootingColor;
   
   for (let ty = 0; ty < height; ty++) {
     for (let tx = 0; tx < shootingDepth; tx++) {
@@ -983,7 +1032,7 @@ function drawShuffleboard(ctx: CanvasRenderingContext2D, element: GameElement, t
   const scoringLength = Math.floor(width * 0.115);
   
   // Left scoring zone
-  ctx.fillStyle = "#FDE047"; // Yellow
+  ctx.fillStyle = colors.borderColor;
   for (let i = 0; i < 3; i++) {
     const zoneStart = scoringStart + i * Math.floor(scoringLength / 3);
     const zoneEnd = scoringStart + (i + 1) * Math.floor(scoringLength / 3);

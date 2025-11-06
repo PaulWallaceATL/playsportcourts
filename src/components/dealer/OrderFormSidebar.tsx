@@ -727,6 +727,15 @@ export function OrderFormSidebar() {
               courtWidth={parseFloat(formData.courtWidth) || 0}
               gameLines={formData.gameLines}
               baseTileColor={formData.baseTileColor}
+              basketballCourtColor={formData.basketballCourtColor}
+              basketballLaneColor={formData.basketballLaneColor}
+              basketballBorderColor={formData.basketballBorderColor}
+              pickleballInnerCourtColor={formData.pickleballInnerCourtColor}
+              pickleballOuterCourtColor={formData.pickleballOuterCourtColor}
+              pickleballKitchenColor={formData.pickleballKitchenColor}
+              shuffleboardCourtColor={formData.shuffleboardCourtColor}
+              shuffleboardShootingAreaColor={formData.shuffleboardShootingAreaColor}
+              shuffleboardBorderColor={formData.shuffleboardBorderColor}
             />
           ) : (
             <div className="h-full min-h-[400px] card-premium flex items-center justify-center p-6">
