@@ -9,7 +9,7 @@ import {
   Send,
   FileText,
 } from "lucide-react";
-import { CourtVisualizer } from "./CourtVisualizer";
+import { InteractiveCourtBuilder } from "./InteractiveCourtBuilder";
 import { OrderSummary } from "./OrderSummary";
 
 // Available tile types with pricing
@@ -719,24 +719,14 @@ export function OrderFormSidebar() {
           </div>
         )}
 
-        {/* Court Visualizer - Takes all remaining space */}
+        {/* Interactive Court Builder - Takes all remaining space */}
         <div className="flex-1">
           {squareFeet > 0 ? (
-            <CourtVisualizer
+            <InteractiveCourtBuilder
               courtLength={parseFloat(formData.courtLength) || 0}
               courtWidth={parseFloat(formData.courtWidth) || 0}
               gameLines={formData.gameLines}
               baseTileColor={formData.baseTileColor}
-              pickleballInnerCourtColor={formData.pickleballInnerCourtColor}
-              pickleballOuterCourtColor={formData.pickleballOuterCourtColor}
-              pickleballKitchenColor={formData.pickleballKitchenColor}
-              basketballCourtColor={formData.basketballCourtColor}
-              basketballLaneColor={formData.basketballLaneColor}
-              basketballBorderColor={formData.basketballBorderColor}
-              shuffleboardCourtColor={formData.shuffleboardCourtColor}
-              shuffleboardShootingAreaColor={formData.shuffleboardShootingAreaColor}
-              shuffleboardBorderColor={formData.shuffleboardBorderColor}
-              linePaintingColor={formData.linePainting ? formData.linePaintingColor : undefined}
             />
           ) : (
             <div className="h-full min-h-[400px] card-premium flex items-center justify-center p-6">
