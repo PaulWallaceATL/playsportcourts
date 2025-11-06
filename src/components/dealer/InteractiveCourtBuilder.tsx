@@ -913,73 +913,60 @@ function drawBasketball(
     }
   }
 
-  // 3-point lines - CORRECT orientation like reference image
-  // Basket is 5 tiles from baseline  
-  const basketX = baselineOffset + 5;
+  // 3-point line - simple wrap around the key
+  // Start just beyond the lane and wrap around it
+  const threePointX = baselineOffset + laneLength + 4; // 4 tiles beyond the lane
   
-  // Arc radius - scaled to fit
-  const arcRadius = Math.min(
-    16, // Default 16 tiles radius
-    Math.floor(width * 0.22) // Max 22% of court width
-  );
+  // Corner sections (horizontal lines parallel to sidelines)  
+  const cornerY = 3; // 3 tiles from sidelines
   
-  // Corner 3-point distance (measured from baseline, parallel to baseline)
-  const cornerXPos = Math.min(
-    Math.floor(specs.threePointCorner),
-    basketX + arcRadius - 2 // Must be less than basketX + radius
-  );
+  // Arc to connect top and bottom corners
+  const arcRadius = Math.min(14, Math.floor(height * 0.35)); // Reasonable arc
   
-  // Where arc meets the straight sections (y coordinate)
-  const straightHeight = Math.min(
-    14, // Standard 14 feet
-    Math.floor(height * 0.35) // Or 35% of court height
-  );
-  
-  // Left 3-point line
-  if (basketX + arcRadius < width / 2 && cornerXPos < width) {
+  // Left 3-point line - wrap around left key
+  if (threePointX < width / 2) {
     ctx.beginPath();
     
-    // Start at top-left corner of court at 3-point corner distance
-    ctx.moveTo((x + cornerXPos) * tileSize, y * tileSize);
-    // Straight down (parallel to baseline) until arc starts
-    ctx.lineTo((x + cornerXPos) * tileSize, (y + height / 2 - straightHeight) * tileSize);
+    // Top corner straight (HORIZONTAL along baseline)
+    ctx.moveTo((x + baselineOffset) * tileSize, (y + cornerY) * tileSize);
+    ctx.lineTo((x + threePointX) * tileSize, (y + cornerY) * tileSize);
     
-    // Arc around basket (semicircle)
+    // Curved section wrapping around
     ctx.arc(
-      (x + basketX) * tileSize,
+      (x + threePointX) * tileSize,
       (y + height / 2) * tileSize,
-      arcRadius * tileSize,
+      (height / 2 - cornerY) * tileSize,
       -Math.PI / 2,
       Math.PI / 2
     );
     
-    // Straight up (parallel to baseline) from arc to bottom
-    ctx.lineTo((x + cornerXPos) * tileSize, (y + height) * tileSize);
+    // Bottom corner straight (HORIZONTAL along baseline)
+    ctx.lineTo((x + baselineOffset) * tileSize, (y + height - cornerY) * tileSize);
     ctx.stroke();
   }
 
   if (!isHalfCourt) {
-    // Right 3-point line
-    const rightBasketX = width - basketX;
-    const rightCornerXPos = width - cornerXPos;
+    // Right 3-point line - wrap around right key
+    const rightThreePointX = width - threePointX;
     
-    if (rightBasketX - arcRadius > width / 2) {
+    if (rightThreePointX > width / 2) {
       ctx.beginPath();
-      // Top corner
-      ctx.moveTo((x + rightCornerXPos) * tileSize, y * tileSize);
-      ctx.lineTo((x + rightCornerXPos) * tileSize, (y + height / 2 - straightHeight) * tileSize);
       
-      // Arc
+      // Top corner straight
+      ctx.moveTo((x + width - baselineOffset) * tileSize, (y + cornerY) * tileSize);
+      ctx.lineTo((x + rightThreePointX) * tileSize, (y + cornerY) * tileSize);
+      
+      // Curved section
       ctx.arc(
-        (x + rightBasketX) * tileSize,
+        (x + rightThreePointX) * tileSize,
         (y + height / 2) * tileSize,
-        arcRadius * tileSize,
+        (height / 2 - cornerY) * tileSize,
         Math.PI / 2,
         (3 * Math.PI) / 2
       );
       
-      // Bottom corner
-      ctx.lineTo((x + rightCornerXPos) * tileSize, (y + height) * tileSize);
+      // Bottom corner straight
+      ctx.lineTo((x + width - baselineOffset) * tileSize, (y + height - cornerY) * tileSize);
       ctx.stroke();
     }
   }
