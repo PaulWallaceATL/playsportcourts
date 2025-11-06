@@ -913,43 +913,63 @@ function drawBasketball(
     }
   }
 
-  // 3-point lines - simple and contained
-  // Position just beyond the lane
-  const threePointLine = baselineOffset + laneLength + 3; // 3 tiles beyond lane
+  // 3-point lines - proper basketball arc
+  const basketX = baselineOffset + 5; // Basket position from baseline
+  const arcRadius = Math.min(
+    Math.floor(specs.threePoint), 
+    Math.floor(width * 0.35), // Don't exceed 35% of court width
+    Math.floor(height * 0.6) // Don't exceed 60% of court height
+  );
   
-  // Only draw if we have space
-  if (threePointLine < width / 2 - 5) {
-    // Left 3-point line (simple vertical line with small curve)
-    const curveDepth = 2; // How much the line curves toward basket
+  // Left 3-point arc
+  if (basketX + arcRadius < width - 10) { // Make sure it fits
     ctx.beginPath();
-    ctx.moveTo((x + threePointLine) * tileSize, y * tileSize);
-    ctx.lineTo((x + threePointLine) * tileSize, (y + 3) * tileSize);
-    // Gentle curve
-    ctx.quadraticCurveTo(
-      (x + threePointLine - curveDepth) * tileSize,
+    
+    // Top corner straight (from sideline down to where arc starts)
+    const cornerX = Math.floor(specs.threePointCorner);
+    const topArcY = height / 2 - Math.sqrt(Math.pow(arcRadius, 2) - Math.pow(cornerX - basketX, 2));
+    
+    ctx.moveTo((x + cornerX) * tileSize, y * tileSize);
+    ctx.lineTo((x + cornerX) * tileSize, (y + topArcY) * tileSize);
+    
+    // Arc centered on basket (semicircle facing right)
+    ctx.arc(
+      (x + basketX) * tileSize,
       (y + height / 2) * tileSize,
-      (x + threePointLine) * tileSize,
-      (y + height - 3) * tileSize
+      arcRadius * tileSize,
+      Math.asin((topArcY - height / 2) / arcRadius),
+      -Math.asin((topArcY - height / 2) / arcRadius),
+      false
     );
-    ctx.lineTo((x + threePointLine) * tileSize, (y + height) * tileSize);
+    
+    // Bottom corner straight
+    ctx.lineTo((x + cornerX) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
 
   if (!isHalfCourt) {
-    // Right 3-point line
-    const rightThreePointLine = width - threePointLine;
-    if (rightThreePointLine > width / 2 + 5) {
-      const curveDepth = 2;
+    // Right 3-point arc
+    const rightBasketX = width - basketX;
+    if (rightBasketX - arcRadius > 10) {
       ctx.beginPath();
-      ctx.moveTo((x + rightThreePointLine) * tileSize, y * tileSize);
-      ctx.lineTo((x + rightThreePointLine) * tileSize, (y + 3) * tileSize);
-      ctx.quadraticCurveTo(
-        (x + rightThreePointLine + curveDepth) * tileSize,
+      
+      const cornerX = width - Math.floor(specs.threePointCorner);
+      const topArcY = height / 2 - Math.sqrt(Math.pow(arcRadius, 2) - Math.pow(width - cornerX - rightBasketX, 2));
+      
+      ctx.moveTo((x + cornerX) * tileSize, y * tileSize);
+      ctx.lineTo((x + cornerX) * tileSize, (y + topArcY) * tileSize);
+      
+      // Arc centered on right basket (semicircle facing left)
+      ctx.arc(
+        (x + rightBasketX) * tileSize,
         (y + height / 2) * tileSize,
-        (x + rightThreePointLine) * tileSize,
-        (y + height - 3) * tileSize
+        arcRadius * tileSize,
+        Math.PI - Math.asin((topArcY - height / 2) / arcRadius),
+        Math.PI + Math.asin((topArcY - height / 2) / arcRadius),
+        false
       );
-      ctx.lineTo((x + rightThreePointLine) * tileSize, (y + height) * tileSize);
+      
+      ctx.lineTo((x + cornerX) * tileSize, (y + height) * tileSize);
       ctx.stroke();
     }
   }
