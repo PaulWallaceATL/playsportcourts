@@ -604,11 +604,10 @@ export function InteractiveCourtBuilder({
         
         // Keep 4 square as a perfect square and even number
         if (el.type === "4square") {
-          const newWidth = Math.max(4, Math.min(el.width + dWidth, maxWidth));
-          const newHeight = Math.max(4, Math.min(el.height + dHeight, maxHeight));
-          const size = dWidth !== 0 ? newWidth : newHeight;
-          const evenSize = Math.max(4, Math.floor(size / 2) * 2);
-          return { ...el, width: Math.min(evenSize, maxWidth), height: Math.min(evenSize, maxHeight) };
+          const newSize = Math.max(4, el.width + (dWidth !== 0 ? dWidth : dHeight));
+          const evenSize = Math.max(4, Math.floor(newSize / 2) * 2);
+          const finalSize = Math.min(evenSize, maxWidth, maxHeight);
+          return { ...el, width: finalSize, height: finalSize };
         }
         
         // Ensure hopscotch stays 2 tiles wide
@@ -617,9 +616,9 @@ export function InteractiveCourtBuilder({
           return { ...el, width: 2, height: newHeight };
         }
         
-        // All other elements can resize freely
-        const newWidth = Math.max(4, Math.min(el.width + dWidth, maxWidth));
-        const newHeight = Math.max(4, Math.min(el.height + dHeight, maxHeight));
+        // Cornhole and batters box can resize
+        const newWidth = Math.max(2, Math.min(el.width + dWidth, maxWidth));
+        const newHeight = Math.max(2, Math.min(el.height + dHeight, maxHeight));
         return { ...el, width: newWidth, height: newHeight };
       }
       return el;
@@ -739,11 +738,32 @@ export function InteractiveCourtBuilder({
         <canvas
           ref={canvasRef}
           className="w-full h-auto"
-          style={{ maxWidth: "100%", cursor: isDragging ? "grabbing" : selectedElement ? "grab" : "pointer" }}
+          style={{ 
+            maxWidth: "100%", 
+            cursor: isDragging ? "grabbing" : selectedElement ? "grab" : "pointer",
+            touchAction: "none"
+          }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}
+          onTouchStart={(e) => {
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+              clientX: touch.clientX,
+              clientY: touch.clientY
+            });
+            handleMouseDown(mouseEvent as unknown as React.MouseEvent<HTMLCanvasElement>);
+          }}
+          onTouchMove={(e) => {
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+              clientX: touch.clientX,
+              clientY: touch.clientY
+            });
+            handleMouseMove(mouseEvent as unknown as React.MouseEvent<HTMLCanvasElement>);
+          }}
+          onTouchEnd={() => handleMouseUp()}
         />
       </div>
 
