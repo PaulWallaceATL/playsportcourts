@@ -916,55 +916,56 @@ function drawBasketball(
     }
   }
 
-  // 3-point line - SUPER SIMPLE D-shape
-  const threePointDist = baselineOffset + laneLength + 5;
-  const cornerStraightY = 3; // How far from top/bottom sideline
+  // 3-point line - EXACTLY like real basketball court
+  // Just a vertical line with arc connecting top to bottom
   
-  // Check if it fits
-  const fits = isHalfCourt || (threePointDist < width / 2 - 10);
+  const lineXPos = baselineOffset + laneLength + 5; // X position of the line
+  const topY = 3; // Start 3 tiles from top
+  const bottomY = height - 3; // End 3 tiles from bottom
+  const arcHeight = 14; // Arc extends 14 tiles from center
   
-  if (fits && threePointDist < width - 5) {
+  // Only draw if it fits
+  if (lineXPos < (isHalfCourt ? width - 5 : width / 2 - 8)) {
     // Left 3-point line
     ctx.beginPath();
-    // Top corner straight (vertical line near baseline)
-    ctx.moveTo((x + cornerStraightY) * tileSize, y * tileSize);
-    ctx.lineTo((x + cornerStraightY) * tileSize, (y + height * 0.2) * tileSize);
+    // Top vertical straight
+    ctx.moveTo((x + lineXPos) * tileSize, (y + topY) * tileSize);
+    ctx.lineTo((x + lineXPos) * tileSize, (y + height / 2 - arcHeight) * tileSize);
     
-    // Arc wrapping around the key
+    // Simple arc bulging toward center
     ctx.arc(
-      (x + threePointDist) * tileSize,
+      (x + lineXPos) * tileSize,
       (y + height / 2) * tileSize,
-      threePointDist - cornerStraightY,
-      Math.PI,
-      0,
-      true // Draw counter-clockwise
+      arcHeight * tileSize,
+      -Math.PI / 2,
+      Math.PI / 2
     );
     
-    // Bottom corner straight
-    ctx.lineTo((x + cornerStraightY) * tileSize, (y + height) * tileSize);
+    // Bottom vertical straight
+    ctx.lineTo((x + lineXPos) * tileSize, (y + bottomY) * tileSize);
     ctx.stroke();
   }
 
-  if (!isHalfCourt && fits) {
+  if (!isHalfCourt) {
     // Right 3-point line
-    const rightThreePointDist = width - threePointDist;
-    const rightCorner = width - cornerStraightY;
-    
-    if (rightThreePointDist > width / 2 + 10) {
+    const rightLineXPos = width - lineXPos;
+    if (rightLineXPos > width / 2 + 8) {
       ctx.beginPath();
-      ctx.moveTo((x + rightCorner) * tileSize, y * tileSize);
-      ctx.lineTo((x + rightCorner) * tileSize, (y + height * 0.2) * tileSize);
+      // Top vertical
+      ctx.moveTo((x + rightLineXPos) * tileSize, (y + topY) * tileSize);
+      ctx.lineTo((x + rightLineXPos) * tileSize, (y + height / 2 - arcHeight) * tileSize);
       
+      // Arc bulging toward center
       ctx.arc(
-        (x + rightThreePointDist) * tileSize,
+        (x + rightLineXPos) * tileSize,
         (y + height / 2) * tileSize,
-        rightCorner - rightThreePointDist,
-        0,
-        Math.PI,
-        true
+        arcHeight * tileSize,
+        Math.PI / 2,
+        (3 * Math.PI) / 2
       );
       
-      ctx.lineTo((x + rightCorner) * tileSize, (y + height) * tileSize);
+      // Bottom vertical
+      ctx.lineTo((x + rightLineXPos) * tileSize, (y + bottomY) * tileSize);
       ctx.stroke();
     }
   }
