@@ -476,8 +476,18 @@ export function OrderFormSidebar() {
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {GAME_LINES.map((line) => {
-                    // Disable Basketball - Full if court is too small
-                    const isDisabled = line === "Basketball - Full" && parseFloat(formData.courtLength) < 95;
+                    // Disable Basketball if court is too small
+                    const length = parseFloat(formData.courtLength);
+                    const width = parseFloat(formData.courtWidth);
+                    
+                    const isDisabled = 
+                      (line === "Basketball - Full" && (length < 95 || width < 35)) ||
+                      (line === "Basketball - Half" && width < 35);
+                    
+                    const requirementText = 
+                      line === "Basketball - Full" ? "(Requires 95ft+ length, 35ft+ width)" :
+                      line === "Basketball - Half" ? "(Requires 35ft+ width)" :
+                      "";
                     
                     return (
                       <label
@@ -495,8 +505,8 @@ export function OrderFormSidebar() {
                           disabled={isDisabled}
                           className="w-3.5 h-3.5"
                         />
-                        {line}
-                        {isDisabled && <span className="text-xs text-red-400">(Requires 95ft+)</span>}
+                        <span className={isDisabled ? "line-through" : ""}>{line}</span>
+                        {isDisabled && <span className="text-xs text-red-400">{requirementText}</span>}
                       </label>
                     );
                   })}
