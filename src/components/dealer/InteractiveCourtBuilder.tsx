@@ -150,10 +150,13 @@ export function InteractiveCourtBuilder({
     // Basketball courts
     if (gameLines.includes("Basketball - Full")) {
       const courtW = Math.min(50, tilesY - 2);
-      const courtL = Math.min(94, tilesX - 2);
+      // Full court requires 95ft minimum, otherwise force half court
+      const courtL = tilesX >= 95 ? Math.min(94, tilesX - 2) : Math.min(47, tilesX - 2);
+      const isActuallyHalf = tilesX < 95;
+      
       newElements.push({
-        id: "basketball-full",
-        type: "basketball-full",
+        id: isActuallyHalf ? "basketball-half" : "basketball-full",
+        type: isActuallyHalf ? "basketball-half" : "basketball-full",
         x: Math.floor((tilesX - courtL) / 2),
         y: Math.floor((tilesY - courtW) / 2),
         width: courtL,
@@ -161,7 +164,7 @@ export function InteractiveCourtBuilder({
       });
     }
 
-    if (gameLines.includes("Basketball - Half")) {
+    if (gameLines.includes("Basketball - Half") && !gameLines.includes("Basketball - Full")) {
       const courtW = Math.min(50, tilesY - 2);
       const courtL = Math.min(47, tilesX - 2);
       newElements.push({
@@ -913,60 +916,53 @@ function drawBasketball(
     }
   }
 
-  // 3-point line - simple wrap around the key
-  // Start just beyond the lane and wrap around it
-  const threePointX = baselineOffset + laneLength + 4; // 4 tiles beyond the lane
+  // 3-point line - only draw if it won't overlap center circle
+  const threePointX = baselineOffset + laneLength + 5; // 5 tiles beyond lane
+  const centerX = width / 2;
   
-  // Corner sections (horizontal lines parallel to sidelines)  
-  const cornerY = 3; // 3 tiles from sidelines
+  // Only draw 3-point line if it stays clear of center (for full court)
+  const drawThreePoint = isHalfCourt || (threePointX < centerX - 8);
   
-  // Arc to connect top and bottom corners
-  const arcRadius = Math.min(14, Math.floor(height * 0.35)); // Reasonable arc
-  
-  // Left 3-point line - wrap around left key
-  if (threePointX < width / 2) {
+  if (drawThreePoint && threePointX < (isHalfCourt ? width - 5 : centerX - 8)) {
+    // Left 3-point line
+    const cornerDist = 3; // 3 tiles from baseline (corner straight)
+    
     ctx.beginPath();
+    // Vertical straight in corner
+    ctx.moveTo((x + cornerDist) * tileSize, y * tileSize);
+    ctx.lineTo((x + cornerDist) * tileSize, (y + height * 0.15) * tileSize);
     
-    // Top corner straight (HORIZONTAL along baseline)
-    ctx.moveTo((x + baselineOffset) * tileSize, (y + cornerY) * tileSize);
-    ctx.lineTo((x + threePointX) * tileSize, (y + cornerY) * tileSize);
-    
-    // Curved section wrapping around
-    ctx.arc(
+    // Smooth curve using quadratic
+    ctx.quadraticCurveTo(
       (x + threePointX) * tileSize,
       (y + height / 2) * tileSize,
-      (height / 2 - cornerY) * tileSize,
-      -Math.PI / 2,
-      Math.PI / 2
+      (x + cornerDist) * tileSize,
+      (y + height * 0.85) * tileSize
     );
     
-    // Bottom corner straight (HORIZONTAL along baseline)
-    ctx.lineTo((x + baselineOffset) * tileSize, (y + height - cornerY) * tileSize);
+    // Vertical straight in bottom corner
+    ctx.lineTo((x + cornerDist) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
 
-  if (!isHalfCourt) {
-    // Right 3-point line - wrap around right key
+  if (!isHalfCourt && drawThreePoint) {
+    // Right 3-point line
     const rightThreePointX = width - threePointX;
+    const rightCornerDist = width - 3;
     
-    if (rightThreePointX > width / 2) {
+    if (rightThreePointX > centerX + 8) {
       ctx.beginPath();
+      ctx.moveTo((x + rightCornerDist) * tileSize, y * tileSize);
+      ctx.lineTo((x + rightCornerDist) * tileSize, (y + height * 0.15) * tileSize);
       
-      // Top corner straight
-      ctx.moveTo((x + width - baselineOffset) * tileSize, (y + cornerY) * tileSize);
-      ctx.lineTo((x + rightThreePointX) * tileSize, (y + cornerY) * tileSize);
-      
-      // Curved section
-      ctx.arc(
+      ctx.quadraticCurveTo(
         (x + rightThreePointX) * tileSize,
         (y + height / 2) * tileSize,
-        (height / 2 - cornerY) * tileSize,
-        Math.PI / 2,
-        (3 * Math.PI) / 2
+        (x + rightCornerDist) * tileSize,
+        (y + height * 0.85) * tileSize
       );
       
-      // Bottom corner straight
-      ctx.lineTo((x + width - baselineOffset) * tileSize, (y + height - cornerY) * tileSize);
+      ctx.lineTo((x + rightCornerDist) * tileSize, (y + height) * tileSize);
       ctx.stroke();
     }
   }
