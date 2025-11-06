@@ -905,42 +905,57 @@ function drawBasketball(
     }
   }
 
-  // 3-point line - use regulation distance (rounded to nearest tile)
-  const threePointDist = Math.floor(specs.threePoint) + baselineOffset;
-  const threePointCorner = Math.floor(specs.threePointCorner) + baselineOffset;
-  const straightHeight = Math.min(14, Math.floor(height * 0.28));
+  // 3-point line - use regulation distance
+  const basketPos = baselineOffset + 5.25; // Basket center (4ft backboard + 1.25ft to center)
+  const threePointRadius = Math.floor(specs.threePoint);
+  const cornerDist = Math.floor(specs.threePointCorner);
+  
+  // Calculate where arc meets the sideline
+  const sideOffset = Math.min(3, Math.floor(height * 0.15)); // Distance from sideline
   
   // Left 3-point line
-  if (threePointCorner < width) {
+  if (basketPos + threePointRadius < width) {
+    ctx.strokeStyle = "#FFFFFF";
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    // Corner straight
-    ctx.moveTo((x + threePointCorner) * tileSize, y * tileSize);
-    ctx.lineTo((x + threePointCorner) * tileSize, (y + (height - straightHeight) / 2) * tileSize);
-    // Arc
-    ctx.quadraticCurveTo(
-      (x + baselineOffset + 5.25) * tileSize,
+    
+    // Draw from top corner
+    ctx.moveTo((x + cornerDist) * tileSize, y * tileSize);
+    ctx.lineTo((x + cornerDist) * tileSize, (y + sideOffset) * tileSize);
+    
+    // Arc portion
+    ctx.arc(
+      (x + basketPos) * tileSize,
       (y + height / 2) * tileSize,
-      (x + threePointCorner) * tileSize,
-      (y + (height + straightHeight) / 2) * tileSize
+      threePointRadius * tileSize,
+      -Math.PI / 2 + Math.atan2(sideOffset - height / 2, cornerDist - basketPos),
+      Math.PI / 2 - Math.atan2(sideOffset - height / 2, cornerDist - basketPos)
     );
-    // Straight to corner
-    ctx.lineTo((x + threePointCorner) * tileSize, (y + height) * tileSize);
+    
+    // Bottom corner
+    ctx.lineTo((x + cornerDist) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
 
-  if (!isHalfCourt && threePointCorner < width / 2) {
+  if (!isHalfCourt) {
     // Right 3-point line
-    ctx.beginPath();
-    ctx.moveTo((x + width - threePointCorner) * tileSize, y * tileSize);
-    ctx.lineTo((x + width - threePointCorner) * tileSize, (y + (height - straightHeight) / 2) * tileSize);
-    ctx.quadraticCurveTo(
-      (x + width - baselineOffset - 5.25) * tileSize,
-      (y + height / 2) * tileSize,
-      (x + width - threePointCorner) * tileSize,
-      (y + (height + straightHeight) / 2) * tileSize
-    );
-    ctx.lineTo((x + width - threePointCorner) * tileSize, (y + height) * tileSize);
-    ctx.stroke();
+    const rightBasketPos = width - basketPos;
+    if (rightBasketPos > threePointRadius) {
+      ctx.beginPath();
+      ctx.moveTo((x + width - cornerDist) * tileSize, y * tileSize);
+      ctx.lineTo((x + width - cornerDist) * tileSize, (y + sideOffset) * tileSize);
+      
+      ctx.arc(
+        (x + rightBasketPos) * tileSize,
+        (y + height / 2) * tileSize,
+        threePointRadius * tileSize,
+        Math.PI / 2 + Math.atan2(sideOffset - height / 2, width - cornerDist - rightBasketPos),
+        (3 * Math.PI) / 2 - Math.atan2(sideOffset - height / 2, width - cornerDist - rightBasketPos)
+      );
+      
+      ctx.lineTo((x + width - cornerDist) * tileSize, (y + height) * tileSize);
+      ctx.stroke();
+    }
   }
 
   // Lane boundary lines
@@ -949,6 +964,7 @@ function drawBasketball(
   ctx.lineTo((x + baselineOffset + laneLength) * tileSize, (y + laneY) * tileSize);
   ctx.lineTo((x + baselineOffset + laneLength) * tileSize, (y + laneY + laneWidth) * tileSize);
   ctx.lineTo((x + baselineOffset) * tileSize, (y + laneY + laneWidth) * tileSize);
+  ctx.closePath();
   ctx.stroke();
 
   if (!isHalfCourt) {
@@ -957,8 +973,14 @@ function drawBasketball(
     ctx.lineTo((x + width - baselineOffset - laneLength) * tileSize, (y + laneY) * tileSize);
     ctx.lineTo((x + width - baselineOffset - laneLength) * tileSize, (y + laneY + laneWidth) * tileSize);
     ctx.lineTo((x + width - baselineOffset) * tileSize, (y + laneY + laneWidth) * tileSize);
+    ctx.closePath();
     ctx.stroke();
   }
+
+  // Court border in border color
+  ctx.strokeStyle = colors.borderColor;
+  ctx.lineWidth = 4;
+  ctx.strokeRect(x * tileSize, y * tileSize, width * tileSize, height * tileSize);
 }
 
 function drawPickleball(
