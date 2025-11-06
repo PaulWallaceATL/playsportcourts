@@ -288,7 +288,7 @@ export function InteractiveCourtBuilder({
     }
   }, [elements, onElementsChange]);
 
-  const drawCourt = React.useCallback(() => {
+  const drawCourt = () => {
     const canvas = canvasRef.current;
     if (!canvas || courtLength === 0 || courtWidth === 0) return;
 
@@ -429,11 +429,11 @@ export function InteractiveCourtBuilder({
     );
 
     ctx.restore();
-  }, [courtLength, courtWidth, baseTileColor, elements, selectedElement, isFullscreen, scale]);
+  };
 
   React.useEffect(() => {
     drawCourt();
-  }, [drawCourt, basketballCourtColor, basketballLaneColor, basketballBorderColor, pickleballInnerCourtColor, pickleballOuterCourtColor, pickleballKitchenColor, shuffleboardCourtColor, shuffleboardShootingAreaColor, shuffleboardBorderColor]);
+  }, [courtLength, courtWidth, baseTileColor, elements, selectedElement, isFullscreen, scale, basketballCourtColor, basketballLaneColor, basketballBorderColor, pickleballInnerCourtColor, pickleballOuterCourtColor, pickleballKitchenColor, shuffleboardCourtColor, shuffleboardShootingAreaColor, shuffleboardBorderColor, gameLines]);
 
   // Handle canvas interactions
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -856,15 +856,41 @@ function drawBasketball(
     }
   }
 
-  // 3-point arc - simplified to stay within bounds
-  const radius = Math.min(23, width * 0.4);
+  // 3-point line - regulation is 23.75 ft radius, but we'll draw a simplified version that fits
+  // Draw as a straight line at top of key plus small arc
+  const threePointStraight = 14 * tileSize; // 14 feet straight portion
+  const arcRadius = 23.75 * tileSize;
+  
+  // Left 3-point line
   ctx.beginPath();
-  ctx.arc(x * tileSize, (y + height / 2) * tileSize, radius * tileSize, -Math.PI / 3, Math.PI / 3);
+  // Top straight section
+  ctx.moveTo((x + 3) * tileSize, y * tileSize);
+  ctx.lineTo((x + 3) * tileSize, (y + height / 2 - threePointStraight / 2) * tileSize);
+  // Arc
+  ctx.arc(
+    (x + 5.25) * tileSize, 
+    (y + height / 2) * tileSize, 
+    arcRadius, 
+    -Math.PI / 2, 
+    Math.PI / 2
+  );
+  // Bottom straight section
+  ctx.lineTo((x + 3) * tileSize, (y + height) * tileSize);
   ctx.stroke();
 
   if (!isHalfCourt) {
+    // Right 3-point line
     ctx.beginPath();
-    ctx.arc((x + width) * tileSize, (y + height / 2) * tileSize, radius * tileSize, Math.PI - Math.PI / 3, Math.PI + Math.PI / 3);
+    ctx.moveTo((x + width - 3) * tileSize, y * tileSize);
+    ctx.lineTo((x + width - 3) * tileSize, (y + height / 2 - threePointStraight / 2) * tileSize);
+    ctx.arc(
+      (x + width - 5.25) * tileSize,
+      (y + height / 2) * tileSize,
+      arcRadius,
+      Math.PI / 2,
+      (3 * Math.PI) / 2
+    );
+    ctx.lineTo((x + width - 3) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
 }
