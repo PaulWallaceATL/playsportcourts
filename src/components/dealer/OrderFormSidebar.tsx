@@ -63,6 +63,7 @@ interface OrderFormData {
   projectName: string;
   phone: string;
   tileType: string;
+  baseTileColor: string;
   courtLength: string;
   courtWidth: string;
   gameLines: string[];
@@ -97,11 +98,12 @@ export function OrderFormSidebar() {
     projectName: "",
     phone: "",
     tileType: "core",
+    baseTileColor: "Graphite",
     courtLength: "",
     courtWidth: "",
     gameLines: [],
     linePainting: false,
-    linePaintingColor: COLORS[0].name,
+    linePaintingColor: "White",
     rampsNeeded: false,
     rampsColor: COLORS[0].name,
     rampsPriority: false,
@@ -109,13 +111,13 @@ export function OrderFormSidebar() {
     logoHeight: "",
     logoWidth: "",
     basketballOverhang: "0",
-    pickleballInnerCourtColor: COLORS[4].name,
-    pickleballOuterCourtColor: COLORS[6].name,
-    pickleballKitchenColor: COLORS[3].name,
+    pickleballInnerCourtColor: "Graphite",
+    pickleballOuterCourtColor: "Titanium",
+    pickleballKitchenColor: "Royal Blue",
     pickleballRampsColor: COLORS[0].name,
-    basketballCourtColor: COLORS[3].name,
-    basketballLaneColor: COLORS[4].name,
-    basketballBorderColor: COLORS[9].name,
+    basketballCourtColor: "Graphite",
+    basketballLaneColor: "Royal Blue",
+    basketballBorderColor: "Orange",
     basketballRampColor: COLORS[0].name,
     shuffleboardCourtColor: COLORS[0].name,
     shuffleboardShootingAreaColor: COLORS[4].name,
@@ -332,6 +334,14 @@ export function OrderFormSidebar() {
                       </option>
                     ))}
                   </select>
+                </div>
+
+                <div>
+                  <label className="text-xs block mb-1.5">Base Tile Color *</label>
+                  <ColorSelector
+                    value={formData.baseTileColor}
+                    onChange={(color) => updateFormData("baseTileColor", color)}
+                  />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
@@ -692,6 +702,7 @@ export function OrderFormSidebar() {
               courtLength={parseFloat(formData.courtLength) || 0}
               courtWidth={parseFloat(formData.courtWidth) || 0}
               gameLines={formData.gameLines}
+              baseTileColor={formData.baseTileColor}
               pickleballInnerCourtColor={formData.pickleballInnerCourtColor}
               pickleballOuterCourtColor={formData.pickleballOuterCourtColor}
               pickleballKitchenColor={formData.pickleballKitchenColor}

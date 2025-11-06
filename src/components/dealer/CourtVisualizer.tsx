@@ -7,6 +7,7 @@ interface CourtVisualizerProps {
   courtLength: number; // in feet
   courtWidth: number; // in feet
   gameLines: string[];
+  baseTileColor?: string;
   // Color props for different sports
   pickleballInnerCourtColor?: string;
   pickleballOuterCourtColor?: string;
@@ -39,10 +40,11 @@ export function CourtVisualizer({
   courtLength,
   courtWidth,
   gameLines,
-  pickleballInnerCourtColor = "Royal Blue",
-  pickleballOuterCourtColor = "Emerald Green",
-  pickleballKitchenColor = "Navy Blue",
-  basketballCourtColor = "Navy Blue",
+  baseTileColor = "Graphite",
+  pickleballInnerCourtColor = "Graphite",
+  pickleballOuterCourtColor = "Titanium",
+  pickleballKitchenColor = "Royal Blue",
+  basketballCourtColor = "Graphite",
   basketballLaneColor = "Royal Blue",
   basketballBorderColor = "Orange",
   shuffleboardCourtColor = "Black",
@@ -103,11 +105,15 @@ export function CourtVisualizer({
     const tilesY = Math.ceil(courtWidth);
     const tileSize = scale; // Each tile is scale pixels
 
-    // Draw base court color based on sport
-    let baseColor = COLOR_MAP[pickleballOuterCourtColor];
-    if (hasBasketball && !hasPickleball) {
+    // Draw base court color
+    let baseColor = COLOR_MAP[baseTileColor];
+    
+    // Override with sport-specific colors if applicable
+    if (hasPickleball) {
+      baseColor = COLOR_MAP[pickleballOuterCourtColor];
+    } else if (hasBasketball) {
       baseColor = COLOR_MAP[basketballCourtColor];
-    } else if (hasShuffleboard && !hasPickleball && !hasBasketball) {
+    } else if (hasShuffleboard) {
       baseColor = COLOR_MAP[shuffleboardCourtColor];
     }
 
@@ -115,9 +121,9 @@ export function CourtVisualizer({
     ctx.fillStyle = baseColor;
     ctx.fillRect(0, 0, courtPixelWidth, courtPixelHeight);
 
-    // Draw tile grid lines (subtle)
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
-    ctx.lineWidth = 1;
+    // Draw tile grid lines (more visible)
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.25)";
+    ctx.lineWidth = 1.5;
     for (let x = 0; x <= tilesX; x++) {
       ctx.beginPath();
       ctx.moveTo(x * tileSize, 0);
@@ -200,6 +206,7 @@ export function CourtVisualizer({
     courtLength,
     courtWidth,
     gameLines,
+    baseTileColor,
     pickleballInnerCourtColor,
     pickleballOuterCourtColor,
     pickleballKitchenColor,
@@ -470,27 +477,221 @@ function drawOtherGameLines(
   lineColor: string
 ) {
   ctx.strokeStyle = lineColor;
-  ctx.lineWidth = 1.5;
-  ctx.setLineDash([5, 5]);
+  ctx.lineWidth = 2;
 
-  // Draw simplified markings for other sports
-  if (gameLines.includes("Volleyball")) {
-    // Volleyball net line
+  // 4 Square
+  if (gameLines.includes("4 Square")) {
+    const size = Math.min(width, height) * 0.3;
+    const x = (width - size) / 2;
+    const y = (height - size) / 2;
+    ctx.strokeRect(x, y, size, size);
     ctx.beginPath();
-    ctx.moveTo(width / 2, 0);
-    ctx.lineTo(width / 2, height);
+    ctx.moveTo(x + size / 2, y);
+    ctx.lineTo(x + size / 2, y + size);
+    ctx.moveTo(x, y + size / 2);
+    ctx.lineTo(x + size, y + size / 2);
     ctx.stroke();
   }
 
+  // Badminton
   if (gameLines.includes("Badminton")) {
-    // Badminton court (simplified)
-    const courtWidth = Math.min(width, height) * 0.3;
-    const courtLength = Math.min(width, height) * 0.6;
-    const x = (width - courtLength) / 2;
-    const y = (height - courtWidth) / 2;
-    ctx.strokeRect(x, y, courtLength, courtWidth);
+    const scale = Math.min(width / 20, height / 44);
+    const courtW = 20 * scale;
+    const courtL = 44 * scale;
+    const x = (width - courtL) / 2;
+    const y = (height - courtW) / 2;
+    
+    // Outer boundary
+    ctx.strokeRect(x, y, courtL, courtW);
+    // Center line
+    ctx.beginPath();
+    ctx.moveTo(x + courtL / 2, y);
+    ctx.lineTo(x + courtL / 2, y + courtW);
+    // Service lines
+    ctx.moveTo(x + courtL * 0.24, y);
+    ctx.lineTo(x + courtL * 0.24, y + courtW);
+    ctx.moveTo(x + courtL * 0.76, y);
+    ctx.lineTo(x + courtL * 0.76, y + courtW);
+    // Side service lines
+    ctx.moveTo(x, y + courtW * 0.2);
+    ctx.lineTo(x + courtL, y + courtW * 0.2);
+    ctx.moveTo(x, y + courtW * 0.8);
+    ctx.lineTo(x + courtL, y + courtW * 0.8);
+    ctx.stroke();
+  }
+
+  // Volleyball
+  if (gameLines.includes("Volleyball")) {
+    const scale = Math.min(width / 30, height / 60);
+    const courtW = 30 * scale;
+    const courtL = 60 * scale;
+    const x = (width - courtL) / 2;
+    const y = (height - courtW) / 2;
+    
+    ctx.strokeRect(x, y, courtL, courtW);
+    // Center line (net)
+    ctx.beginPath();
+    ctx.moveTo(x + courtL / 2, y);
+    ctx.lineTo(x + courtL / 2, y + courtW);
+    // Attack lines (10 feet from center)
+    const attackLine = 10 * scale;
+    ctx.moveTo(x + courtL / 2 - attackLine, y);
+    ctx.lineTo(x + courtL / 2 - attackLine, y + courtW);
+    ctx.moveTo(x + courtL / 2 + attackLine, y);
+    ctx.lineTo(x + courtL / 2 + attackLine, y + courtW);
+    ctx.stroke();
+  }
+
+  // Soccer
+  if (gameLines.includes("Soccer")) {
+    const scale = Math.min(width / 50, height / 80);
+    const courtW = 50 * scale;
+    const courtL = 80 * scale;
+    const x = (width - courtL) / 2;
+    const y = (height - courtW) / 2;
+    
+    ctx.strokeRect(x, y, courtL, courtW);
+    // Center line
+    ctx.beginPath();
+    ctx.moveTo(x + courtL / 2, y);
+    ctx.lineTo(x + courtL / 2, y + courtW);
+    // Center circle
+    ctx.arc(x + courtL / 2, y + courtW / 2, 10 * scale, 0, Math.PI * 2);
+    // Penalty boxes
+    const boxW = 20 * scale;
+    const boxL = 16 * scale;
+    ctx.moveTo(x, y + (courtW - boxW) / 2);
+    ctx.lineTo(x + boxL, y + (courtW - boxW) / 2);
+    ctx.lineTo(x + boxL, y + (courtW + boxW) / 2);
+    ctx.lineTo(x, y + (courtW + boxW) / 2);
+    ctx.moveTo(x + courtL, y + (courtW - boxW) / 2);
+    ctx.lineTo(x + courtL - boxL, y + (courtW - boxW) / 2);
+    ctx.lineTo(x + courtL - boxL, y + (courtW + boxW) / 2);
+    ctx.lineTo(x + courtL, y + (courtW + boxW) / 2);
+    ctx.stroke();
+  }
+
+  // Cornhole
+  if (gameLines.includes("Cornhole")) {
+    const boardW = 2;
+    const boardL = 4;
+    const spacing = 27;
+    const scale = Math.min(width / (2 * boardL + spacing), height / boardW) * 0.5;
+    const y = height / 2 - (boardW * scale) / 2;
+    
+    // Two boards
+    const x1 = width / 2 - spacing * scale / 2 - boardL * scale;
+    const x2 = width / 2 + spacing * scale / 2;
+    
+    ctx.fillStyle = lineColor;
+    ctx.fillRect(x1, y, boardL * scale, boardW * scale);
+    ctx.fillRect(x2, y, boardL * scale, boardW * scale);
+    
+    // Holes
+    ctx.fillStyle = "#000";
+    ctx.beginPath();
+    ctx.arc(x1 + boardL * scale * 0.5, y + boardW * scale * 0.6, boardW * scale * 0.15, 0, Math.PI * 2);
+    ctx.arc(x2 + boardL * scale * 0.5, y + boardW * scale * 0.6, boardW * scale * 0.15, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Hop Scotch
+  if (gameLines.includes("Hop Scotch")) {
+    const boxSize = Math.min(width, height) * 0.08;
+    const startX = width / 2 - boxSize / 2;
+    const startY = height * 0.2;
+    
+    ctx.strokeRect(startX, startY, boxSize, boxSize); // 1
+    ctx.strokeRect(startX, startY + boxSize, boxSize, boxSize); // 2
+    ctx.strokeRect(startX - boxSize, startY + boxSize * 2, boxSize, boxSize); // 3
+    ctx.strokeRect(startX, startY + boxSize * 2, boxSize, boxSize); // 4
+    ctx.strokeRect(startX, startY + boxSize * 3, boxSize, boxSize); // 5
+    ctx.strokeRect(startX - boxSize, startY + boxSize * 4, boxSize, boxSize); // 6
+    ctx.strokeRect(startX, startY + boxSize * 4, boxSize, boxSize); // 7
+  }
+
+  // Futsal
+  if (gameLines.includes("Futsal - Reduced") || gameLines.includes("Futsal - Regulated")) {
+    const isRegulated = gameLines.includes("Futsal - Regulated");
+    const scale = isRegulated 
+      ? Math.min(width / 40, height / 20)
+      : Math.min(width / 30, height / 15);
+    const courtL = isRegulated ? 40 * scale : 30 * scale;
+    const courtW = isRegulated ? 20 * scale : 15 * scale;
+    const x = (width - courtL) / 2;
+    const y = (height - courtW) / 2;
+    
+    ctx.strokeRect(x, y, courtL, courtW);
+    // Center line and circle
+    ctx.beginPath();
+    ctx.moveTo(x + courtL / 2, y);
+    ctx.lineTo(x + courtL / 2, y + courtW);
+    ctx.arc(x + courtL / 2, y + courtW / 2, 3 * scale, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // Hockey Crease / Regulation
+  if (gameLines.includes("Hockey Crease") || gameLines.includes("Hockey Regulation")) {
+    const isRegulation = gameLines.includes("Hockey Regulation");
+    const scale = isRegulation
+      ? Math.min(width / 200, height / 85)
+      : Math.min(width / 100, height / 50);
+    const courtL = isRegulation ? 200 * scale : 100 * scale;
+    const courtW = isRegulation ? 85 * scale : 50 * scale;
+    const x = (width - courtL) / 2;
+    const y = (height - courtW) / 2;
+    
+    ctx.strokeRect(x, y, courtL, courtW);
+    // Center line (red line)
+    ctx.strokeStyle = "#FF0000";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(x + courtL / 2, y);
+    ctx.lineTo(x + courtL / 2, y + courtW);
+    ctx.stroke();
+    
+    ctx.strokeStyle = lineColor;
+    ctx.lineWidth = 2;
+    // Blue lines
+    ctx.strokeStyle = "#0000FF";
+    ctx.beginPath();
+    ctx.moveTo(x + courtL * 0.3, y);
+    ctx.lineTo(x + courtL * 0.3, y + courtW);
+    ctx.moveTo(x + courtL * 0.7, y);
+    ctx.lineTo(x + courtL * 0.7, y + courtW);
+    ctx.stroke();
+    
+    ctx.strokeStyle = lineColor;
+    // Goal creases
+    ctx.beginPath();
+    ctx.arc(x + courtL * 0.1, y + courtW / 2, 6 * scale, 0, Math.PI);
+    ctx.arc(x + courtL * 0.9, y + courtW / 2, 6 * scale, 0, Math.PI);
+    ctx.stroke();
+  }
+
+  // Batters Box
+  if (gameLines.includes("Batters Box")) {
+    const boxW = 4;
+    const boxL = 6;
+    const scale = Math.min(width, height) / 50;
+    const y = height / 2;
+    
+    // Right box
+    ctx.strokeRect(width / 2 + 2 * scale, y - boxL * scale / 2, boxW * scale, boxL * scale);
+    // Left box
+    ctx.strokeRect(width / 2 - (2 + boxW) * scale, y - boxL * scale / 2, boxW * scale, boxL * scale);
+    // Home plate
+    ctx.fillStyle = lineColor;
+    ctx.beginPath();
+    ctx.moveTo(width / 2, y);
+    ctx.lineTo(width / 2 - scale, y - 1.5 * scale);
+    ctx.lineTo(width / 2 - scale, y + 1.5 * scale);
+    ctx.closePath();
+    ctx.fill();
   }
 
   ctx.setLineDash([]);
+  ctx.strokeStyle = lineColor;
+  ctx.lineWidth = 2;
 }
 
