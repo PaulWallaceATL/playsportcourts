@@ -913,56 +913,75 @@ function drawBasketball(
     }
   }
 
-  // 3-point lines
-  // Basket is 5.25ft from baseline (4ft backboard + 1.25ft to center)
-  const basketPos = baselineOffset + 5.25;
-  const threePointRadius = Math.floor(specs.threePoint);
-  const cornerDist = Math.floor(specs.threePointCorner);
+  // 3-point lines - SCALED TO FIT COURT
+  // Don't use actual regulation distance if court is too small
+  // Instead, position it nicely within the available space
   
-  // Calculate where arc should end (14ft from center on each side)
-  const arcEndHeight = 14; // Standard for all regulations
+  const basketPos = baselineOffset + 5;
+  // Scale 3-point distance to fit court (use at most 40% of court width)
+  const maxThreePoint = Math.floor(width * 0.4);
+  const threePointDistance = Math.min(Math.floor(specs.threePoint), maxThreePoint);
+  const threePointPos = basketPos + threePointDistance;
+  
+  // Corner distance - keep it simple
+  const cornerDist = threePointPos;
+  
+  // Height where arc meets corners (stay well within court height)
+  const arcTop = 3; // 3 tiles from top
+  const arcBottom = height - 3; // 3 tiles from bottom
   
   // Left 3-point line
-  if (basketPos + threePointRadius <= width) {
+  if (threePointPos < width / 2) {
     ctx.beginPath();
-    // Top corner straight
+    // Top corner
     ctx.moveTo((x + cornerDist) * tileSize, y * tileSize);
-    ctx.lineTo((x + cornerDist) * tileSize, (y + (height / 2 - arcEndHeight)) * tileSize);
+    ctx.lineTo((x + cornerDist) * tileSize, (y + arcTop) * tileSize);
     
-    // Arc around basket (180 degree arc from top to bottom)
+    // Simple arc - radius based on the geometry
+    const arcRadius = Math.sqrt(
+      Math.pow(threePointDistance, 2) + 
+      Math.pow((arcBottom - arcTop) / 2, 2)
+    );
+    
     ctx.arc(
       (x + basketPos) * tileSize,
       (y + height / 2) * tileSize,
-      threePointRadius * tileSize,
+      arcRadius * tileSize,
       -Math.PI / 2,
       Math.PI / 2
     );
     
-    // Bottom corner straight
+    // Bottom corner
     ctx.lineTo((x + cornerDist) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
 
-  if (!isHalfCourt && basketPos + threePointRadius <= width) {
+  if (!isHalfCourt) {
     // Right 3-point line
     const rightBasketPos = width - basketPos;
-    ctx.beginPath();
-    // Top corner
-    ctx.moveTo((x + width - cornerDist) * tileSize, y * tileSize);
-    ctx.lineTo((x + width - cornerDist) * tileSize, (y + (height / 2 - arcEndHeight)) * tileSize);
+    const rightThreePointPos = width - threePointPos;
     
-    // Arc (180 degrees from bottom to top)
-    ctx.arc(
-      (x + rightBasketPos) * tileSize,
-      (y + height / 2) * tileSize,
-      threePointRadius * tileSize,
-      Math.PI / 2,
-      (3 * Math.PI) / 2
-    );
-    
-    // Bottom corner
-    ctx.lineTo((x + width - cornerDist) * tileSize, (y + height) * tileSize);
-    ctx.stroke();
+    if (rightThreePointPos > width / 2) {
+      ctx.beginPath();
+      ctx.moveTo((x + rightThreePointPos) * tileSize, y * tileSize);
+      ctx.lineTo((x + rightThreePointPos) * tileSize, (y + arcTop) * tileSize);
+      
+      const arcRadius = Math.sqrt(
+        Math.pow(threePointDistance, 2) + 
+        Math.pow((arcBottom - arcTop) / 2, 2)
+      );
+      
+      ctx.arc(
+        (x + rightBasketPos) * tileSize,
+        (y + height / 2) * tileSize,
+        arcRadius * tileSize,
+        Math.PI / 2,
+        (3 * Math.PI) / 2
+      );
+      
+      ctx.lineTo((x + rightThreePointPos) * tileSize, (y + height) * tileSize);
+      ctx.stroke();
+    }
   }
 
   // Court border in border color
