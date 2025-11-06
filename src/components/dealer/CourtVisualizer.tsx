@@ -148,12 +148,13 @@ export function CourtVisualizer({
     }
 
     if (hasBasketball) {
+      const isHalfCourt = gameLines.includes("Basketball - Half");
       drawBasketballCourt(ctx, courtPixelWidth, courtPixelHeight, {
         courtColor: COLOR_MAP[basketballCourtColor],
         laneColor: COLOR_MAP[basketballLaneColor],
         borderColor: COLOR_MAP[basketballBorderColor],
         lineColor: linePaintingColor === "White" ? "#ffffff" : COLOR_MAP[linePaintingColor] || "#ffffff",
-      });
+      }, isHalfCourt);
     }
 
     if (hasShuffleboard) {
@@ -167,7 +168,8 @@ export function CourtVisualizer({
 
     // Draw other game lines
     drawOtherGameLines(ctx, courtPixelWidth, courtPixelHeight, gameLines, 
-      linePaintingColor === "White" ? "#ffffff" : COLOR_MAP[linePaintingColor] || "#ffffff"
+      linePaintingColor === "White" ? "#ffffff" : COLOR_MAP[linePaintingColor] || "#ffffff",
+      tileSize
     );
 
     // Draw border
@@ -342,10 +344,11 @@ function drawBasketballCourt(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
-  colors: { courtColor: string; laneColor: string; borderColor: string; lineColor: string }
+  colors: { courtColor: string; laneColor: string; borderColor: string; lineColor: string },
+  isHalfCourt: boolean = false
 ) {
-  const standardWidth = 50; // 50 feet wide (full court)
-  const standardLength = 94; // 94 feet long (full court)
+  const standardWidth = 50; // 50 feet wide
+  const standardLength = isHalfCourt ? 47 : 94; // Half court is 47 feet, full is 94
   const scale = Math.min(width / standardLength, height / standardWidth) * 0.9;
 
   const courtWidth = standardWidth * scale;
@@ -364,44 +367,59 @@ function drawBasketballCourt(
   const laneWidth = 12 * scale;
   const laneLength = 19 * scale;
   ctx.fillStyle = colors.laneColor;
-  ctx.fillRect(0, (courtWidth - laneWidth) / 2, laneLength, laneWidth);
-  ctx.fillRect(courtLength - laneLength, (courtWidth - laneWidth) / 2, laneLength, laneWidth);
+  
+  if (isHalfCourt) {
+    // Only one lane/key for half court
+    ctx.fillRect(0, (courtWidth - laneWidth) / 2, laneLength, laneWidth);
+  } else {
+    // Both lanes for full court
+    ctx.fillRect(0, (courtWidth - laneWidth) / 2, laneLength, laneWidth);
+    ctx.fillRect(courtLength - laneLength, (courtWidth - laneWidth) / 2, laneLength, laneWidth);
+  }
 
   // Draw lines
   ctx.strokeStyle = colors.lineColor;
   ctx.lineWidth = 2;
 
-  // Centerline
-  ctx.beginPath();
-  ctx.moveTo(courtLength / 2, 0);
-  ctx.lineTo(courtLength / 2, courtWidth);
-  ctx.stroke();
+  if (!isHalfCourt) {
+    // Full court: Center line
+    ctx.beginPath();
+    ctx.moveTo(courtLength / 2, 0);
+    ctx.lineTo(courtLength / 2, courtWidth);
+    ctx.stroke();
 
-  // Center circle
-  const centerRadius = 6 * scale;
-  ctx.beginPath();
-  ctx.arc(courtLength / 2, courtWidth / 2, centerRadius, 0, Math.PI * 2);
-  ctx.stroke();
+    // Center circle (full court only)
+    const centerRadius = 6 * scale;
+    ctx.beginPath();
+    ctx.arc(courtLength / 2, courtWidth / 2, centerRadius, 0, Math.PI * 2);
+    ctx.stroke();
+  }
 
-  // Free throw circles
+  // Free throw circle(s)
   const freeThrowRadius = 6 * scale;
   ctx.beginPath();
   ctx.arc(laneLength, courtWidth / 2, freeThrowRadius, 0, Math.PI * 2);
   ctx.stroke();
 
-  ctx.beginPath();
-  ctx.arc(courtLength - laneLength, courtWidth / 2, freeThrowRadius, 0, Math.PI * 2);
-  ctx.stroke();
+  if (!isHalfCourt) {
+    // Second free throw circle (full court only)
+    ctx.beginPath();
+    ctx.arc(courtLength - laneLength, courtWidth / 2, freeThrowRadius, 0, Math.PI * 2);
+    ctx.stroke();
+  }
 
-  // 3-point lines (simplified)
+  // 3-point line(s)
   const threePointRadius = 23.75 * scale;
   ctx.beginPath();
   ctx.arc(0, courtWidth / 2, threePointRadius, -Math.PI / 2.5, Math.PI / 2.5);
   ctx.stroke();
 
-  ctx.beginPath();
-  ctx.arc(courtLength, courtWidth / 2, threePointRadius, Math.PI - Math.PI / 2.5, Math.PI + Math.PI / 2.5);
-  ctx.stroke();
+  if (!isHalfCourt) {
+    // Second 3-point line (full court only)
+    ctx.beginPath();
+    ctx.arc(courtLength, courtWidth / 2, threePointRadius, Math.PI - Math.PI / 2.5, Math.PI + Math.PI / 2.5);
+    ctx.stroke();
+  }
 
   // Outer boundary
   ctx.strokeStyle = colors.borderColor;
@@ -474,22 +492,43 @@ function drawOtherGameLines(
   width: number,
   height: number,
   gameLines: string[],
-  lineColor: string
+  lineColor: string,
+  tileSize: number
 ) {
   ctx.strokeStyle = lineColor;
   ctx.lineWidth = 2;
 
-  // 4 Square
+  // 4 Square - aligned to tile grid
   if (gameLines.includes("4 Square")) {
-    const size = Math.min(width, height) * 0.3;
-    const x = (width - size) / 2;
-    const y = (height - size) / 2;
-    ctx.strokeRect(x, y, size, size);
+    // Each tile is 1 sq ft, 4 square needs to be in multiples of 2 tiles (2ft minimum)
+    // Standard 4 square is 8ft x 8ft (8 tiles x 8 tiles)
+    const tilesPerSide = Math.min(Math.floor(width / tileSize), Math.floor(height / tileSize));
+    
+    // Determine best size: prefer 8x8, but scale down if needed
+    let squareSize = 8; // 8 feet (8 tiles)
+    if (tilesPerSide < 8) {
+      squareSize = Math.max(4, Math.floor(tilesPerSide / 2) * 2); // Must be even, minimum 4
+    }
+    
+    const pixelSize = squareSize * tileSize; // Convert to pixels
+    const x = (width - pixelSize) / 2;
+    const y = (height - pixelSize) / 2;
+    
+    // Snap to grid
+    const snappedX = Math.round(x / tileSize) * tileSize;
+    const snappedY = Math.round(y / tileSize) * tileSize;
+    
+    // Draw outer square
+    ctx.strokeRect(snappedX, snappedY, pixelSize, pixelSize);
+    
+    // Draw cross dividing into 4 squares
     ctx.beginPath();
-    ctx.moveTo(x + size / 2, y);
-    ctx.lineTo(x + size / 2, y + size);
-    ctx.moveTo(x, y + size / 2);
-    ctx.lineTo(x + size, y + size / 2);
+    // Vertical line (snapped to grid)
+    ctx.moveTo(snappedX + pixelSize / 2, snappedY);
+    ctx.lineTo(snappedX + pixelSize / 2, snappedY + pixelSize);
+    // Horizontal line (snapped to grid)
+    ctx.moveTo(snappedX, snappedY + pixelSize / 2);
+    ctx.lineTo(snappedX + pixelSize, snappedY + pixelSize / 2);
     ctx.stroke();
   }
 
@@ -595,11 +634,11 @@ function drawOtherGameLines(
     ctx.fill();
   }
 
-  // Hop Scotch
+  // Hop Scotch - snapped to grid (each square is 1 tile = 1ft)
   if (gameLines.includes("Hop Scotch")) {
-    const boxSize = Math.min(width, height) * 0.08;
-    const startX = width / 2 - boxSize / 2;
-    const startY = height * 0.2;
+    const boxSize = tileSize; // Each hop scotch square is exactly 1 tile
+    const startX = Math.round((width / 2 - boxSize / 2) / tileSize) * tileSize;
+    const startY = Math.round((height * 0.2) / tileSize) * tileSize;
     
     ctx.strokeRect(startX, startY, boxSize, boxSize); // 1
     ctx.strokeRect(startX, startY + boxSize, boxSize, boxSize); // 2
