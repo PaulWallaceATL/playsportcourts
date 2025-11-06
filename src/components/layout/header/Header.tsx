@@ -45,10 +45,15 @@ export function Header() {
     setHovered(null);
   }, [pathname]);
 
+  const isDealerPortal = pathname?.startsWith("/dealer-portal");
+
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300 bg-black/95 backdrop-blur-xl border-b border-white/10",
+        "sticky top-0 z-50 w-full transition-all duration-300 backdrop-blur-xl border-b",
+        isDealerPortal 
+          ? "bg-gradient-to-r from-purple-900/95 via-indigo-900/95 to-blue-900/95 border-purple-500/20" 
+          : "bg-black/95 border-white/10",
         isScrolled && "shadow-lg"
       )}
     >
