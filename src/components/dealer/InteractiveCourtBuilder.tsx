@@ -913,42 +913,8 @@ function drawBasketball(
     }
   }
 
-  // 3-point lines - SIMPLE version that stays in bounds
-  // Position 3-point line just beyond the lane
-  const threePointPos = Math.min(
-    Math.floor(specs.threePoint) + baselineOffset,
-    baselineOffset + laneLength + 4 // Just 4 tiles beyond lane
-  );
-  
-  // Left 3-point line (simple vertical line for now)
-  if (threePointPos < width / 2) {
-    ctx.beginPath();
-    // Top corner to 3ft in
-    ctx.moveTo((x + threePointPos) * tileSize, y * tileSize);
-    ctx.lineTo((x + threePointPos) * tileSize, (y + 3) * tileSize);
-    // Middle section - slight curve
-    const midY = height / 2;
-    ctx.lineTo((x + threePointPos - 2) * tileSize, (y + midY) * tileSize);
-    ctx.lineTo((x + threePointPos) * tileSize, (y + height - 3) * tileSize);
-    // Bottom
-    ctx.lineTo((x + threePointPos) * tileSize, (y + height) * tileSize);
-    ctx.stroke();
-  }
-
-  if (!isHalfCourt) {
-    // Right 3-point line
-    const rightThreePoint = width - threePointPos;
-    if (rightThreePoint > width / 2) {
-      ctx.beginPath();
-      ctx.moveTo((x + rightThreePoint) * tileSize, y * tileSize);
-      ctx.lineTo((x + rightThreePoint) * tileSize, (y + 3) * tileSize);
-      const midY = height / 2;
-      ctx.lineTo((x + rightThreePoint + 2) * tileSize, (y + midY) * tileSize);
-      ctx.lineTo((x + rightThreePoint) * tileSize, (y + height - 3) * tileSize);
-      ctx.lineTo((x + rightThreePoint) * tileSize, (y + height) * tileSize);
-      ctx.stroke();
-    }
-  }
+  // Note: 3-point lines omitted - they require precise court dimensions
+  // The court shows the essential markings: keys, free throw lines, center markings
 
   // Court border in border color
   ctx.strokeStyle = colors.borderColor;
