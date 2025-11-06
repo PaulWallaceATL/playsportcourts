@@ -913,8 +913,48 @@ function drawBasketball(
     }
   }
 
-  // Note: 3-point lines omitted - they require precise court dimensions
-  // The court shows the essential markings: keys, free throw lines, center markings
+  // 3-point lines
+  // Basket is 5.25ft from baseline (4ft backboard + 1.25ft to center of rim)
+  const basketPos = baselineOffset + 5.25;
+  const threePointRadius = Math.floor(specs.threePoint); // NBA: 24ft, NCAA: 22ft, HS: 20ft
+  const cornerDist = Math.floor(specs.threePointCorner); // Distance in corners
+  
+  // Only draw if we have enough space
+  if (basketPos + threePointRadius <= width && cornerDist < width) {
+    // Left 3-point line
+    ctx.beginPath();
+    // Start at top corner
+    ctx.moveTo((x + cornerDist) * tileSize, y * tileSize);
+    ctx.lineTo((x + cornerDist) * tileSize, (y + 3) * tileSize); // 3 tiles down
+    // Arc around basket
+    ctx.arc(
+      (x + basketPos) * tileSize,
+      (y + height / 2) * tileSize,
+      threePointRadius * tileSize,
+      -Math.asin((height / 2 - 3) / threePointRadius),
+      Math.asin((height / 2 - 3) / threePointRadius)
+    );
+    // Bottom corner
+    ctx.lineTo((x + cornerDist) * tileSize, (y + height) * tileSize);
+    ctx.stroke();
+  }
+
+  if (!isHalfCourt && basketPos + threePointRadius <= width / 2) {
+    // Right 3-point line
+    const rightBasketPos = width - basketPos;
+    ctx.beginPath();
+    ctx.moveTo((x + width - cornerDist) * tileSize, y * tileSize);
+    ctx.lineTo((x + width - cornerDist) * tileSize, (y + 3) * tileSize);
+    ctx.arc(
+      (x + rightBasketPos) * tileSize,
+      (y + height / 2) * tileSize,
+      threePointRadius * tileSize,
+      Math.PI - Math.asin((height / 2 - 3) / threePointRadius),
+      Math.PI + Math.asin((height / 2 - 3) / threePointRadius)
+    );
+    ctx.lineTo((x + width - cornerDist) * tileSize, (y + height) * tileSize);
+    ctx.stroke();
+  }
 
   // Court border in border color
   ctx.strokeStyle = colors.borderColor;
