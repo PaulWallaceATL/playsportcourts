@@ -856,41 +856,42 @@ function drawBasketball(
     }
   }
 
-  // 3-point line - regulation is 23.75 ft radius, but we'll draw a simplified version that fits
-  // Draw as a straight line at top of key plus small arc
-  const threePointStraight = 14 * tileSize; // 14 feet straight portion
-  const arcRadius = 23.75 * tileSize;
+  // 3-point line - simple and contained within court bounds
+  // Position at edge of lane (19 tiles) with a smaller arc
+  const threePointLine = Math.min(23, laneLength + 4); // 23 tiles from baseline
+  const arcHeight = Math.min(14, Math.floor(height * 0.28)); // Height of curved section
   
   // Left 3-point line
-  ctx.beginPath();
-  // Top straight section
-  ctx.moveTo((x + 3) * tileSize, y * tileSize);
-  ctx.lineTo((x + 3) * tileSize, (y + height / 2 - threePointStraight / 2) * tileSize);
-  // Arc
-  ctx.arc(
-    (x + 5.25) * tileSize, 
-    (y + height / 2) * tileSize, 
-    arcRadius, 
-    -Math.PI / 2, 
-    Math.PI / 2
-  );
-  // Bottom straight section
-  ctx.lineTo((x + 3) * tileSize, (y + height) * tileSize);
-  ctx.stroke();
-
-  if (!isHalfCourt) {
-    // Right 3-point line
+  if (width > threePointLine) {
     ctx.beginPath();
-    ctx.moveTo((x + width - 3) * tileSize, y * tileSize);
-    ctx.lineTo((x + width - 3) * tileSize, (y + height / 2 - threePointStraight / 2) * tileSize);
-    ctx.arc(
-      (x + width - 5.25) * tileSize,
+    // Top straight section
+    ctx.moveTo((x + threePointLine) * tileSize, y * tileSize);
+    // Straight down to arc
+    ctx.lineTo((x + threePointLine) * tileSize, (y + (height - arcHeight) / 2) * tileSize);
+    // Small arc
+    ctx.quadraticCurveTo(
+      (x + laneLength - 6) * tileSize,
       (y + height / 2) * tileSize,
-      arcRadius,
-      Math.PI / 2,
-      (3 * Math.PI) / 2
+      (x + threePointLine) * tileSize,
+      (y + (height + arcHeight) / 2) * tileSize
     );
-    ctx.lineTo((x + width - 3) * tileSize, (y + height) * tileSize);
+    // Straight to bottom
+    ctx.lineTo((x + threePointLine) * tileSize, (y + height) * tileSize);
+    ctx.stroke();
+  }
+
+  if (!isHalfCourt && width > threePointLine * 2) {
+    // Right 3-point line  
+    ctx.beginPath();
+    ctx.moveTo((x + width - threePointLine) * tileSize, y * tileSize);
+    ctx.lineTo((x + width - threePointLine) * tileSize, (y + (height - arcHeight) / 2) * tileSize);
+    ctx.quadraticCurveTo(
+      (x + width - laneLength + 6) * tileSize,
+      (y + height / 2) * tileSize,
+      (x + width - threePointLine) * tileSize,
+      (y + (height + arcHeight) / 2) * tileSize
+    );
+    ctx.lineTo((x + width - threePointLine) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
 }
