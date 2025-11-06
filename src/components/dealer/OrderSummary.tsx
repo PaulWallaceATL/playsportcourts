@@ -54,42 +54,161 @@ export function OrderSummary({ formData, pricing, squareFeet, onClose }: OrderSu
   const totalTiles = Math.ceil(squareFeet);
   const tilePrice = TILE_PRICES[formData.tileType as keyof typeof TILE_PRICES];
 
-  // Calculate tile breakdown by color
+  // Calculate detailed tile breakdown by color
   const tileBreakdown = React.useMemo(() => {
     const breakdown: Record<string, number> = {};
     
-    // Base tiles
-    breakdown[formData.baseTileColor] = (breakdown[formData.baseTileColor] || 0) + totalTiles;
+    // Start with all base tiles
+    breakdown[formData.baseTileColor] = totalTiles;
 
-    // Sport-specific color tiles would override some base tiles
-    // For simplicity, we're showing the breakdown as configured
-    // In a real system, you'd calculate exact tile counts per color zone
+    // Estimate sport-specific tiles (simplified calculation)
+    // In production, this would calculate exact zones from the interactive builder
+    
+    // Basketball adjustments
+    if (formData.gameLines.some(l => ["Basketball - Full", "Basketball - Half"].includes(l))) {
+      const isFullCourt = formData.gameLines.includes("Basketball - Full");
+      const laneSize = 19 * 12; // 19ft x 12ft lane
+      const laneTiles = isFullCourt ? laneSize * 2 : laneSize;
+      
+      breakdown[formData.baseTileColor] = Math.max(0, breakdown[formData.baseTileColor] - laneTiles);
+      breakdown[formData.basketballLaneColor] = (breakdown[formData.basketballLaneColor] || 0) + laneTiles;
+    }
+
+    // Pickleball adjustments
+    if (formData.gameLines.includes("Pickleball")) {
+      const kitchenSize = 7 * 20 * 2; // 7ft x 20ft kitchens (both sides)
+      breakdown[formData.baseTileColor] = Math.max(0, breakdown[formData.baseTileColor] - kitchenSize);
+      breakdown[formData.pickleballKitchenColor] = (breakdown[formData.pickleballKitchenColor] || 0) + kitchenSize;
+    }
 
     // Convert to array and calculate totals
-    return Object.entries(breakdown).map(([color, quantity]) => ({
-      color,
-      quantity,
-      pricePerTile: tilePrice,
-      total: quantity * tilePrice,
-    }));
-  }, [formData.baseTileColor, totalTiles, tilePrice]);
+    return Object.entries(breakdown)
+      .filter(([_, quantity]) => quantity > 0)
+      .map(([color, quantity]) => ({
+        color,
+        quantity,
+        pricePerTile: tilePrice,
+        total: quantity * tilePrice,
+      }));
+  }, [formData.baseTileColor, formData.basketballLaneColor, formData.pickleballKitchenColor, formData.gameLines, totalTiles, tilePrice]);
 
   const handlePrint = () => {
     window.print();
   };
 
-  const handleDownload = () => {
-    // Generate text summary
-    const summary = generateTextSummary();
-    const blob = new Blob([summary], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `order-summary-${formData.projectName.replace(/\s+/g, "-")}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  const handleDownload = (format: "txt" | "pdf" | "dxf") => {
+    if (format === "txt") {
+      const summary = generateTextSummary();
+      const blob = new Blob([summary], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `order-summary-${formData.projectName.replace(/\s+/g, "-")}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } else if (format === "pdf") {
+      // PDF generation - would use jsPDF library in production
+      alert("PDF export feature - integrate with jsPDF library");
+    } else if (format === "dxf") {
+      // DXF/DWG generation for CAD
+      const dxfContent = generateDXF();
+      const blob = new Blob([dxfContent], { type: "application/dxf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `court-plan-${formData.projectName.replace(/\s+/g, "-")}.dxf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  };
+
+  const generateDXF = () => {
+    // Basic DXF file structure for court layout
+    return `0
+SECTION
+2
+HEADER
+0
+ENDSEC
+0
+SECTION
+2
+ENTITIES
+0
+POLYLINE
+8
+COURT_BOUNDARY
+62
+1
+70
+1
+0
+VERTEX
+8
+COURT_BOUNDARY
+10
+0.0
+20
+0.0
+0
+VERTEX
+8
+COURT_BOUNDARY
+10
+${formData.courtLength}.0
+20
+0.0
+0
+VERTEX
+8
+COURT_BOUNDARY  
+10
+${formData.courtLength}.0
+20
+${formData.courtWidth}.0
+0
+VERTEX
+8
+COURT_BOUNDARY
+10
+0.0
+20
+${formData.courtWidth}.0
+0
+SEQEND
+0
+TEXT
+8
+DIMENSIONS
+10
+${parseFloat(formData.courtLength) / 2}
+20
+-2.0
+40
+2.0
+1
+${formData.courtLength} ft x ${formData.courtWidth} ft
+0
+TEXT
+8
+SPEC
+10
+2.0
+20
+${parseFloat(formData.courtWidth) + 2}
+40
+1.5
+1
+Tile: ${formData.tileType.toUpperCase()} | Base Color: ${formData.baseTileColor}
+0
+ENDSEC
+0
+EOF
+`;
   };
 
   const generateTextSummary = () => {
@@ -176,12 +295,28 @@ Generated: ${new Date().toLocaleString()}
           </div>
           <div className="flex items-center gap-1 sm:gap-2">
             <button
-              onClick={handleDownload}
+              onClick={() => handleDownload("txt")}
               className="hidden sm:flex btn-premium-secondary items-center gap-2 text-sm"
               title="Download as text file"
             >
               <Download className="w-4 h-4" />
-              <span className="hidden lg:inline">Download</span>
+              <span className="hidden lg:inline">TXT</span>
+            </button>
+            <button
+              onClick={() => handleDownload("pdf")}
+              className="hidden sm:flex btn-premium-secondary items-center gap-2 text-sm"
+              title="Download as PDF"
+            >
+              <FileText className="w-4 h-4" />
+              <span className="hidden lg:inline">PDF</span>
+            </button>
+            <button
+              onClick={() => handleDownload("dxf")}
+              className="hidden sm:flex btn-premium-secondary items-center gap-2 text-sm"
+              title="Download CAD file (DXF)"
+            >
+              <Download className="w-4 h-4" />
+              <span className="hidden lg:inline">DXF</span>
             </button>
             <button
               onClick={handlePrint}
