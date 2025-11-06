@@ -204,6 +204,59 @@ export function InteractiveCourtBuilder({
       });
     }
 
+    // Soccer field
+    if (gameLines.includes("Soccer")) {
+      const courtW = Math.min(50, tilesY - 2);
+      const courtL = Math.min(80, tilesX - 2);
+      newElements.push({
+        id: "soccer",
+        type: "soccer",
+        x: Math.floor((tilesX - courtL) / 2),
+        y: Math.floor((tilesY - courtW) / 2),
+        width: courtL,
+        height: courtW,
+      });
+    }
+
+    // Futsal
+    if (gameLines.includes("Futsal - Reduced") || gameLines.includes("Futsal - Regulated")) {
+      const isRegulated = gameLines.includes("Futsal - Regulated");
+      const courtW = isRegulated ? Math.min(20, tilesY - 2) : Math.min(15, tilesY - 2);
+      const courtL = isRegulated ? Math.min(40, tilesX - 2) : Math.min(30, tilesX - 2);
+      newElements.push({
+        id: "futsal",
+        type: "futsal",
+        x: Math.floor((tilesX - courtL) / 2),
+        y: Math.floor((tilesY - courtW) / 2),
+        width: courtL,
+        height: courtW,
+      });
+    }
+
+    // Batters Box
+    if (gameLines.includes("Batters Box")) {
+      const boxW = 4;
+      const boxH = 6;
+      // Left box
+      newElements.push({
+        id: "battersbox1",
+        type: "battersbox",
+        x: Math.floor(tilesX / 2) - 3 - boxW,
+        y: Math.floor(tilesY / 2) - Math.floor(boxH / 2),
+        width: boxW,
+        height: boxH,
+      });
+      // Right box
+      newElements.push({
+        id: "battersbox2",
+        type: "battersbox",
+        x: Math.floor(tilesX / 2) + 3,
+        y: Math.floor(tilesY / 2) - Math.floor(boxH / 2),
+        width: boxW,
+        height: boxH,
+      });
+    }
+
     setElements(newElements);
   }, [gameLines, courtLength, courtWidth]);
 
@@ -277,6 +330,12 @@ export function InteractiveCourtBuilder({
         drawVolleyball(ctx, element, tileSize);
       } else if (element.type === "shuffleboard") {
         drawShuffleboard(ctx, element, tileSize);
+      } else if (element.type === "soccer") {
+        drawSoccer(ctx, element, tileSize);
+      } else if (element.type === "futsal") {
+        drawFutsal(ctx, element, tileSize);
+      } else if (element.type === "battersbox") {
+        drawBattersBox(ctx, element, tileSize);
       }
 
       // Highlight selected element
@@ -704,65 +763,69 @@ function drawBasketball(ctx: CanvasRenderingContext2D, element: GameElement, til
     }
   }
 
-  // Paint/Lane area (19ft x 12ft key)
-  const laneLength = Math.min(19, Math.floor(width * 0.2));
-  const laneWidth = Math.min(12, Math.floor(height * 0.24));
+  // Paint/Lane area (19ft x 12ft key) - snap to tiles
+  const laneLength = 19; // 19 tiles
+  const laneWidth = 12; // 12 tiles
   const laneY = Math.floor((height - laneWidth) / 2);
   
   ctx.fillStyle = "#2563EB"; // Royal Blue for lane
   
   // Left lane
   for (let ty = laneY; ty < laneY + laneWidth; ty++) {
-    for (let tx = 0; tx < laneLength; tx++) {
+    for (let tx = 0; tx < Math.min(laneLength, width); tx++) {
       ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
     }
   }
   
   // Right lane (full court only)
-  if (!isHalfCourt) {
+  if (!isHalfCourt && width >= laneLength * 2) {
     for (let ty = laneY; ty < laneY + laneWidth; ty++) {
-      for (let tx = width - laneLength; tx < width; tx++) {
+      for (let tx = Math.max(0, width - laneLength); tx < width; tx++) {
         ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
       }
     }
   }
 
-  // Draw lines
+  // Draw lines - all on tile boundaries
   ctx.strokeStyle = "#FFFFFF";
   ctx.lineWidth = 3;
 
   if (!isHalfCourt) {
-    // Center line
+    // Center line - snap to middle tile
+    const centerTile = Math.floor(width / 2);
     ctx.beginPath();
-    ctx.moveTo((x + width / 2) * tileSize, y * tileSize);
-    ctx.lineTo((x + width / 2) * tileSize, (y + height) * tileSize);
+    ctx.moveTo((x + centerTile) * tileSize, y * tileSize);
+    ctx.lineTo((x + centerTile) * tileSize, (y + height) * tileSize);
     ctx.stroke();
 
     // Center circle
     ctx.beginPath();
-    ctx.arc((x + width / 2) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
+    ctx.arc((x + centerTile) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
     ctx.stroke();
   }
 
-  // Free throw circles
+  // Free throw circles - snap to tile positions
+  if (width >= laneLength) {
+    ctx.beginPath();
+    ctx.arc((x + laneLength) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
+    ctx.stroke();
+
+    if (!isHalfCourt && width >= laneLength * 2) {
+      ctx.beginPath();
+      ctx.arc((x + width - laneLength) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+  }
+
+  // 3-point arc - simplified to stay within bounds
+  const radius = Math.min(23, width * 0.4);
   ctx.beginPath();
-  ctx.arc((x + laneLength) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
+  ctx.arc(x * tileSize, (y + height / 2) * tileSize, radius * tileSize, -Math.PI / 3, Math.PI / 3);
   ctx.stroke();
 
   if (!isHalfCourt) {
     ctx.beginPath();
-    ctx.arc((x + width - laneLength) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
-    ctx.stroke();
-  }
-
-  // 3-point arc
-  ctx.beginPath();
-  ctx.arc(x * tileSize, (y + height / 2) * tileSize, 23.75 * tileSize, -Math.PI / 2.5, Math.PI / 2.5);
-  ctx.stroke();
-
-  if (!isHalfCourt) {
-    ctx.beginPath();
-    ctx.arc((x + width) * tileSize, (y + height / 2) * tileSize, 23.75 * tileSize, Math.PI - Math.PI / 2.5, Math.PI + Math.PI / 2.5);
+    ctx.arc((x + width) * tileSize, (y + height / 2) * tileSize, radius * tileSize, Math.PI - Math.PI / 3, Math.PI + Math.PI / 3);
     ctx.stroke();
   }
 }
@@ -963,5 +1026,91 @@ function drawShuffleboard(ctx: CanvasRenderingContext2D, element: GameElement, t
     ctx.lineTo((x + lineXRight) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
+}
+
+function drawSoccer(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+  const { x, y, width, height } = element;
+  
+  // Base field
+  ctx.fillStyle = "#10B981"; // Emerald Green
+  for (let ty = 0; ty < height; ty++) {
+    for (let tx = 0; tx < width; tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+  }
+
+  // Penalty boxes (16 tiles deep, 20 tiles wide)
+  const penaltyDepth = Math.min(16, Math.floor(width * 0.2));
+  const penaltyWidth = Math.min(20, Math.floor(height * 0.4));
+  const penaltyY = Math.floor((height - penaltyWidth) / 2);
+  
+  ctx.fillStyle = "#84CC16"; // Olive Green for penalty areas
+  for (let ty = penaltyY; ty < penaltyY + penaltyWidth; ty++) {
+    for (let tx = 0; tx < penaltyDepth; tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+      ctx.fillRect((x + width - penaltyDepth + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+  }
+
+  // Draw lines
+  ctx.strokeStyle = "#FFFFFF";
+  ctx.lineWidth = 2;
+
+  // Center line
+  const centerTile = Math.floor(width / 2);
+  ctx.beginPath();
+  ctx.moveTo((x + centerTile) * tileSize, y * tileSize);
+  ctx.lineTo((x + centerTile) * tileSize, (y + height) * tileSize);
+  ctx.stroke();
+
+  // Center circle
+  ctx.beginPath();
+  ctx.arc((x + centerTile) * tileSize, (y + height / 2) * tileSize, 10 * tileSize, 0, Math.PI * 2);
+  ctx.stroke();
+}
+
+function drawFutsal(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+  const { x, y, width, height } = element;
+  
+  // Base court
+  ctx.fillStyle = "#F97316"; // Orange
+  for (let ty = 0; ty < height; ty++) {
+    for (let tx = 0; tx < width; tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+  }
+
+  // Draw lines
+  ctx.strokeStyle = "#FFFFFF";
+  ctx.lineWidth = 2;
+
+  // Center line
+  const centerTile = Math.floor(width / 2);
+  ctx.beginPath();
+  ctx.moveTo((x + centerTile) * tileSize, y * tileSize);
+  ctx.lineTo((x + centerTile) * tileSize, (y + height) * tileSize);
+  ctx.stroke();
+
+  // Center circle
+  ctx.beginPath();
+  ctx.arc((x + centerTile) * tileSize, (y + height / 2) * tileSize, 3 * tileSize, 0, Math.PI * 2);
+  ctx.stroke();
+}
+
+function drawBattersBox(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+  const { x, y, width, height } = element;
+  
+  // Fill box tiles
+  ctx.fillStyle = "#6B7280"; // Titanium
+  for (let ty = 0; ty < height; ty++) {
+    for (let tx = 0; tx < width; tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+  }
+
+  // Draw border
+  ctx.strokeStyle = "#FFFFFF";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(x * tileSize, y * tileSize, width * tileSize, height * tileSize);
 }
 
