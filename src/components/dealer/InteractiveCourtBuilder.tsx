@@ -916,46 +916,62 @@ function drawBasketball(
     }
   }
 
-  // 3-POINT LINE - SIMPLEST POSSIBLE
+  // 3-POINT LINE - Like the reference: vertical straights + connecting arc
+  // Corner 3-point position (vertical line parallel to baseline)
+  const cornerXPos = 22; // 22 tiles from baseline
   const basketX = baselineOffset + 5;
-  const radius = 18;
+  
+  // Straights run from 0 to 14 tiles from center
+  const straightLimit = 14;
+  
+  // Arc radius to connect the straights
+  const arcRadius = Math.sqrt(
+    Math.pow(cornerXPos - 5, 2) + Math.pow(straightLimit, 2)
+  );
   
   // Only draw if fits
-  if (basketX + radius < (isHalfCourt ? width - 5 : width / 2 - 10)) {
+  if (basketX + cornerXPos < (isHalfCourt ? width - 5 : width / 2 - 10)) {
     // LEFT
     ctx.beginPath();
-    // Top corner - starts at baseline, 3 tiles from top
-    ctx.moveTo((x + baselineOffset) * tileSize, (y + 3) * tileSize);
-    ctx.lineTo((x + baselineOffset + 3) * tileSize, (y + 3) * tileSize);
-    // Arc from basket
+    // Vertical straight from top (parallel to baseline)
+    ctx.moveTo((x + baselineOffset + cornerXPos) * tileSize, y * tileSize);
+    ctx.lineTo((x + baselineOffset + cornerXPos) * tileSize, (y + height / 2 - straightLimit) * tileSize);
+    
+    // Arc connecting top to bottom
     ctx.arc(
       (x + basketX) * tileSize,
       (y + height / 2) * tileSize,
-      radius * tileSize,
-      -Math.PI * 0.6,
-      Math.PI * 0.6
+      arcRadius * tileSize,
+      -Math.asin(straightLimit / arcRadius),
+      Math.asin(straightLimit / arcRadius)
     );
-    // Bottom corner - back to baseline, 3 tiles from bottom
-    ctx.lineTo((x + baselineOffset) * tileSize, (y + height - 3) * tileSize);
+    
+    // Vertical straight to bottom
+    ctx.lineTo((x + baselineOffset + cornerXPos) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
 
-  if (!isHalfCourt && basketX + radius < width / 2 - 10) {
-    // RIGHT  
+  if (!isHalfCourt) {
+    // RIGHT
     const rightBasketX = width - basketX;
+    const rightCornerX = width - baselineOffset - cornerXPos;
     
-    ctx.beginPath();
-    ctx.moveTo((x + width - baselineOffset) * tileSize, (y + 3) * tileSize);
-    ctx.lineTo((x + width - baselineOffset - 3) * tileSize, (y + 3) * tileSize);
-    ctx.arc(
-      (x + rightBasketX) * tileSize,
-      (y + height / 2) * tileSize,
-      radius * tileSize,
-      Math.PI - Math.PI * 0.6,
-      Math.PI + Math.PI * 0.6
-    );
-    ctx.lineTo((x + width - baselineOffset) * tileSize, (y + height - 3) * tileSize);
-    ctx.stroke();
+    if (rightCornerX > width / 2 + 10) {
+      ctx.beginPath();
+      ctx.moveTo((x + rightCornerX) * tileSize, y * tileSize);
+      ctx.lineTo((x + rightCornerX) * tileSize, (y + height / 2 - straightLimit) * tileSize);
+      
+      ctx.arc(
+        (x + rightBasketX) * tileSize,
+        (y + height / 2) * tileSize,
+        arcRadius * tileSize,
+        Math.PI - Math.asin(straightLimit / arcRadius),
+        Math.PI + Math.asin(straightLimit / arcRadius)
+      );
+      
+      ctx.lineTo((x + rightCornerX) * tileSize, (y + height) * tileSize);
+      ctx.stroke();
+    }
   }
 
   // Court border in border color
