@@ -916,63 +916,56 @@ function drawBasketball(
     }
   }
 
-  // 3-point line - JUST vertical straight + arc + vertical straight (D-shape)
-  const cornerXDist = baselineOffset + 22; // 22 tiles from baseline for the vertical line
-  const arcRadius = 17; // Arc radius in tiles
+  // 3-point line - match reference image exactly
+  // Corner 3-point is at 22ft, arc 3-point is at 23.75ft from basket
+  const basketX = baselineOffset + 5;
+  const cornerThreePoint = 22; // Corner distance
+  const arcThreePoint = Math.floor(specs.threePoint); // Top of arc distance
   
-  // Corner Y positions (how far down from top/up from bottom the straight goes)
-  const straightTop = 3; // Start 3 tiles from top
-  const straightBottom = height - 3; // End 3 tiles from bottom
+  // Where corners are (14ft from center line, running along sideline)
+  const cornerY = 14; // 14ft from center
   
-  // Arc starts/ends
-  const arcTop = height / 2 - arcRadius;
-  const arcBottom = height / 2 + arcRadius;
-  
-  // Only draw if fits
-  if (cornerXDist < (isHalfCourt ? width - 5 : width / 2 - 10)) {
+  // Only draw if space permits
+  if (basketX + arcThreePoint < (isHalfCourt ? width - 5 : width / 2 - 10)) {
     // Left 3-point line
     ctx.beginPath();
-    // Vertical straight from top
-    ctx.moveTo((x + cornerXDist) * tileSize, (y + straightTop) * tileSize);
-    ctx.lineTo((x + cornerXDist) * tileSize, (y + arcTop) * tileSize);
     
-    // Arc bulging toward center
+    // Top corner straight (parallel to baseline)
+    ctx.moveTo((x + basketX + cornerThreePoint) * tileSize, y * tileSize);
+    ctx.lineTo((x + basketX + cornerThreePoint) * tileSize, (y + height / 2 - cornerY) * tileSize);
+    
+    // Arc from top to bottom
     ctx.arc(
-      (x + cornerXDist) * tileSize,
+      (x + basketX) * tileSize,
       (y + height / 2) * tileSize,
-      arcRadius * tileSize,
-      -Math.PI / 2,
-      Math.PI / 2
+      arcThreePoint * tileSize,
+      -Math.asin(cornerY / arcThreePoint),
+      Math.asin(cornerY / arcThreePoint)
     );
     
-    // Vertical straight to bottom
-    ctx.lineTo((x + cornerXDist) * tileSize, (y + straightBottom) * tileSize);
+    // Bottom corner straight
+    ctx.lineTo((x + basketX + cornerThreePoint) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
 
-  if (!isHalfCourt) {
+  if (!isHalfCourt && basketX + arcThreePoint < width / 2 - 10) {
     // Right 3-point line
-    const rightCornerXDist = width - cornerXDist;
+    const rightBasketX = width - basketX;
     
-    if (rightCornerXDist > width / 2 + 10) {
-      ctx.beginPath();
-      // Vertical from top
-      ctx.moveTo((x + rightCornerXDist) * tileSize, (y + straightTop) * tileSize);
-      ctx.lineTo((x + rightCornerXDist) * tileSize, (y + arcTop) * tileSize);
-      
-      // Arc bulging toward center  
-      ctx.arc(
-        (x + rightCornerXDist) * tileSize,
-        (y + height / 2) * tileSize,
-        arcRadius * tileSize,
-        Math.PI / 2,
-        (3 * Math.PI) / 2
-      );
-      
-      // Vertical to bottom
-      ctx.lineTo((x + rightCornerXDist) * tileSize, (y + straightBottom) * tileSize);
-      ctx.stroke();
-    }
+    ctx.beginPath();
+    ctx.moveTo((x + rightBasketX - cornerThreePoint) * tileSize, y * tileSize);
+    ctx.lineTo((x + rightBasketX - cornerThreePoint) * tileSize, (y + height / 2 - cornerY) * tileSize);
+    
+    ctx.arc(
+      (x + rightBasketX) * tileSize,
+      (y + height / 2) * tileSize,
+      arcThreePoint * tileSize,
+      Math.PI - Math.asin(cornerY / arcThreePoint),
+      Math.PI + Math.asin(cornerY / arcThreePoint)
+    );
+    
+    ctx.lineTo((x + rightBasketX - cornerThreePoint) * tileSize, (y + height) * tileSize);
+    ctx.stroke();
   }
 
   // Court border in border color
