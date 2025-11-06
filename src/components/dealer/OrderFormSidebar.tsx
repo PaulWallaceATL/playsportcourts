@@ -76,6 +76,7 @@ interface OrderFormData {
   logoHeight: string;
   logoWidth: string;
   basketballOverhang: string;
+  basketballRegulation: string;
   pickleballInnerCourtColor: string;
   pickleballOuterCourtColor: string;
   pickleballKitchenColor: string;
@@ -111,6 +112,7 @@ export function OrderFormSidebar() {
     logoHeight: "",
     logoWidth: "",
     basketballOverhang: "0",
+    basketballRegulation: "nba",
     pickleballInnerCourtColor: "Graphite",
     pickleballOuterCourtColor: "Titanium",
     pickleballKitchenColor: "Royal Blue",
@@ -573,6 +575,19 @@ export function OrderFormSidebar() {
                           />
                         </div>
                         <div>
+                          <label className="text-xs block mb-1">Regulation Type *</label>
+                          <select
+                            required
+                            value={formData.basketballRegulation}
+                            onChange={(e) => updateFormData("basketballRegulation", e.target.value)}
+                            className="field-input w-full text-xs"
+                          >
+                            <option value="nba">NBA (23.75ft 3-pt, 16ft key)</option>
+                            <option value="ncaa">NCAA (22.15ft 3-pt, 12ft key)</option>
+                            <option value="highschool">High School (19.75ft 3-pt, 12ft key)</option>
+                          </select>
+                        </div>
+                        <div>
                           <label className="text-xs block mb-1">Backboard Overhang *</label>
                           <select
                             required
@@ -730,6 +745,8 @@ export function OrderFormSidebar() {
               basketballCourtColor={formData.basketballCourtColor}
               basketballLaneColor={formData.basketballLaneColor}
               basketballBorderColor={formData.basketballBorderColor}
+              basketballRegulation={formData.basketballRegulation}
+              basketballOverhang={parseInt(formData.basketballOverhang) || 0}
               pickleballInnerCourtColor={formData.pickleballInnerCourtColor}
               pickleballOuterCourtColor={formData.pickleballOuterCourtColor}
               pickleballKitchenColor={formData.pickleballKitchenColor}

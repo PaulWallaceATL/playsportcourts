@@ -18,10 +18,12 @@ interface InteractiveCourtBuilderProps {
   courtWidth: number; // in feet (tiles)
   gameLines: string[];
   baseTileColor: string;
-  // Basketball colors
+  // Basketball colors and settings
   basketballCourtColor?: string;
   basketballLaneColor?: string;
   basketballBorderColor?: string;
+  basketballRegulation?: string;
+  basketballOverhang?: number;
   // Pickleball colors
   pickleballInnerCourtColor?: string;
   pickleballOuterCourtColor?: string;
@@ -55,6 +57,8 @@ export function InteractiveCourtBuilder({
   basketballCourtColor = "Navy Blue",
   basketballLaneColor = "Royal Blue",
   basketballBorderColor = "Orange",
+  basketballRegulation = "nba",
+  basketballOverhang = 0,
   pickleballInnerCourtColor = "Graphite",
   pickleballOuterCourtColor = "Titanium",
   pickleballKitchenColor = "Royal Blue",
@@ -346,7 +350,7 @@ export function InteractiveCourtBuilder({
           courtColor: COLOR_MAP[basketballCourtColor],
           laneColor: COLOR_MAP[basketballLaneColor],
           borderColor: COLOR_MAP[basketballBorderColor],
-        });
+        }, basketballRegulation, basketballOverhang);
       } else if (element.type === "tennis") {
         drawTennis(ctx, element, tileSize);
       } else if (element.type === "pickleball") {
@@ -433,7 +437,7 @@ export function InteractiveCourtBuilder({
 
   React.useEffect(() => {
     drawCourt();
-  }, [courtLength, courtWidth, baseTileColor, elements, selectedElement, isFullscreen, scale, basketballCourtColor, basketballLaneColor, basketballBorderColor, pickleballInnerCourtColor, pickleballOuterCourtColor, pickleballKitchenColor, shuffleboardCourtColor, shuffleboardShootingAreaColor, shuffleboardBorderColor, gameLines]);
+  }, [courtLength, courtWidth, baseTileColor, elements, selectedElement, isFullscreen, scale, basketballCourtColor, basketballLaneColor, basketballBorderColor, basketballRegulation, basketballOverhang, pickleballInnerCourtColor, pickleballOuterCourtColor, pickleballKitchenColor, shuffleboardCourtColor, shuffleboardShootingAreaColor, shuffleboardBorderColor, gameLines]);
 
   // Handle canvas interactions
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -790,9 +794,20 @@ function drawBasketball(
   element: GameElement, 
   tileSize: number, 
   isHalfCourt: boolean,
-  colors: { courtColor: string; laneColor: string; borderColor: string }
+  colors: { courtColor: string; laneColor: string; borderColor: string },
+  regulation: string = "nba",
+  overhang: number = 0
 ) {
   const { x, y, width, height } = element;
+  
+  // Regulation-specific dimensions (in feet/tiles)
+  const regulations = {
+    nba: { keyWidth: 16, threePoint: 23.75, threePointCorner: 22, freeThrowDist: 15, laneLength: 19 },
+    ncaa: { keyWidth: 12, threePoint: 22.15, threePointCorner: 21.65, freeThrowDist: 15, laneLength: 19 },
+    highschool: { keyWidth: 12, threePoint: 19.75, threePointCorner: 19.75, freeThrowDist: 15, laneLength: 19 },
+  };
+  
+  const specs = regulations[regulation as keyof typeof regulations] || regulations.nba;
   
   // Base court color
   ctx.fillStyle = colors.courtColor;
@@ -802,96 +817,146 @@ function drawBasketball(
     }
   }
 
-  // Paint/Lane area (19ft x 12ft key) - snap to tiles
-  const laneLength = 19; // 19 tiles
-  const laneWidth = 12; // 12 tiles
+  // Backboard is 4ft from baseline (regulation), overhang extends forward
+  const baselineOffset = overhang; // Overhang pushes baseline inward
+  
+  // Paint/Lane area - use regulation key width
+  const laneLength = Math.min(specs.laneLength, Math.floor(width * 0.4));
+  const laneWidth = Math.min(specs.keyWidth, Math.floor(height * 0.5));
   const laneY = Math.floor((height - laneWidth) / 2);
   
   ctx.fillStyle = colors.laneColor;
   
   // Left lane
   for (let ty = laneY; ty < laneY + laneWidth; ty++) {
-    for (let tx = 0; tx < Math.min(laneLength, width); tx++) {
-      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
-    }
-  }
-  
-  // Right lane (full court only)
-  if (!isHalfCourt && width >= laneLength * 2) {
-    for (let ty = laneY; ty < laneY + laneWidth; ty++) {
-      for (let tx = Math.max(0, width - laneLength); tx < width; tx++) {
+    for (let tx = baselineOffset; tx < Math.min(baselineOffset + laneLength, width); tx++) {
+      if (tx >= 0 && tx < width) {
         ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
       }
     }
   }
+  
+  // Right lane (full court only)
+  if (!isHalfCourt) {
+    for (let ty = laneY; ty < laneY + laneWidth; ty++) {
+      for (let tx = Math.max(0, width - laneLength - baselineOffset); tx < width - baselineOffset; tx++) {
+        if (tx >= 0 && tx < width) {
+          ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+        }
+      }
+    }
+  }
 
-  // Draw lines - all on tile boundaries
+  // Draw all lines
   ctx.strokeStyle = "#FFFFFF";
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 2;
+
+  // Baselines (adjust for overhang if any)
+  if (baselineOffset > 0) {
+    ctx.beginPath();
+    ctx.moveTo((x + baselineOffset) * tileSize, y * tileSize);
+    ctx.lineTo((x + baselineOffset) * tileSize, (y + height) * tileSize);
+    if (!isHalfCourt) {
+      ctx.moveTo((x + width - baselineOffset) * tileSize, y * tileSize);
+      ctx.lineTo((x + width - baselineOffset) * tileSize, (y + height) * tileSize);
+    }
+    ctx.stroke();
+  }
+
+  // Free throw line (15 feet from backboard, which is 4ft from baseline)
+  const freeThrowPos = baselineOffset + specs.freeThrowDist;
+  if (freeThrowPos < width) {
+    // Left free throw line
+    ctx.beginPath();
+    ctx.moveTo((x + freeThrowPos) * tileSize, (y + laneY) * tileSize);
+    ctx.lineTo((x + freeThrowPos) * tileSize, (y + laneY + laneWidth) * tileSize);
+    ctx.stroke();
+
+    // Left free throw circle (6ft radius)
+    ctx.beginPath();
+    ctx.arc((x + freeThrowPos) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
+    ctx.stroke();
+  }
 
   if (!isHalfCourt) {
-    // Center line - snap to middle tile
+    // Center line
     const centerTile = Math.floor(width / 2);
     ctx.beginPath();
     ctx.moveTo((x + centerTile) * tileSize, y * tileSize);
     ctx.lineTo((x + centerTile) * tileSize, (y + height) * tileSize);
     ctx.stroke();
 
-    // Center circle
+    // Center circle (6ft radius)
     ctx.beginPath();
     ctx.arc((x + centerTile) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
     ctx.stroke();
-  }
 
-  // Free throw circles - snap to tile positions
-  if (width >= laneLength) {
-    ctx.beginPath();
-    ctx.arc((x + laneLength) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
-    ctx.stroke();
-
-    if (!isHalfCourt && width >= laneLength * 2) {
+    // Right free throw line and circle
+    const rightFreeThrow = width - freeThrowPos;
+    if (rightFreeThrow > 0) {
       ctx.beginPath();
-      ctx.arc((x + width - laneLength) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
+      ctx.moveTo((x + rightFreeThrow) * tileSize, (y + laneY) * tileSize);
+      ctx.lineTo((x + rightFreeThrow) * tileSize, (y + laneY + laneWidth) * tileSize);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc((x + rightFreeThrow) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
       ctx.stroke();
     }
   }
 
-  // 3-point line - simple and contained within court bounds
-  // Position at edge of lane (19 tiles) with a smaller arc
-  const threePointLine = Math.min(23, laneLength + 4); // 23 tiles from baseline
-  const arcHeight = Math.min(14, Math.floor(height * 0.28)); // Height of curved section
+  // 3-point line - use regulation distance (rounded to nearest tile)
+  const threePointDist = Math.floor(specs.threePoint) + baselineOffset;
+  const threePointCorner = Math.floor(specs.threePointCorner) + baselineOffset;
+  const straightHeight = Math.min(14, Math.floor(height * 0.28));
   
   // Left 3-point line
-  if (width > threePointLine) {
+  if (threePointCorner < width) {
     ctx.beginPath();
-    // Top straight section
-    ctx.moveTo((x + threePointLine) * tileSize, y * tileSize);
-    // Straight down to arc
-    ctx.lineTo((x + threePointLine) * tileSize, (y + (height - arcHeight) / 2) * tileSize);
-    // Small arc
+    // Corner straight
+    ctx.moveTo((x + threePointCorner) * tileSize, y * tileSize);
+    ctx.lineTo((x + threePointCorner) * tileSize, (y + (height - straightHeight) / 2) * tileSize);
+    // Arc
     ctx.quadraticCurveTo(
-      (x + laneLength - 6) * tileSize,
+      (x + baselineOffset + 5.25) * tileSize,
       (y + height / 2) * tileSize,
-      (x + threePointLine) * tileSize,
-      (y + (height + arcHeight) / 2) * tileSize
+      (x + threePointCorner) * tileSize,
+      (y + (height + straightHeight) / 2) * tileSize
     );
-    // Straight to bottom
-    ctx.lineTo((x + threePointLine) * tileSize, (y + height) * tileSize);
+    // Straight to corner
+    ctx.lineTo((x + threePointCorner) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
 
-  if (!isHalfCourt && width > threePointLine * 2) {
-    // Right 3-point line  
+  if (!isHalfCourt && threePointCorner < width / 2) {
+    // Right 3-point line
     ctx.beginPath();
-    ctx.moveTo((x + width - threePointLine) * tileSize, y * tileSize);
-    ctx.lineTo((x + width - threePointLine) * tileSize, (y + (height - arcHeight) / 2) * tileSize);
+    ctx.moveTo((x + width - threePointCorner) * tileSize, y * tileSize);
+    ctx.lineTo((x + width - threePointCorner) * tileSize, (y + (height - straightHeight) / 2) * tileSize);
     ctx.quadraticCurveTo(
-      (x + width - laneLength + 6) * tileSize,
+      (x + width - baselineOffset - 5.25) * tileSize,
       (y + height / 2) * tileSize,
-      (x + width - threePointLine) * tileSize,
-      (y + (height + arcHeight) / 2) * tileSize
+      (x + width - threePointCorner) * tileSize,
+      (y + (height + straightHeight) / 2) * tileSize
     );
-    ctx.lineTo((x + width - threePointLine) * tileSize, (y + height) * tileSize);
+    ctx.lineTo((x + width - threePointCorner) * tileSize, (y + height) * tileSize);
+    ctx.stroke();
+  }
+
+  // Lane boundary lines
+  ctx.beginPath();
+  ctx.moveTo((x + baselineOffset) * tileSize, (y + laneY) * tileSize);
+  ctx.lineTo((x + baselineOffset + laneLength) * tileSize, (y + laneY) * tileSize);
+  ctx.lineTo((x + baselineOffset + laneLength) * tileSize, (y + laneY + laneWidth) * tileSize);
+  ctx.lineTo((x + baselineOffset) * tileSize, (y + laneY + laneWidth) * tileSize);
+  ctx.stroke();
+
+  if (!isHalfCourt) {
+    ctx.beginPath();
+    ctx.moveTo((x + width - baselineOffset) * tileSize, (y + laneY) * tileSize);
+    ctx.lineTo((x + width - baselineOffset - laneLength) * tileSize, (y + laneY) * tileSize);
+    ctx.lineTo((x + width - baselineOffset - laneLength) * tileSize, (y + laneY + laneWidth) * tileSize);
+    ctx.lineTo((x + width - baselineOffset) * tileSize, (y + laneY + laneWidth) * tileSize);
     ctx.stroke();
   }
 }
