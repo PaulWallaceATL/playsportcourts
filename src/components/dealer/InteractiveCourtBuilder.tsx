@@ -549,12 +549,18 @@ export function InteractiveCourtBuilder({
       (a.width * a.height) - (b.width * b.height)
     )[0];
 
+    console.log('Click at tile:', tileX, tileY);
+    console.log('Elements:', elements);
+    console.log('Clicked elements:', clickedElements);
+
     if (clickedElement) {
+      console.log('Selected:', clickedElement);
       setSelectedElement(clickedElement.id);
       setIsDragging(true);
       setDragStart({ x: tileX - clickedElement.x, y: tileY - clickedElement.y });
     } else {
       // Clicked on empty space - deselect
+      console.log('No element at this position');
       setSelectedElement(null);
     }
   };
