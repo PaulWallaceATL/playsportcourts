@@ -301,13 +301,25 @@ export function InteractiveCourtBuilder({
     }
 
     // Hockey rinks
-    if (gameLines.includes("Hockey Regulation") || gameLines.includes("Hockey Crease")) {
-      const isRegulation = gameLines.includes("Hockey Regulation");
-      const rinkW = isRegulation ? Math.min(85, tilesY - 2) : Math.min(50, tilesY - 2);
-      const rinkL = isRegulation ? Math.min(200, tilesX - 2) : Math.min(100, tilesX - 2);
+    if (gameLines.includes("Hockey Regulation")) {
+      const rinkW = Math.min(85, tilesY - 2);
+      const rinkL = Math.min(200, tilesX - 2);
       newElements.push({
-        id: "hockey",
-        type: isRegulation ? "hockey-regulation" : "hockey-crease",
+        id: "hockey-reg",
+        type: "hockey-regulation",
+        x: Math.floor((tilesX - rinkL) / 2),
+        y: Math.floor((tilesY - rinkW) / 2),
+        width: rinkL,
+        height: rinkW,
+      });
+    }
+
+    if (gameLines.includes("Hockey Crease") && !gameLines.includes("Hockey Regulation")) {
+      const rinkW = Math.min(50, tilesY - 2);
+      const rinkL = Math.min(100, tilesX - 2);
+      newElements.push({
+        id: "hockey-crease",
+        type: "hockey-crease",
         x: Math.floor((tilesX - rinkL) / 2),
         y: Math.floor((tilesY - rinkW) / 2),
         width: rinkL,
@@ -1277,6 +1289,7 @@ function drawHockey(
   colors: { iceColor: string; creaseColor: string }
 ) {
   const { x, y, width, height } = element;
+  const isRegulation = element.type === "hockey-regulation";
   
   // Ice surface
   ctx.fillStyle = colors.iceColor;
@@ -1287,14 +1300,14 @@ function drawHockey(
   }
 
   // Goal creases (semicircles at each end)
-  const creaseRadius = 6;
+  const creaseRadius = isRegulation ? 6 : 4; // Smaller for crease-only rink
   ctx.fillStyle = colors.creaseColor;
   
   // Left crease
   for (let ty = 0; ty < height; ty++) {
-    for (let tx = 0; tx < creaseRadius; tx++) {
-      const distFromGoal = Math.sqrt(Math.pow(tx, 2) + Math.pow(ty - height / 2, 2));
-      if (distFromGoal <= creaseRadius) {
+    for (let tx = 0; tx < creaseRadius * 2; tx++) {
+      const distFromGoal = Math.sqrt(Math.pow(tx - creaseRadius, 2) + Math.pow(ty - height / 2, 2));
+      if (distFromGoal <= creaseRadius && tx >= creaseRadius) {
         ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
       }
     }
@@ -1302,52 +1315,60 @@ function drawHockey(
   
   // Right crease
   for (let ty = 0; ty < height; ty++) {
-    for (let tx = width - creaseRadius; tx < width; tx++) {
-      const distFromGoal = Math.sqrt(Math.pow(width - tx, 2) + Math.pow(ty - height / 2, 2));
-      if (distFromGoal <= creaseRadius) {
+    for (let tx = width - creaseRadius * 2; tx < width; tx++) {
+      const distFromGoal = Math.sqrt(Math.pow(tx - (width - creaseRadius), 2) + Math.pow(ty - height / 2, 2));
+      if (distFromGoal <= creaseRadius && tx <= width - creaseRadius) {
         ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
       }
     }
   }
 
-  // Draw lines
-  ctx.strokeStyle = "#FFFFFF";
-  ctx.lineWidth = 2;
+  if (isRegulation) {
+    // Full regulation markings
+    // Center red line
+    const centerX = Math.floor(width / 2);
+    ctx.strokeStyle = "#FF0000";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo((x + centerX) * tileSize, y * tileSize);
+    ctx.lineTo((x + centerX) * tileSize, (y + height) * tileSize);
+    ctx.stroke();
 
-  // Center red line
-  const centerX = Math.floor(width / 2);
-  ctx.strokeStyle = "#FF0000";
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.moveTo((x + centerX) * tileSize, y * tileSize);
-  ctx.lineTo((x + centerX) * tileSize, (y + height) * tileSize);
-  ctx.stroke();
-
-  // Blue lines (zone lines)
-  ctx.strokeStyle = "#0000FF";
-  ctx.lineWidth = 3;
-  const blueLineLeft = Math.floor(width * 0.25);
-  const blueLineRight = Math.floor(width * 0.75);
-  
-  ctx.beginPath();
-  ctx.moveTo((x + blueLineLeft) * tileSize, y * tileSize);
-  ctx.lineTo((x + blueLineLeft) * tileSize, (y + height) * tileSize);
-  ctx.stroke();
-  
-  ctx.beginPath();
-  ctx.moveTo((x + blueLineRight) * tileSize, y * tileSize);
-  ctx.lineTo((x + blueLineRight) * tileSize, (y + height) * tileSize);
-  ctx.stroke();
+    // Blue lines (zone lines)
+    ctx.strokeStyle = "#0000FF";
+    ctx.lineWidth = 3;
+    const blueLineLeft = Math.floor(width * 0.25);
+    const blueLineRight = Math.floor(width * 0.75);
+    
+    ctx.beginPath();
+    ctx.moveTo((x + blueLineLeft) * tileSize, y * tileSize);
+    ctx.lineTo((x + blueLineLeft) * tileSize, (y + height) * tileSize);
+    ctx.stroke();
+    
+    ctx.beginPath();
+    ctx.moveTo((x + blueLineRight) * tileSize, y * tileSize);
+    ctx.lineTo((x + blueLineRight) * tileSize, (y + height) * tileSize);
+    ctx.stroke();
+  } else {
+    // Crease only - just center line
+    const centerX = Math.floor(width / 2);
+    ctx.strokeStyle = "#FFFFFF";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo((x + centerX) * tileSize, y * tileSize);
+    ctx.lineTo((x + centerX) * tileSize, (y + height) * tileSize);
+    ctx.stroke();
+  }
 
   // Goal creases outline
   ctx.strokeStyle = "#FF0000";
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.arc((x + creaseRadius) * tileSize, (y + height / 2) * tileSize, creaseRadius * tileSize, -Math.PI / 2, Math.PI / 2);
+  ctx.arc((x + creaseRadius) * tileSize, (y + height / 2) * tileSize, creaseRadius * tileSize, Math.PI, 0);
   ctx.stroke();
   
   ctx.beginPath();
-  ctx.arc((x + width - creaseRadius) * tileSize, (y + height / 2) * tileSize, creaseRadius * tileSize, Math.PI / 2, (3 * Math.PI) / 2);
+  ctx.arc((x + width - creaseRadius) * tileSize, (y + height / 2) * tileSize, creaseRadius * tileSize, 0, Math.PI);
   ctx.stroke();
 }
 
