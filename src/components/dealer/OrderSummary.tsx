@@ -161,39 +161,39 @@ Generated: ${new Date().toLocaleString()}
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden card-premium border-premium-animated">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm">
+      <div className="relative w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden card-premium border-premium-animated">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center text-black">
-              <FileText className="w-5 h-5" />
+        <div className="flex items-center justify-between p-3 sm:p-4 lg:p-6 border-b border-white/10">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-primary flex items-center justify-center text-black">
+              <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <h2 className="heading-2">Order Summary</h2>
-              <p className="text-sm text-muted-foreground">{formData.projectName}</p>
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-bold">Order Summary</h2>
+              <p className="text-xs sm:text-sm text-muted-foreground line-clamp-1">{formData.projectName}</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <button
               onClick={handleDownload}
-              className="btn-premium-secondary flex items-center gap-2 text-sm"
+              className="hidden sm:flex btn-premium-secondary items-center gap-2 text-sm"
               title="Download as text file"
             >
               <Download className="w-4 h-4" />
-              Download
+              <span className="hidden lg:inline">Download</span>
             </button>
             <button
               onClick={handlePrint}
-              className="btn-premium-secondary flex items-center gap-2 text-sm"
+              className="hidden sm:flex btn-premium-secondary items-center gap-2 text-sm"
               title="Print summary"
             >
               <Printer className="w-4 h-4" />
-              Print
+              <span className="hidden lg:inline">Print</span>
             </button>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+              className="p-2 hover:bg-white/10 rounded-lg transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
             >
               <X className="w-5 h-5" />
             </button>
@@ -201,13 +201,13 @@ Generated: ${new Date().toLocaleString()}
         </div>
 
         {/* Scrollable Content */}
-        <div className="overflow-y-auto p-6 space-y-6" style={{ maxHeight: "calc(90vh - 100px)" }}>
+        <div className="overflow-y-auto p-3 sm:p-4 lg:p-6 space-y-4 lg:space-y-6" style={{ maxHeight: "calc(95vh - 100px)" }}>
           {/* Project Info */}
           <div>
-            <h3 className="font-bold text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-3">
+            <h3 className="font-bold text-xs sm:text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-2 sm:mb-3">
               Project Information
             </h3>
-            <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
               <div>
                 <span className="text-muted-foreground">Dealer:</span>
                 <span className="ml-2 font-semibold">{formData.dealerName}</span>
@@ -222,7 +222,7 @@ Generated: ${new Date().toLocaleString()}
                   {formData.shippingOption === "address" ? "Ship to Address" : "Warehouse Pickup"}
                 </span>
                 {formData.shippingOption === "address" && (
-                  <div className="mt-1 ml-2 text-muted-foreground">{formData.shippingAddress}</div>
+                  <div className="mt-1 ml-2 text-muted-foreground break-words">{formData.shippingAddress}</div>
                 )}
               </div>
             </div>
@@ -230,10 +230,10 @@ Generated: ${new Date().toLocaleString()}
 
           {/* Court Specifications */}
           <div>
-            <h3 className="font-bold text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-3">
+            <h3 className="font-bold text-xs sm:text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-2 sm:mb-3">
               Court Specifications
             </h3>
-            <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
               <div>
                 <span className="text-muted-foreground">Tile Type:</span>
                 <span className="ml-2 font-semibold">{formData.tileType.toUpperCase()}</span>
@@ -255,21 +255,21 @@ Generated: ${new Date().toLocaleString()}
 
           {/* Tile Breakdown */}
           <div>
-            <h3 className="font-bold text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-3">
+            <h3 className="font-bold text-xs sm:text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-2 sm:mb-3">
               Tile Breakdown
             </h3>
             <div className="space-y-2">
               {tileBreakdown.map((tile) => (
-                <div key={tile.color} className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02] border border-border">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded border-2 border-white/20" style={{ backgroundColor: getColorHex(tile.color) }} />
+                <div key={tile.color} className="flex items-center justify-between p-2 sm:p-3 rounded-lg bg-white/[0.02] border border-border">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 rounded border-2 border-white/20 flex-shrink-0" style={{ backgroundColor: getColorHex(tile.color) }} />
                     <div>
-                      <div className="font-semibold">{tile.color}</div>
-                      <div className="text-xs text-muted-foreground">{tile.quantity.toLocaleString()} tiles (12&quot; × 12&quot;)</div>
+                      <div className="font-semibold text-xs sm:text-sm">{tile.color}</div>
+                      <div className="text-xs text-muted-foreground">{tile.quantity.toLocaleString()} tiles</div>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="font-semibold">${tile.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                    <div className="font-semibold text-xs sm:text-sm">${tile.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                     <div className="text-xs text-muted-foreground">${tile.pricePerTile}/tile</div>
                   </div>
                 </div>
@@ -284,10 +284,10 @@ Generated: ${new Date().toLocaleString()}
           {/* Game Lines */}
           {formData.gameLines.length > 0 && (
             <div>
-              <h3 className="font-bold text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-3">
+              <h3 className="font-bold text-xs sm:text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-2 sm:mb-3">
                 Game Lines ({formData.gameLines.length})
               </h3>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2">
                 {formData.gameLines.map((line) => (
                   <span key={line} className="sport-badge">
                     {line}
@@ -299,10 +299,10 @@ Generated: ${new Date().toLocaleString()}
 
           {/* Optional Add-ons */}
           <div>
-            <h3 className="font-bold text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-3">
+            <h3 className="font-bold text-xs sm:text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-2 sm:mb-3">
               Optional Add-ons
             </h3>
-            <div className="space-y-2 text-sm">
+            <div className="space-y-2 text-xs sm:text-sm">
               <div className={`flex items-center justify-between p-3 rounded-lg ${formData.linePainting ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-white/[0.02] border border-border opacity-50'}`}>
                 <div>
                   <div className="font-semibold">Line Painting</div>
@@ -351,14 +351,14 @@ Generated: ${new Date().toLocaleString()}
             formData.gameLines.some(l => ["Basketball - Full", "Basketball - Half"].includes(l)) ||
             formData.gameLines.some(l => ["Shuffleboard - Single", "Shuffleboard - Double"].includes(l))) && (
             <div>
-              <h3 className="font-bold text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-3">
+              <h3 className="font-bold text-xs sm:text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-2 sm:mb-3">
                 Sport-Specific Colors
               </h3>
-              <div className="space-y-4 text-sm">
+              <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm">
                 {formData.gameLines.some(l => ["Pickleball", "Tennis - Full Court", "Tennis - Reduced", "Volleyball"].includes(l)) && (
                   <div>
-                    <div className="font-semibold text-purple-400 mb-2">Pickleball/Tennis/Volleyball</div>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="font-semibold text-purple-400 mb-2 text-xs sm:text-sm">Pickleball/Tennis/Volleyball</div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       <ColorDisplay label="Inner Court" color={formData.pickleballInnerCourtColor} />
                       <ColorDisplay label="Outer Court" color={formData.pickleballOuterCourtColor} />
                       <ColorDisplay label="Kitchen" color={formData.pickleballKitchenColor} />
@@ -397,11 +397,11 @@ Generated: ${new Date().toLocaleString()}
           )}
 
           {/* Price Summary */}
-          <div className="p-6 rounded-lg bg-gradient-primary/10 border border-[var(--brand-primary)]/30">
-            <h3 className="font-bold text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-4">
+          <div className="p-3 sm:p-4 lg:p-6 rounded-lg bg-gradient-primary/10 border border-[var(--brand-primary)]/30">
+            <h3 className="font-bold text-xs sm:text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-3 sm:mb-4">
               Price Summary
             </h3>
-            <div className="space-y-2 text-sm">
+            <div className="space-y-2 text-xs sm:text-sm">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Base Tiles ({totalTiles} tiles)</span>
                 <span className="font-semibold">${pricing.basePrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
@@ -418,7 +418,7 @@ Generated: ${new Date().toLocaleString()}
                   <span className="font-semibold">${pricing.rampsCost.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 </div>
               )}
-              <div className="flex justify-between pt-3 border-t border-white/10 text-lg">
+              <div className="flex justify-between pt-2 sm:pt-3 border-t border-white/10 text-base sm:text-lg">
                 <span className="font-bold">Total</span>
                 <span className="font-bold text-gradient-hero">${pricing.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
               </div>
@@ -433,10 +433,10 @@ Generated: ${new Date().toLocaleString()}
 function ColorDisplay({ label, color }: { label: string; color: string }) {
   return (
     <div className="flex items-center gap-2">
-      <div className="w-6 h-6 rounded border-2 border-white/20" style={{ backgroundColor: getColorHex(color) }} />
-      <div>
-        <div className="text-xs text-muted-foreground">{label}</div>
-        <div className="text-xs font-semibold">{color}</div>
+      <div className="w-5 h-5 sm:w-6 sm:h-6 rounded border-2 border-white/20 flex-shrink-0" style={{ backgroundColor: getColorHex(color) }} />
+      <div className="min-w-0">
+        <div className="text-xs text-muted-foreground truncate">{label}</div>
+        <div className="text-xs font-semibold truncate">{color}</div>
       </div>
     </div>
   );

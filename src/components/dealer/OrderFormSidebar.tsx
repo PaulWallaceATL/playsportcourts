@@ -220,31 +220,32 @@ export function OrderFormSidebar() {
         />
       )}
 
-      <div className="flex h-[calc(100vh-8rem)] gap-6">
+      {/* Mobile: Stack vertically, Desktop: Side by side */}
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 lg:h-[calc(100vh-8rem)]">
       {/* Sidebar - Scrollable Form */}
       <div
         className={`transition-all duration-300 ${
-          sidebarOpen ? "w-[420px]" : "w-0"
-        } flex-shrink-0`}
+          sidebarOpen ? "lg:w-[420px]" : "lg:w-0 hidden lg:block"
+        } flex-shrink-0 w-full`}
       >
-        <div className={`h-full ${sidebarOpen ? "" : "hidden"}`}>
-          <div className="h-full flex flex-col card-premium">
+        <div className={`h-auto lg:h-full ${sidebarOpen ? "" : "hidden"}`}>
+          <div className="h-auto lg:h-full flex flex-col card-premium">
             <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/10">
-              <h2 className="heading-3">Order Configuration</h2>
+              <h2 className="text-lg lg:text-xl font-bold">Order Configuration</h2>
               <button
                 type="button"
                 onClick={() => setSidebarOpen(false)}
-                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors hidden lg:block"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Scrollable Form Content */}
-            <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto pr-2 space-y-6">
+            <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto lg:pr-2 space-y-4 lg:space-y-6 max-h-[60vh] lg:max-h-none">
               {/* Basic Info */}
-              <div className="space-y-4">
-                <h3 className="font-bold text-sm uppercase tracking-wider text-[var(--brand-primary)]">
+              <div className="space-y-3 lg:space-y-4">
+                <h3 className="font-bold text-xs lg:text-sm uppercase tracking-wider text-[var(--brand-primary)]">
                   Basic Information
                 </h3>
                 
@@ -327,8 +328,8 @@ export function OrderFormSidebar() {
               </div>
 
               {/* Court Specs */}
-              <div className="space-y-4">
-                <h3 className="font-bold text-sm uppercase tracking-wider text-[var(--brand-primary)]">
+              <div className="space-y-3 lg:space-y-4">
+                <h3 className="font-bold text-xs lg:text-sm uppercase tracking-wider text-[var(--brand-primary)]">
                   Court Specifications
                 </h3>
 
@@ -392,11 +393,11 @@ export function OrderFormSidebar() {
               </div>
 
               {/* Game Lines */}
-              <div className="space-y-4">
-                <h3 className="font-bold text-sm uppercase tracking-wider text-[var(--brand-primary)]">
+              <div className="space-y-3 lg:space-y-4">
+                <h3 className="font-bold text-xs lg:text-sm uppercase tracking-wider text-[var(--brand-primary)]">
                   Game Lines
                 </h3>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {GAME_LINES.map((line) => (
                     <label
                       key={line}
@@ -512,8 +513,8 @@ export function OrderFormSidebar() {
 
               {/* Sport Colors */}
               {(showPickleballColors || showBasketballColors || showShuffleboardColors) && (
-                <div className="space-y-4">
-                  <h3 className="font-bold text-sm uppercase tracking-wider text-[var(--brand-primary)]">
+                <div className="space-y-3 lg:space-y-4">
+                  <h3 className="font-bold text-xs lg:text-sm uppercase tracking-wider text-[var(--brand-primary)]">
                     Sport Colors
                   </h3>
 
@@ -623,8 +624,8 @@ export function OrderFormSidebar() {
 
               {/* Price Summary */}
               {squareFeet > 0 && (
-                <div className="space-y-3 p-4 rounded-lg bg-gradient-primary/10 border border-[var(--brand-primary)]/30">
-                  <h3 className="font-bold text-sm uppercase tracking-wider text-[var(--brand-primary)]">
+                <div className="space-y-2 lg:space-y-3 p-3 lg:p-4 rounded-lg bg-gradient-primary/10 border border-[var(--brand-primary)]/30">
+                  <h3 className="font-bold text-xs lg:text-sm uppercase tracking-wider text-[var(--brand-primary)]">
                     Price Summary
                   </h3>
                   <div className="space-y-2 text-xs">
@@ -654,21 +655,22 @@ export function OrderFormSidebar() {
             </form>
 
             {/* Action Buttons - Sticky at bottom */}
-            <div className="pt-4 mt-4 border-t border-white/10 space-y-2">
+            <div className="pt-3 lg:pt-4 mt-3 lg:mt-4 border-t border-white/10 space-y-2">
               <button
                 type="button"
                 onClick={() => setShowSummary(true)}
                 disabled={squareFeet === 0}
-                className="btn-premium-secondary w-full flex items-center justify-center gap-2 text-sm"
+                className="btn-premium-secondary w-full flex items-center justify-center gap-2 text-sm min-h-[44px]"
               >
                 <FileText className="w-4 h-4" />
-                View Order Summary
+                <span className="hidden sm:inline">View Order Summary</span>
+                <span className="sm:hidden">Summary</span>
               </button>
               <button
                 type="submit"
                 onClick={handleSubmit}
                 disabled={submitting || squareFeet === 0}
-                className="btn-premium-primary w-full flex items-center justify-center gap-2 text-sm"
+                className="btn-premium-primary w-full flex items-center justify-center gap-2 text-sm min-h-[44px]"
               >
                 {submitting ? (
                   <>
@@ -678,7 +680,8 @@ export function OrderFormSidebar() {
                 ) : (
                   <>
                     <Send className="w-4 h-4" />
-                    Submit Order
+                    <span className="hidden sm:inline">Submit Order</span>
+                    <span className="sm:hidden">Submit</span>
                   </>
                 )}
               </button>
@@ -687,18 +690,18 @@ export function OrderFormSidebar() {
         </div>
       </div>
 
-      {/* Toggle Button when sidebar is closed */}
+      {/* Toggle Button when sidebar is closed (Desktop only) */}
       {!sidebarOpen && (
         <button
           onClick={() => setSidebarOpen(true)}
-          className="btn-premium-secondary h-fit sticky top-4"
+          className="hidden lg:block btn-premium-secondary h-fit sticky top-4"
         >
           <Package className="w-5 h-5" />
         </button>
       )}
 
       {/* Main Content - Court Visualizer */}
-      <div className="flex-1 flex flex-col gap-4">
+      <div className="flex-1 flex flex-col gap-3 lg:gap-4 min-h-[400px] lg:min-h-0">
         {/* Success Message */}
         {submitted && (
           <div className="card-premium border-premium-animated bg-emerald-500/10 animate-in">
@@ -736,12 +739,12 @@ export function OrderFormSidebar() {
               linePaintingColor={formData.linePainting ? formData.linePaintingColor : undefined}
             />
           ) : (
-            <div className="h-full card-premium flex items-center justify-center">
+            <div className="h-full min-h-[400px] card-premium flex items-center justify-center p-6">
               <div className="text-center">
-                <Ruler className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="heading-3 mb-2">Ready to Design Your Court?</h3>
-                <p className="text-muted-foreground">
-                  Enter court dimensions in the sidebar to see your live preview
+                <Ruler className="w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="text-xl lg:text-2xl font-bold mb-2">Ready to Design Your Court?</h3>
+                <p className="text-sm lg:text-base text-muted-foreground">
+                  Enter court dimensions {sidebarOpen ? "above" : "to see your live preview"}
                 </p>
               </div>
             </div>
@@ -763,13 +766,13 @@ function ColorSelector({
 }) {
   return (
     <div className="space-y-1.5">
-      <div className="grid grid-cols-11 gap-1">
+      <div className="grid grid-cols-6 sm:grid-cols-11 gap-1">
         {COLORS.map((color) => (
           <button
             key={color.name}
             type="button"
             onClick={() => onChange(color.name)}
-            className={`aspect-square rounded border-2 transition-all hover:scale-110 ${
+            className={`aspect-square rounded border-2 transition-all hover:scale-110 min-h-[32px] sm:min-h-0 ${
               value === color.name
                 ? "border-[var(--brand-primary)] shadow-neon-blue scale-110"
                 : "border-border"
