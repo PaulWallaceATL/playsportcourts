@@ -45,6 +45,9 @@ interface InteractiveCourtBuilderProps {
   badmintonCourtColor?: string;
   volleyballCourtColor?: string;
   futsalCourtColor?: string;
+  fourSquareColor?: string;
+  cornholeColor?: string;
+  battersBoxColor?: string;
   // Line painting color
   linePaintingColor?: string;
   onElementsChange?: (elements: GameElement[]) => void;
@@ -89,6 +92,9 @@ export function InteractiveCourtBuilder({
   badmintonCourtColor = "Emerald Green",
   volleyballCourtColor = "Bright Red",
   futsalCourtColor = "Orange",
+  fourSquareColor = "Royal Blue",
+  cornholeColor = "Bright Red",
+  battersBoxColor = "Titanium",
   linePaintingColor,
   onElementsChange,
 }: InteractiveCourtBuilderProps) {
@@ -393,11 +399,11 @@ export function InteractiveCourtBuilder({
     // Draw game elements on tiles
     elements.forEach(element => {
       if (element.type === "4square") {
-        draw4Square(ctx, element, tileSize);
+        draw4Square(ctx, element, tileSize, COLOR_MAP[fourSquareColor], linePaintingColor ? COLOR_MAP[linePaintingColor] : "#FFFFFF");
       } else if (element.type === "hopscotch") {
         drawHopScotch(ctx, element, tileSize);
       } else if (element.type === "cornhole") {
-        drawCornhole(ctx, element, tileSize);
+        drawCornhole(ctx, element, tileSize, COLOR_MAP[cornholeColor]);
       } else if (element.type === "badminton") {
         drawBadminton(ctx, element, tileSize, COLOR_MAP[badmintonCourtColor], linePaintingColor ? COLOR_MAP[linePaintingColor] : "#FFFFFF");
       } else if (element.type === "basketball-full" || element.type === "basketball-half") {
@@ -433,7 +439,7 @@ export function InteractiveCourtBuilder({
       } else if (element.type === "futsal") {
         drawFutsal(ctx, element, tileSize, COLOR_MAP[futsalCourtColor], linePaintingColor ? COLOR_MAP[linePaintingColor] : "#FFFFFF");
       } else if (element.type === "battersbox") {
-        drawBattersBox(ctx, element, tileSize);
+        drawBattersBox(ctx, element, tileSize, COLOR_MAP[battersBoxColor]);
       } else if (element.type === "hockey-regulation" || element.type === "hockey-crease") {
         drawHockey(ctx, element, tileSize, {
           iceColor: COLOR_MAP[hockeyIceColor],
@@ -755,11 +761,11 @@ export function InteractiveCourtBuilder({
 }
 
 // Drawing functions that work with tile grid
-function draw4Square(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+function draw4Square(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number, squareColor: string, lineColor: string) {
   const { x, y, width, height } = element;
   
   // Fill tiles with color
-  ctx.fillStyle = "#2563EB"; // Royal Blue
+  ctx.fillStyle = squareColor;
   for (let ty = 0; ty < height; ty++) {
     for (let tx = 0; tx < width; tx++) {
       ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
@@ -767,7 +773,7 @@ function draw4Square(ctx: CanvasRenderingContext2D, element: GameElement, tileSi
   }
 
   // Draw center lines
-  ctx.strokeStyle = "#FFFFFF";
+  ctx.strokeStyle = lineColor;
   ctx.lineWidth = 3;
   ctx.beginPath();
   // Vertical center
@@ -804,11 +810,11 @@ function drawHopScotch(ctx: CanvasRenderingContext2D, element: GameElement, tile
   }
 }
 
-function drawCornhole(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+function drawCornhole(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number, boardColor: string) {
   const { x, y, width, height } = element;
   
   // Fill tiles
-  ctx.fillStyle = "#EF4444"; // Bright Red
+  ctx.fillStyle = boardColor;
   for (let ty = 0; ty < height; ty++) {
     for (let tx = 0; tx < width; tx++) {
       ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
@@ -983,8 +989,44 @@ function drawBasketball(
     }
   }
 
-  // 3-POINT LINE - Remove for now, needs proper implementation
-  // TODO: Implement accurate 3-point line matching regulation specs
+  // 3-POINT LINE (THE ARC)
+  // Simple approach: just beyond lane, wraps around smoothly
+  const arcX = baselineOffset + laneLength + 4; // 4 tiles beyond lane end
+  const arcRadius = 15; // Fixed radius that fits most courts
+  
+  // Only draw if it fits without hitting center
+  if (arcX + arcRadius < (isHalfCourt ? width - 5 : width / 2 - 8)) {
+    ctx.strokeStyle = "#FFFFFF";
+    ctx.lineWidth = 2;
+    
+    // Left arc
+    ctx.beginPath();
+    ctx.arc(
+      (x + arcX) * tileSize,
+      (y + height / 2) * tileSize,
+      arcRadius * tileSize,
+      -Math.PI / 2,
+      Math.PI / 2
+    );
+    ctx.stroke();
+  }
+
+  if (!isHalfCourt && arcX + arcRadius < width / 2 - 8) {
+    // Right arc
+    const rightArcX = width - arcX;
+    ctx.strokeStyle = "#FFFFFF";
+    ctx.lineWidth = 2;
+    
+    ctx.beginPath();
+    ctx.arc(
+      (x + rightArcX) * tileSize,
+      (y + height / 2) * tileSize,
+      arcRadius * tileSize,
+      Math.PI / 2,
+      (3 * Math.PI) / 2
+    );
+    ctx.stroke();
+  }
 
   // Court border in border color
   ctx.strokeStyle = colors.borderColor;
@@ -1279,11 +1321,11 @@ function drawFutsal(ctx: CanvasRenderingContext2D, element: GameElement, tileSiz
   ctx.stroke();
 }
 
-function drawBattersBox(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+function drawBattersBox(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number, boxColor: string) {
   const { x, y, width, height } = element;
   
   // Fill box tiles
-  ctx.fillStyle = "#6B7280"; // Titanium
+  ctx.fillStyle = boxColor;
   for (let ty = 0; ty < height; ty++) {
     for (let tx = 0; tx < width; tx++) {
       ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
