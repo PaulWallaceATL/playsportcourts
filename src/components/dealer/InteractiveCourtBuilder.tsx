@@ -916,48 +916,8 @@ function drawBasketball(
     }
   }
 
-  // 3-POINT LINE - Just a vertical line with a bulge (arc) in the middle
-  const threePointX = baselineOffset + 22; // Position: 22 tiles from baseline
-  const arcBulge = 5; // How much the arc bulges toward center
-  
-  // Only draw if fits
-  if (threePointX < (isHalfCourt ? width - 5 : width / 2 - 10)) {
-    // LEFT 3-point line
-    ctx.beginPath();
-    // Start at top
-    ctx.moveTo((x + threePointX) * tileSize, y * tileSize);
-    // Straight down to where arc starts (14 tiles from center)
-    ctx.lineTo((x + threePointX) * tileSize, (y + height / 2 - 14) * tileSize);
-    // Arc bulging toward center (simple quadratic curve)
-    ctx.quadraticCurveTo(
-      (x + threePointX + arcBulge) * tileSize,
-      (y + height / 2) * tileSize,
-      (x + threePointX) * tileSize,
-      (y + height / 2 + 14) * tileSize
-    );
-    // Straight down to bottom
-    ctx.lineTo((x + threePointX) * tileSize, (y + height) * tileSize);
-    ctx.stroke();
-  }
-
-  if (!isHalfCourt) {
-    // RIGHT 3-point line
-    const rightThreePointX = width - threePointX;
-    
-    if (rightThreePointX > width / 2 + 10) {
-      ctx.beginPath();
-      ctx.moveTo((x + rightThreePointX) * tileSize, y * tileSize);
-      ctx.lineTo((x + rightThreePointX) * tileSize, (y + height / 2 - 14) * tileSize);
-      ctx.quadraticCurveTo(
-        (x + rightThreePointX - arcBulge) * tileSize,
-        (y + height / 2) * tileSize,
-        (x + rightThreePointX) * tileSize,
-        (y + height / 2 + 14) * tileSize
-      );
-      ctx.lineTo((x + rightThreePointX) * tileSize, (y + height) * tileSize);
-      ctx.stroke();
-    }
-  }
+  // 3-POINT LINE - Remove for now, needs proper implementation
+  // TODO: Implement accurate 3-point line matching regulation specs
 
   // Court border in border color
   ctx.strokeStyle = colors.borderColor;
