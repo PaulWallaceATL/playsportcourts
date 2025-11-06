@@ -863,18 +863,25 @@ function drawBasketball(
     ctx.stroke();
   }
 
-  // Free throw line (15 feet from backboard, which is 4ft from baseline)
+  // Free throw line and circle
   const freeThrowPos = baselineOffset + specs.freeThrowDist;
+  
+  // Left free throw
   if (freeThrowPos < width) {
-    // Left free throw line
+    // Free throw line
     ctx.beginPath();
     ctx.moveTo((x + freeThrowPos) * tileSize, (y + laneY) * tileSize);
     ctx.lineTo((x + freeThrowPos) * tileSize, (y + laneY + laneWidth) * tileSize);
     ctx.stroke();
 
-    // Left free throw circle (6ft radius)
+    // Free throw circle (6ft radius)
     ctx.beginPath();
     ctx.arc((x + freeThrowPos) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Lane outline
+    ctx.beginPath();
+    ctx.rect((x + baselineOffset) * tileSize, (y + laneY) * tileSize, laneLength * tileSize, laneWidth * tileSize);
     ctx.stroke();
   }
 
@@ -891,90 +898,25 @@ function drawBasketball(
     ctx.arc((x + centerTile) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
     ctx.stroke();
 
-    // Right free throw line and circle
+    // Right free throw
     const rightFreeThrow = width - freeThrowPos;
-    if (rightFreeThrow > 0) {
+    if (rightFreeThrow > 0 && rightFreeThrow < width) {
+      // Free throw line
       ctx.beginPath();
       ctx.moveTo((x + rightFreeThrow) * tileSize, (y + laneY) * tileSize);
       ctx.lineTo((x + rightFreeThrow) * tileSize, (y + laneY + laneWidth) * tileSize);
       ctx.stroke();
 
+      // Free throw circle
       ctx.beginPath();
       ctx.arc((x + rightFreeThrow) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
       ctx.stroke();
-    }
-  }
 
-  // 3-point line - use regulation distance
-  const basketPos = baselineOffset + 5.25; // Basket center (4ft backboard + 1.25ft to center)
-  const threePointRadius = Math.floor(specs.threePoint);
-  const cornerDist = Math.floor(specs.threePointCorner);
-  
-  // Calculate where arc meets the sideline
-  const sideOffset = Math.min(3, Math.floor(height * 0.15)); // Distance from sideline
-  
-  // Left 3-point line
-  if (basketPos + threePointRadius < width) {
-    ctx.strokeStyle = "#FFFFFF";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    
-    // Draw from top corner
-    ctx.moveTo((x + cornerDist) * tileSize, y * tileSize);
-    ctx.lineTo((x + cornerDist) * tileSize, (y + sideOffset) * tileSize);
-    
-    // Arc portion
-    ctx.arc(
-      (x + basketPos) * tileSize,
-      (y + height / 2) * tileSize,
-      threePointRadius * tileSize,
-      -Math.PI / 2 + Math.atan2(sideOffset - height / 2, cornerDist - basketPos),
-      Math.PI / 2 - Math.atan2(sideOffset - height / 2, cornerDist - basketPos)
-    );
-    
-    // Bottom corner
-    ctx.lineTo((x + cornerDist) * tileSize, (y + height) * tileSize);
-    ctx.stroke();
-  }
-
-  if (!isHalfCourt) {
-    // Right 3-point line
-    const rightBasketPos = width - basketPos;
-    if (rightBasketPos > threePointRadius) {
+      // Lane outline
       ctx.beginPath();
-      ctx.moveTo((x + width - cornerDist) * tileSize, y * tileSize);
-      ctx.lineTo((x + width - cornerDist) * tileSize, (y + sideOffset) * tileSize);
-      
-      ctx.arc(
-        (x + rightBasketPos) * tileSize,
-        (y + height / 2) * tileSize,
-        threePointRadius * tileSize,
-        Math.PI / 2 + Math.atan2(sideOffset - height / 2, width - cornerDist - rightBasketPos),
-        (3 * Math.PI) / 2 - Math.atan2(sideOffset - height / 2, width - cornerDist - rightBasketPos)
-      );
-      
-      ctx.lineTo((x + width - cornerDist) * tileSize, (y + height) * tileSize);
+      ctx.rect((x + width - baselineOffset - laneLength) * tileSize, (y + laneY) * tileSize, laneLength * tileSize, laneWidth * tileSize);
       ctx.stroke();
     }
-  }
-
-  // Lane boundary lines
-  ctx.beginPath();
-  ctx.moveTo((x + baselineOffset) * tileSize, (y + laneY) * tileSize);
-  ctx.lineTo((x + baselineOffset + laneLength) * tileSize, (y + laneY) * tileSize);
-  ctx.lineTo((x + baselineOffset + laneLength) * tileSize, (y + laneY + laneWidth) * tileSize);
-  ctx.lineTo((x + baselineOffset) * tileSize, (y + laneY + laneWidth) * tileSize);
-  ctx.closePath();
-  ctx.stroke();
-
-  if (!isHalfCourt) {
-    ctx.beginPath();
-    ctx.moveTo((x + width - baselineOffset) * tileSize, (y + laneY) * tileSize);
-    ctx.lineTo((x + width - baselineOffset - laneLength) * tileSize, (y + laneY) * tileSize);
-    ctx.lineTo((x + width - baselineOffset - laneLength) * tileSize, (y + laneY + laneWidth) * tileSize);
-    ctx.lineTo((x + width - baselineOffset) * tileSize, (y + laneY + laneWidth) * tileSize);
-    ctx.closePath();
-    ctx.stroke();
   }
 
   // Court border in border color
