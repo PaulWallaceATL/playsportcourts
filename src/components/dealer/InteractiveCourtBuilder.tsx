@@ -122,6 +122,88 @@ export function InteractiveCourtBuilder({
       });
     }
 
+    // Basketball courts
+    if (gameLines.includes("Basketball - Full")) {
+      const courtW = Math.min(50, tilesY - 2);
+      const courtL = Math.min(94, tilesX - 2);
+      newElements.push({
+        id: "basketball-full",
+        type: "basketball-full",
+        x: Math.floor((tilesX - courtL) / 2),
+        y: Math.floor((tilesY - courtW) / 2),
+        width: courtL,
+        height: courtW,
+      });
+    }
+
+    if (gameLines.includes("Basketball - Half")) {
+      const courtW = Math.min(50, tilesY - 2);
+      const courtL = Math.min(47, tilesX - 2);
+      newElements.push({
+        id: "basketball-half",
+        type: "basketball-half",
+        x: Math.floor((tilesX - courtL) / 2),
+        y: Math.floor((tilesY - courtW) / 2),
+        width: courtL,
+        height: courtW,
+      });
+    }
+
+    // Tennis/Pickleball courts
+    if (gameLines.includes("Tennis - Full Court") || gameLines.includes("Tennis - Reduced")) {
+      const courtW = gameLines.includes("Tennis - Reduced") ? Math.min(27, tilesY - 2) : Math.min(36, tilesY - 2);
+      const courtL = gameLines.includes("Tennis - Reduced") ? Math.min(60, tilesX - 2) : Math.min(78, tilesX - 2);
+      newElements.push({
+        id: "tennis",
+        type: "tennis",
+        x: Math.floor((tilesX - courtL) / 2),
+        y: Math.floor((tilesY - courtW) / 2),
+        width: courtL,
+        height: courtW,
+      });
+    }
+
+    if (gameLines.includes("Pickleball")) {
+      const courtW = Math.min(20, tilesY - 2);
+      const courtL = Math.min(44, tilesX - 2);
+      newElements.push({
+        id: "pickleball",
+        type: "pickleball",
+        x: Math.floor((tilesX - courtL) / 2),
+        y: Math.floor((tilesY - courtW) / 2),
+        width: courtL,
+        height: courtW,
+      });
+    }
+
+    // Volleyball court
+    if (gameLines.includes("Volleyball")) {
+      const courtW = Math.min(30, tilesY - 2);
+      const courtL = Math.min(60, tilesX - 2);
+      newElements.push({
+        id: "volleyball",
+        type: "volleyball",
+        x: Math.floor((tilesX - courtL) / 2),
+        y: Math.floor((tilesY - courtW) / 2),
+        width: courtL,
+        height: courtW,
+      });
+    }
+
+    // Shuffleboard courts
+    if (gameLines.includes("Shuffleboard - Single") || gameLines.includes("Shuffleboard - Double")) {
+      const courtW = gameLines.includes("Shuffleboard - Double") ? Math.min(12, tilesY - 2) : Math.min(6, tilesY - 2);
+      const courtL = Math.min(52, tilesX - 2);
+      newElements.push({
+        id: "shuffleboard",
+        type: "shuffleboard",
+        x: Math.floor((tilesX - courtL) / 2),
+        y: Math.floor((tilesY - courtW) / 2),
+        width: courtL,
+        height: courtW,
+      });
+    }
+
     setElements(newElements);
   }, [gameLines, courtLength, courtWidth]);
 
@@ -185,18 +267,28 @@ export function InteractiveCourtBuilder({
         drawCornhole(ctx, element, tileSize);
       } else if (element.type === "badminton") {
         drawBadminton(ctx, element, tileSize);
+      } else if (element.type === "basketball-full" || element.type === "basketball-half") {
+        drawBasketball(ctx, element, tileSize, element.type === "basketball-half");
+      } else if (element.type === "tennis") {
+        drawTennis(ctx, element, tileSize);
+      } else if (element.type === "pickleball") {
+        drawPickleball(ctx, element, tileSize);
+      } else if (element.type === "volleyball") {
+        drawVolleyball(ctx, element, tileSize);
+      } else if (element.type === "shuffleboard") {
+        drawShuffleboard(ctx, element, tileSize);
       }
 
       // Highlight selected element
       if (selectedElement === element.id) {
         ctx.strokeStyle = "#00d4ff";
-        ctx.lineWidth = 3;
-        ctx.setLineDash([5, 5]);
+        ctx.lineWidth = 4;
+        ctx.setLineDash([8, 4]);
         ctx.strokeRect(
-          element.x * tileSize,
-          element.y * tileSize,
-          element.width * tileSize,
-          element.height * tileSize
+          element.x * tileSize - 2,
+          element.y * tileSize - 2,
+          element.width * tileSize + 4,
+          element.height * tileSize + 4
         );
         ctx.setLineDash([]);
       }
@@ -252,7 +344,7 @@ export function InteractiveCourtBuilder({
   }, [drawCourt]);
 
   // Handle canvas interactions
-  const handleCanvasClick = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -282,17 +374,11 @@ export function InteractiveCourtBuilder({
       tileY >= el.y && tileY < el.y + el.height
     );
 
-    setSelectedElement(clickedElement?.id || null);
-  };
-
-  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!selectedElement) return;
-    setIsDragging(true);
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
-    setDragStart({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    if (clickedElement) {
+      setSelectedElement(clickedElement.id);
+      setIsDragging(true);
+      setDragStart({ x: tileX - clickedElement.x, y: tileY - clickedElement.y });
+    }
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -323,10 +409,14 @@ export function InteractiveCourtBuilder({
 
     setElements(prev => prev.map(el => {
       if (el.id === selectedElement) {
+        // Calculate new position accounting for drag offset
+        const newX = tileX - dragStart.x;
+        const newY = tileY - dragStart.y;
+        
         // Constrain to court bounds
-        const newX = Math.max(0, Math.min(tileX, Math.ceil(courtLength) - el.width));
-        const newY = Math.max(0, Math.min(tileY, Math.ceil(courtWidth) - el.height));
-        return { ...el, x: newX, y: newY };
+        const constrainedX = Math.max(0, Math.min(newX, Math.ceil(courtLength) - el.width));
+        const constrainedY = Math.max(0, Math.min(newY, Math.ceil(courtWidth) - el.height));
+        return { ...el, x: constrainedX, y: constrainedY };
       }
       return el;
     }));
@@ -341,13 +431,19 @@ export function InteractiveCourtBuilder({
     
     setElements(prev => prev.map(el => {
       if (el.id === selectedElement) {
-        const newWidth = Math.max(2, Math.min(el.width + dWidth, Math.ceil(courtLength) - el.x));
-        const newHeight = Math.max(2, Math.min(el.height + dHeight, Math.ceil(courtWidth) - el.y));
+        let newWidth = Math.max(4, Math.min(el.width + dWidth, Math.ceil(courtLength) - el.x));
+        let newHeight = Math.max(4, Math.min(el.height + dHeight, Math.ceil(courtWidth) - el.y));
         
-        // Keep 4 square as a square
+        // Keep 4 square as a perfect square and even number
         if (el.type === "4square") {
           const size = Math.max(newWidth, newHeight);
-          return { ...el, width: size, height: size };
+          const evenSize = Math.floor(size / 2) * 2; // Ensure even number
+          return { ...el, width: Math.max(4, evenSize), height: Math.max(4, evenSize) };
+        }
+        
+        // Ensure hopscotch stays 2 tiles wide
+        if (el.type === "hopscotch") {
+          newWidth = 2;
         }
         
         return { ...el, width: newWidth, height: newHeight };
@@ -417,50 +513,59 @@ export function InteractiveCourtBuilder({
 
       {/* Resize Controls */}
       {selectedElement && (
-        <div className="mb-4 p-3 rounded-lg bg-white/[0.02] border border-border">
-          <div className="flex items-center gap-2 text-sm">
-            <span className="text-muted-foreground">Resize:</span>
-            <button
-              type="button"
-              onClick={() => resizeSelected(-1, 0)}
-              className="px-2 py-1 hover:bg-white/10 rounded"
-            >
-              W-
-            </button>
-            <button
-              type="button"
-              onClick={() => resizeSelected(1, 0)}
-              className="px-2 py-1 hover:bg-white/10 rounded"
-            >
-              W+
-            </button>
-            <button
-              type="button"
-              onClick={() => resizeSelected(0, -1)}
-              className="px-2 py-1 hover:bg-white/10 rounded"
-            >
-              H-
-            </button>
-            <button
-              type="button"
-              onClick={() => resizeSelected(0, 1)}
-              className="px-2 py-1 hover:bg-white/10 rounded"
-            >
-              H+
-            </button>
-            <span className="text-xs text-muted-foreground ml-2">
-              {elements.find(e => e.id === selectedElement)?.width} × {elements.find(e => e.id === selectedElement)?.height} tiles
-            </span>
+        <div className="mb-4 p-4 rounded-lg bg-gradient-primary/10 border-2 border-[var(--brand-primary)]/50">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-[var(--brand-primary)]">
+                {elements.find(e => e.id === selectedElement)?.type.toUpperCase()}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                {elements.find(e => e.id === selectedElement)?.width} × {elements.find(e => e.id === selectedElement)?.height} tiles
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground mr-2">Resize:</span>
+              <button
+                type="button"
+                onClick={() => resizeSelected(-2, 0)}
+                className="btn-premium-secondary px-3 py-2 text-sm min-h-[44px]"
+              >
+                Width -
+              </button>
+              <button
+                type="button"
+                onClick={() => resizeSelected(2, 0)}
+                className="btn-premium-secondary px-3 py-2 text-sm min-h-[44px]"
+              >
+                Width +
+              </button>
+              <button
+                type="button"
+                onClick={() => resizeSelected(0, -2)}
+                className="btn-premium-secondary px-3 py-2 text-sm min-h-[44px]"
+              >
+                Height -
+              </button>
+              <button
+                type="button"
+                onClick={() => resizeSelected(0, 2)}
+                className="btn-premium-secondary px-3 py-2 text-sm min-h-[44px]"
+              >
+                Height +
+              </button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              💡 Click and drag on the court to move this element
+            </p>
           </div>
         </div>
       )}
 
-      <div className="bg-[#0a0a0a] rounded-lg overflow-hidden border border-border cursor-move">
+      <div className="bg-[#0a0a0a] rounded-lg overflow-hidden border border-border">
         <canvas
           ref={canvasRef}
           className="w-full h-auto"
-          style={{ maxWidth: "100%" }}
-          onClick={handleCanvasClick}
+          style={{ maxWidth: "100%", cursor: isDragging ? "grabbing" : selectedElement ? "grab" : "pointer" }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -584,5 +689,277 @@ function drawBadminton(ctx: CanvasRenderingContext2D, element: GameElement, tile
   ctx.moveTo((x + width - serviceLine) * tileSize, y * tileSize);
   ctx.lineTo((x + width - serviceLine) * tileSize, (y + height) * tileSize);
   ctx.stroke();
+}
+
+function drawBasketball(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number, isHalfCourt: boolean) {
+  const { x, y, width, height } = element;
+  
+  // Base court color
+  ctx.fillStyle = "#1E3A8A"; // Navy Blue
+  for (let ty = 0; ty < height; ty++) {
+    for (let tx = 0; tx < width; tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+  }
+
+  // Paint/Lane area (19ft x 12ft key)
+  const laneLength = Math.min(19, Math.floor(width * 0.2));
+  const laneWidth = Math.min(12, Math.floor(height * 0.24));
+  const laneY = Math.floor((height - laneWidth) / 2);
+  
+  ctx.fillStyle = "#2563EB"; // Royal Blue for lane
+  
+  // Left lane
+  for (let ty = laneY; ty < laneY + laneWidth; ty++) {
+    for (let tx = 0; tx < laneLength; tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+  }
+  
+  // Right lane (full court only)
+  if (!isHalfCourt) {
+    for (let ty = laneY; ty < laneY + laneWidth; ty++) {
+      for (let tx = width - laneLength; tx < width; tx++) {
+        ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+      }
+    }
+  }
+
+  // Draw lines
+  ctx.strokeStyle = "#FFFFFF";
+  ctx.lineWidth = 3;
+
+  if (!isHalfCourt) {
+    // Center line
+    ctx.beginPath();
+    ctx.moveTo((x + width / 2) * tileSize, y * tileSize);
+    ctx.lineTo((x + width / 2) * tileSize, (y + height) * tileSize);
+    ctx.stroke();
+
+    // Center circle
+    ctx.beginPath();
+    ctx.arc((x + width / 2) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // Free throw circles
+  ctx.beginPath();
+  ctx.arc((x + laneLength) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
+  ctx.stroke();
+
+  if (!isHalfCourt) {
+    ctx.beginPath();
+    ctx.arc((x + width - laneLength) * tileSize, (y + height / 2) * tileSize, 6 * tileSize, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // 3-point arc
+  ctx.beginPath();
+  ctx.arc(x * tileSize, (y + height / 2) * tileSize, 23.75 * tileSize, -Math.PI / 2.5, Math.PI / 2.5);
+  ctx.stroke();
+
+  if (!isHalfCourt) {
+    ctx.beginPath();
+    ctx.arc((x + width) * tileSize, (y + height / 2) * tileSize, 23.75 * tileSize, Math.PI - Math.PI / 2.5, Math.PI + Math.PI / 2.5);
+    ctx.stroke();
+  }
+}
+
+function drawPickleball(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+  const { x, y, width, height } = element;
+  
+  // Outer court
+  ctx.fillStyle = "#6B7280"; // Titanium
+  for (let ty = 0; ty < height; ty++) {
+    for (let tx = 0; tx < width; tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+  }
+
+  // Kitchen/Non-volley zones (7 feet from net)
+  const kitchenDepth = Math.min(7, Math.floor(width * 0.16));
+  ctx.fillStyle = "#2563EB"; // Royal Blue for kitchen
+  
+  for (let ty = 0; ty < height; ty++) {
+    for (let tx = 0; tx < kitchenDepth; tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+      ctx.fillRect((x + width - kitchenDepth + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+  }
+
+  // Draw lines
+  ctx.strokeStyle = "#FFFFFF";
+  ctx.lineWidth = 2;
+
+  // Center line (net)
+  ctx.beginPath();
+  ctx.moveTo((x + width / 2) * tileSize, y * tileSize);
+  ctx.lineTo((x + width / 2) * tileSize, (y + height) * tileSize);
+  ctx.stroke();
+
+  // Kitchen lines
+  ctx.beginPath();
+  ctx.moveTo((x + kitchenDepth) * tileSize, y * tileSize);
+  ctx.lineTo((x + kitchenDepth) * tileSize, (y + height) * tileSize);
+  ctx.moveTo((x + width - kitchenDepth) * tileSize, y * tileSize);
+  ctx.lineTo((x + width - kitchenDepth) * tileSize, (y + height) * tileSize);
+  ctx.stroke();
+
+  // Sidelines and baselines already defined by court bounds
+}
+
+function drawTennis(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+  const { x, y, width, height } = element;
+  
+  // Base court
+  ctx.fillStyle = "#10B981"; // Emerald Green
+  for (let ty = 0; ty < height; ty++) {
+    for (let tx = 0; tx < width; tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+  }
+
+  // Service boxes (lighter color)
+  const serviceDepth = Math.floor(width * 0.27);
+  ctx.fillStyle = "#84CC16"; // Olive Green
+  for (let ty = Math.floor(height * 0.2); ty < Math.floor(height * 0.8); ty++) {
+    for (let tx = 0; tx < serviceDepth; tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+      ctx.fillRect((x + width - serviceDepth + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+  }
+
+  // Draw lines
+  ctx.strokeStyle = "#FFFFFF";
+  ctx.lineWidth = 2;
+
+  // Center net line
+  ctx.beginPath();
+  ctx.moveTo((x + width / 2) * tileSize, y * tileSize);
+  ctx.lineTo((x + width / 2) * tileSize, (y + height) * tileSize);
+  ctx.stroke();
+
+  // Service lines
+  ctx.beginPath();
+  ctx.moveTo((x + serviceDepth) * tileSize, y * tileSize);
+  ctx.lineTo((x + serviceDepth) * tileSize, (y + height) * tileSize);
+  ctx.moveTo((x + width - serviceDepth) * tileSize, y * tileSize);
+  ctx.lineTo((x + width - serviceDepth) * tileSize, (y + height) * tileSize);
+  ctx.stroke();
+}
+
+function drawVolleyball(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+  const { x, y, width, height } = element;
+  
+  // Base court
+  ctx.fillStyle = "#EF4444"; // Bright Red
+  for (let ty = 0; ty < height; ty++) {
+    for (let tx = 0; tx < width; tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+  }
+
+  // Attack zones
+  const attackLine = Math.floor(width * 0.167); // 10 feet from center
+  ctx.fillStyle = "#F97316"; // Orange for attack zones
+  
+  for (let ty = 0; ty < height; ty++) {
+    for (let tx = Math.floor(width / 2) - attackLine; tx < Math.floor(width / 2); tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+    for (let tx = Math.floor(width / 2); tx < Math.floor(width / 2) + attackLine; tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+  }
+
+  // Draw lines
+  ctx.strokeStyle = "#FFFFFF";
+  ctx.lineWidth = 3;
+
+  // Center line (net)
+  ctx.beginPath();
+  ctx.moveTo((x + width / 2) * tileSize, y * tileSize);
+  ctx.lineTo((x + width / 2) * tileSize, (y + height) * tileSize);
+  ctx.stroke();
+
+  // Attack lines
+  ctx.beginPath();
+  ctx.moveTo((x + width / 2 - attackLine) * tileSize, y * tileSize);
+  ctx.lineTo((x + width / 2 - attackLine) * tileSize, (y + height) * tileSize);
+  ctx.moveTo((x + width / 2 + attackLine) * tileSize, y * tileSize);
+  ctx.lineTo((x + width / 2 + attackLine) * tileSize, (y + height) * tileSize);
+  ctx.stroke();
+}
+
+function drawShuffleboard(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+  const { x, y, width, height } = element;
+  
+  // Base court
+  ctx.fillStyle = "#000000"; // Black
+  for (let ty = 0; ty < height; ty++) {
+    for (let tx = 0; tx < width; tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+  }
+
+  // Shooting areas (6.5 feet from each end)
+  const shootingDepth = Math.min(Math.floor(width * 0.125), 7);
+  ctx.fillStyle = "#2563EB"; // Royal Blue
+  
+  for (let ty = 0; ty < height; ty++) {
+    for (let tx = 0; tx < shootingDepth; tx++) {
+      ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+      ctx.fillRect((x + width - shootingDepth + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+    }
+  }
+
+  // Scoring triangles
+  const scoringStart = shootingDepth;
+  const scoringLength = Math.floor(width * 0.115);
+  
+  // Left scoring zone
+  ctx.fillStyle = "#FDE047"; // Yellow
+  for (let i = 0; i < 3; i++) {
+    const zoneStart = scoringStart + i * Math.floor(scoringLength / 3);
+    const zoneEnd = scoringStart + (i + 1) * Math.floor(scoringLength / 3);
+    for (let ty = 0; ty < height; ty++) {
+      for (let tx = zoneStart; tx < zoneEnd; tx++) {
+        if (tx < width / 2) {
+          ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+        }
+      }
+    }
+  }
+
+  // Right scoring zone
+  for (let i = 0; i < 3; i++) {
+    const zoneStart = width - shootingDepth - scoringLength + i * Math.floor(scoringLength / 3);
+    const zoneEnd = width - shootingDepth - scoringLength + (i + 1) * Math.floor(scoringLength / 3);
+    for (let ty = 0; ty < height; ty++) {
+      for (let tx = zoneStart; tx < zoneEnd; tx++) {
+        if (tx >= width / 2) {
+          ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
+        }
+      }
+    }
+  }
+
+  // Draw scoring zone lines
+  ctx.strokeStyle = "#FFFFFF";
+  ctx.lineWidth = 2;
+  
+  for (let i = 1; i <= 3; i++) {
+    const lineX = scoringStart + i * Math.floor(scoringLength / 3);
+    ctx.beginPath();
+    ctx.moveTo((x + lineX) * tileSize, y * tileSize);
+    ctx.lineTo((x + lineX) * tileSize, (y + height) * tileSize);
+    ctx.stroke();
+
+    const lineXRight = width - shootingDepth - scoringLength + i * Math.floor(scoringLength / 3);
+    ctx.beginPath();
+    ctx.moveTo((x + lineXRight) * tileSize, y * tileSize);
+    ctx.lineTo((x + lineXRight) * tileSize, (y + height) * tileSize);
+    ctx.stroke();
+  }
 }
 
