@@ -914,44 +914,53 @@ function drawBasketball(
   }
 
   // 3-point lines
-  // Basket is 5.25ft from baseline (4ft backboard + 1.25ft to center of rim)
+  // Basket is 5.25ft from baseline (4ft backboard + 1.25ft to center)
   const basketPos = baselineOffset + 5.25;
-  const threePointRadius = Math.floor(specs.threePoint); // NBA: 24ft, NCAA: 22ft, HS: 20ft
-  const cornerDist = Math.floor(specs.threePointCorner); // Distance in corners
+  const threePointRadius = Math.floor(specs.threePoint);
+  const cornerDist = Math.floor(specs.threePointCorner);
   
-  // Only draw if we have enough space
-  if (basketPos + threePointRadius <= width && cornerDist < width) {
-    // Left 3-point line
+  // Calculate where arc should end (14ft from center on each side)
+  const arcEndHeight = 14; // Standard for all regulations
+  
+  // Left 3-point line
+  if (basketPos + threePointRadius <= width) {
     ctx.beginPath();
-    // Start at top corner
+    // Top corner straight
     ctx.moveTo((x + cornerDist) * tileSize, y * tileSize);
-    ctx.lineTo((x + cornerDist) * tileSize, (y + 3) * tileSize); // 3 tiles down
-    // Arc around basket
+    ctx.lineTo((x + cornerDist) * tileSize, (y + (height / 2 - arcEndHeight)) * tileSize);
+    
+    // Arc around basket (180 degree arc from top to bottom)
     ctx.arc(
       (x + basketPos) * tileSize,
       (y + height / 2) * tileSize,
       threePointRadius * tileSize,
-      -Math.asin((height / 2 - 3) / threePointRadius),
-      Math.asin((height / 2 - 3) / threePointRadius)
+      -Math.PI / 2,
+      Math.PI / 2
     );
-    // Bottom corner
+    
+    // Bottom corner straight
     ctx.lineTo((x + cornerDist) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
 
-  if (!isHalfCourt && basketPos + threePointRadius <= width / 2) {
+  if (!isHalfCourt && basketPos + threePointRadius <= width) {
     // Right 3-point line
     const rightBasketPos = width - basketPos;
     ctx.beginPath();
+    // Top corner
     ctx.moveTo((x + width - cornerDist) * tileSize, y * tileSize);
-    ctx.lineTo((x + width - cornerDist) * tileSize, (y + 3) * tileSize);
+    ctx.lineTo((x + width - cornerDist) * tileSize, (y + (height / 2 - arcEndHeight)) * tileSize);
+    
+    // Arc (180 degrees from bottom to top)
     ctx.arc(
       (x + rightBasketPos) * tileSize,
       (y + height / 2) * tileSize,
       threePointRadius * tileSize,
-      Math.PI - Math.asin((height / 2 - 3) / threePointRadius),
-      Math.PI + Math.asin((height / 2 - 3) / threePointRadius)
+      Math.PI / 2,
+      (3 * Math.PI) / 2
     );
+    
+    // Bottom corner
     ctx.lineTo((x + width - cornerDist) * tileSize, (y + height) * tileSize);
     ctx.stroke();
   }
