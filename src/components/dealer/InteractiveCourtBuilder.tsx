@@ -916,28 +916,27 @@ function drawBasketball(
     }
   }
 
-  // 3-point line - starts from baseline, wraps around lane
-  const cornerXDist = Math.min(22, baselineOffset + 22); // Corner 3-point distance from baseline
-  const basketCenterX = baselineOffset + 5;
-  const arcRadius = 17; // Fixed reasonable radius
+  // 3-point line - JUST vertical straight + arc + vertical straight (D-shape)
+  const cornerXDist = baselineOffset + 22; // 22 tiles from baseline for the vertical line
+  const arcRadius = 17; // Arc radius in tiles
   
-  // Corner sections run along sidelines
-  const cornerYDist = 3; // 3 tiles from top/bottom sideline (corner straight length)
+  // Corner Y positions (how far down from top/up from bottom the straight goes)
+  const straightTop = 3; // Start 3 tiles from top
+  const straightBottom = height - 3; // End 3 tiles from bottom
   
-  // Where arc meets the vertical section
-  const arcTopY = height / 2 - arcRadius;
-  const arcBottomY = height / 2 + arcRadius;
+  // Arc starts/ends
+  const arcTop = height / 2 - arcRadius;
+  const arcBottom = height / 2 + arcRadius;
   
-  // Only draw if space permits
+  // Only draw if fits
   if (cornerXDist < (isHalfCourt ? width - 5 : width / 2 - 10)) {
     // Left 3-point line
     ctx.beginPath();
-    // Top corner - short horizontal from baseline
-    ctx.moveTo((x + baselineOffset) * tileSize, (y + cornerYDist) * tileSize);
-    ctx.lineTo((x + cornerXDist) * tileSize, (y + cornerYDist) * tileSize);
-    // Vertical down to arc
-    ctx.lineTo((x + cornerXDist) * tileSize, (y + arcTopY) * tileSize);
-    // Arc wrapping around (from top to bottom)
+    // Vertical straight from top
+    ctx.moveTo((x + cornerXDist) * tileSize, (y + straightTop) * tileSize);
+    ctx.lineTo((x + cornerXDist) * tileSize, (y + arcTop) * tileSize);
+    
+    // Arc bulging toward center
     ctx.arc(
       (x + cornerXDist) * tileSize,
       (y + height / 2) * tileSize,
@@ -945,37 +944,35 @@ function drawBasketball(
       -Math.PI / 2,
       Math.PI / 2
     );
-    // Vertical from arc to corner
-    ctx.lineTo((x + cornerXDist) * tileSize, (y + height - cornerYDist) * tileSize);
-    // Horizontal back to baseline
-    ctx.lineTo((x + baselineOffset) * tileSize, (y + height - cornerYDist) * tileSize);
+    
+    // Vertical straight to bottom
+    ctx.lineTo((x + cornerXDist) * tileSize, (y + straightBottom) * tileSize);
     ctx.stroke();
   }
 
-  if (!isHalfCourt && cornerXDist < width / 2 - 10) {
+  if (!isHalfCourt) {
     // Right 3-point line
     const rightCornerXDist = width - cornerXDist;
-    const rightBaseline = width - baselineOffset;
     
-    ctx.beginPath();
-    // Top corner
-    ctx.moveTo((x + rightBaseline) * tileSize, (y + cornerYDist) * tileSize);
-    ctx.lineTo((x + rightCornerXDist) * tileSize, (y + cornerYDist) * tileSize);
-    // Vertical to arc
-    ctx.lineTo((x + rightCornerXDist) * tileSize, (y + arcTopY) * tileSize);
-    // Arc
-    ctx.arc(
-      (x + rightCornerXDist) * tileSize,
-      (y + height / 2) * tileSize,
-      arcRadius * tileSize,
-      Math.PI / 2,
-      (3 * Math.PI) / 2
-    );
-    // Vertical from arc
-    ctx.lineTo((x + rightCornerXDist) * tileSize, (y + height - cornerYDist) * tileSize);
-    // Horizontal to baseline
-    ctx.lineTo((x + rightBaseline) * tileSize, (y + height - cornerYDist) * tileSize);
-    ctx.stroke();
+    if (rightCornerXDist > width / 2 + 10) {
+      ctx.beginPath();
+      // Vertical from top
+      ctx.moveTo((x + rightCornerXDist) * tileSize, (y + straightTop) * tileSize);
+      ctx.lineTo((x + rightCornerXDist) * tileSize, (y + arcTop) * tileSize);
+      
+      // Arc bulging toward center  
+      ctx.arc(
+        (x + rightCornerXDist) * tileSize,
+        (y + height / 2) * tileSize,
+        arcRadius * tileSize,
+        Math.PI / 2,
+        (3 * Math.PI) / 2
+      );
+      
+      // Vertical to bottom
+      ctx.lineTo((x + rightCornerXDist) * tileSize, (y + straightBottom) * tileSize);
+      ctx.stroke();
+    }
   }
 
   // Court border in border color
