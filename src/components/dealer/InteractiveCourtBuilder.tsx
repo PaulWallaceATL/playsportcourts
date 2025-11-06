@@ -916,57 +916,45 @@ function drawBasketball(
     }
   }
 
-  // 3-POINT LINE - Copy reference image exactly
-  // Corner 3-point runs parallel to sideline, arc at top
-  
+  // 3-POINT LINE - SIMPLEST POSSIBLE
   const basketX = baselineOffset + 5;
-  const arcRadius = 16; // Arc radius
+  const radius = 18;
   
-  // Corner section Y position and length
-  const cornerY = 3; // 3 tiles from sideline
-  const cornerEndX = 22; // Where corner section ends (X distance from baseline)
-  
-  // Draw if space permits
-  if (basketX + arcRadius < (isHalfCourt ? width - 5 : width / 2 - 10)) {
-    // LEFT side
+  // Only draw if fits
+  if (basketX + radius < (isHalfCourt ? width - 5 : width / 2 - 10)) {
+    // LEFT
     ctx.beginPath();
-    // Top corner - horizontal line from baseline
-    ctx.moveTo((x + baselineOffset) * tileSize, (y + cornerY) * tileSize);
-    ctx.lineTo((x + basketX + cornerEndX) * tileSize, (y + cornerY) * tileSize);
-    // Vertical down to arc
-    ctx.lineTo((x + basketX + cornerEndX) * tileSize, (y + height / 2 - 12) * tileSize);
-    // Arc
+    // Top corner - starts at baseline, 3 tiles from top
+    ctx.moveTo((x + baselineOffset) * tileSize, (y + 3) * tileSize);
+    ctx.lineTo((x + baselineOffset + 3) * tileSize, (y + 3) * tileSize);
+    // Arc from basket
     ctx.arc(
       (x + basketX) * tileSize,
       (y + height / 2) * tileSize,
-      arcRadius * tileSize,
-      -Math.PI / 2,
-      Math.PI / 2
+      radius * tileSize,
+      -Math.PI * 0.6,
+      Math.PI * 0.6
     );
-    // Vertical up from arc
-    ctx.lineTo((x + basketX + cornerEndX) * tileSize, (y + height - cornerY) * tileSize);
-    // Bottom corner horizontal
-    ctx.lineTo((x + baselineOffset) * tileSize, (y + height - cornerY) * tileSize);
+    // Bottom corner - back to baseline, 3 tiles from bottom
+    ctx.lineTo((x + baselineOffset) * tileSize, (y + height - 3) * tileSize);
     ctx.stroke();
   }
 
-  if (!isHalfCourt && basketX + arcRadius < width / 2 - 10) {
-    // RIGHT side
+  if (!isHalfCourt && basketX + radius < width / 2 - 10) {
+    // RIGHT  
     const rightBasketX = width - basketX;
     
     ctx.beginPath();
-    ctx.moveTo((x + width - baselineOffset) * tileSize, (y + cornerY) * tileSize);
-    ctx.lineTo((x + rightBasketX - cornerEndX) * tileSize, (y + cornerY) * tileSize);
-    ctx.lineTo((x + rightBasketX - cornerEndX) * tileSize, (y + height / 2 - 12) * tileSize);
+    ctx.moveTo((x + width - baselineOffset) * tileSize, (y + 3) * tileSize);
+    ctx.lineTo((x + width - baselineOffset - 3) * tileSize, (y + 3) * tileSize);
     ctx.arc(
       (x + rightBasketX) * tileSize,
       (y + height / 2) * tileSize,
-      arcRadius * tileSize,
-      Math.PI / 2,
-      (3 * Math.PI) / 2
+      radius * tileSize,
+      Math.PI - Math.PI * 0.6,
+      Math.PI + Math.PI * 0.6
     );
-    ctx.lineTo((x + rightBasketX - cornerEndX) * tileSize, (y + height - cornerY) * tileSize);
-    ctx.lineTo((x + width - baselineOffset) * tileSize, (y + height - cornerY) * tileSize);
+    ctx.lineTo((x + width - baselineOffset) * tileSize, (y + height - 3) * tileSize);
     ctx.stroke();
   }
 
