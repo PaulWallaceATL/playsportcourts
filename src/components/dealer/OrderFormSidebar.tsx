@@ -9,8 +9,10 @@ import {
   CheckCircle,
   X,
   Send,
+  FileText,
 } from "lucide-react";
 import { CourtVisualizer } from "./CourtVisualizer";
+import { OrderSummary } from "./OrderSummary";
 
 // Available tile types with pricing
 const TILE_TYPES = [
@@ -129,6 +131,7 @@ export function OrderFormSidebar() {
   const [submitting, setSubmitting] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
+  const [showSummary, setShowSummary] = React.useState(false);
 
   // Calculate total square footage
   const squareFeet = React.useMemo(() => {
@@ -208,7 +211,18 @@ export function OrderFormSidebar() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] gap-6">
+    <>
+      {/* Order Summary Modal */}
+      {showSummary && (
+        <OrderSummary
+          formData={formData}
+          pricing={pricing}
+          squareFeet={squareFeet}
+          onClose={() => setShowSummary(false)}
+        />
+      )}
+
+      <div className="flex h-[calc(100vh-8rem)] gap-6">
       {/* Sidebar - Scrollable Form */}
       <div
         className={`transition-all duration-300 ${
@@ -641,8 +655,17 @@ export function OrderFormSidebar() {
               )}
             </form>
 
-            {/* Submit Button - Sticky at bottom */}
-            <div className="pt-4 mt-4 border-t border-white/10">
+            {/* Action Buttons - Sticky at bottom */}
+            <div className="pt-4 mt-4 border-t border-white/10 space-y-2">
+              <button
+                type="button"
+                onClick={() => setShowSummary(true)}
+                disabled={squareFeet === 0}
+                className="btn-premium-secondary w-full flex items-center justify-center gap-2 text-sm"
+              >
+                <FileText className="w-4 h-4" />
+                View Order Summary
+              </button>
               <button
                 type="submit"
                 onClick={handleSubmit}
@@ -728,6 +751,7 @@ export function OrderFormSidebar() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
