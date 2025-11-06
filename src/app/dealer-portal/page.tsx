@@ -22,7 +22,7 @@ import { DashboardMetrics } from "@/components/dealer/DashboardMetrics";
 import { ProductCatalog } from "@/components/dealer/ProductCatalog";
 import { ShoppingCart } from "@/components/dealer/ShoppingCart";
 import { OrdersTable, Order } from "@/components/dealer/OrdersTable";
-import { OrderForm } from "@/components/dealer/OrderForm";
+import { OrderFormSidebar } from "@/components/dealer/OrderFormSidebar";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 type TabType = "dashboard" | "catalog" | "cart" | "orders" | "order-form";
@@ -361,15 +361,7 @@ function DealerPortalContent() {
           )}
 
           {activeTab === "order-form" && (
-            <div>
-              <div className="mb-8 card-premium">
-                <h2 className="heading-2 mb-2">Custom Order Form</h2>
-                <p className="text-body text-muted-foreground">
-                  Create a detailed custom order with specific dimensions, colors, and game line configurations.
-                </p>
-              </div>
-              <OrderForm />
-            </div>
+            <OrderFormSidebar />
           )}
 
           {activeTab === "cart" && (
