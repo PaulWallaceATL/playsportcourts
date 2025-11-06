@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Maximize2, Minimize2, Move, ZoomIn, ZoomOut } from "lucide-react";
+import { Maximize2, Minimize2, ZoomIn, ZoomOut } from "lucide-react";
 
 interface GameElement {
   id: string;
@@ -431,11 +431,10 @@ export function InteractiveCourtBuilder({
     
     setElements(prev => prev.map(el => {
       if (el.id === selectedElement) {
-        let newWidth = Math.max(4, Math.min(el.width + dWidth, Math.ceil(courtLength) - el.x));
-        let newHeight = Math.max(4, Math.min(el.height + dHeight, Math.ceil(courtWidth) - el.y));
-        
         // Keep 4 square as a perfect square and even number
         if (el.type === "4square") {
+          const newWidth = Math.max(4, Math.min(el.width + dWidth, Math.ceil(courtLength) - el.x));
+          const newHeight = Math.max(4, Math.min(el.height + dHeight, Math.ceil(courtWidth) - el.y));
           const size = Math.max(newWidth, newHeight);
           const evenSize = Math.floor(size / 2) * 2; // Ensure even number
           return { ...el, width: Math.max(4, evenSize), height: Math.max(4, evenSize) };
@@ -443,9 +442,12 @@ export function InteractiveCourtBuilder({
         
         // Ensure hopscotch stays 2 tiles wide
         if (el.type === "hopscotch") {
-          newWidth = 2;
+          const newHeight = Math.max(4, Math.min(el.height + dHeight, Math.ceil(courtWidth) - el.y));
+          return { ...el, width: 2, height: newHeight };
         }
         
+        const newWidth = Math.max(4, Math.min(el.width + dWidth, Math.ceil(courtLength) - el.x));
+        const newHeight = Math.max(4, Math.min(el.height + dHeight, Math.ceil(courtWidth) - el.y));
         return { ...el, width: newWidth, height: newHeight };
       }
       return el;
