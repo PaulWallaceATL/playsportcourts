@@ -98,6 +98,9 @@ interface OrderFormData {
   badmintonCourtColor: string;
   volleyballCourtColor: string;
   futsalCourtColor: string;
+  fourSquareColor: string;
+  cornholeColor: string;
+  battersBoxColor: string;
 }
 
 export function OrderFormSidebar() {
@@ -143,6 +146,9 @@ export function OrderFormSidebar() {
     badmintonCourtColor: "Emerald Green",
     volleyballCourtColor: "Bright Red",
     futsalCourtColor: "Orange",
+    fourSquareColor: "Royal Blue",
+    cornholeColor: "Bright Red",
+    battersBoxColor: "Titanium",
   });
 
   const [logoFile, setLogoFile] = React.useState<File | null>(null);
@@ -232,6 +238,21 @@ export function OrderFormSidebar() {
 
   const showFutsalColors = React.useMemo(
     () => formData.gameLines.some((line) => ["Futsal - Reduced", "Futsal - Regulated"].includes(line)),
+    [formData.gameLines]
+  );
+
+  const show4SquareColors = React.useMemo(
+    () => formData.gameLines.includes("4 Square"),
+    [formData.gameLines]
+  );
+
+  const showCornholeColors = React.useMemo(
+    () => formData.gameLines.includes("Cornhole"),
+    [formData.gameLines]
+  );
+
+  const showBattersBoxColors = React.useMemo(
+    () => formData.gameLines.includes("Batters Box"),
     [formData.gameLines]
   );
 
@@ -579,10 +600,10 @@ export function OrderFormSidebar() {
               </div>
 
               {/* Sport Colors */}
-              {(showPickleballColors || showBasketballColors || showShuffleboardColors || showTennisColors || showSoccerColors || showHockeyColors || showBadmintonColors || showVolleyballColors || showFutsalColors) && (
+              {(showPickleballColors || showBasketballColors || showShuffleboardColors || showTennisColors || showSoccerColors || showHockeyColors || showBadmintonColors || showVolleyballColors || showFutsalColors || show4SquareColors || showCornholeColors || showBattersBoxColors) && (
                 <div className="space-y-3 lg:space-y-4">
                   <h3 className="font-bold text-xs lg:text-sm uppercase tracking-wider text-[var(--brand-primary)]">
-                    Sport Colors
+                    Game Element Colors
                   </h3>
 
                   {showPickleballColors && (
@@ -810,6 +831,51 @@ export function OrderFormSidebar() {
                       </div>
                     </div>
                   )}
+
+                  {show4SquareColors && (
+                    <div className="space-y-3">
+                      <div className="text-xs font-semibold text-blue-400">4 Square</div>
+                      <div className="space-y-2">
+                        <div>
+                          <label className="text-xs block mb-1">Square Color</label>
+                          <ColorSelector
+                            value={formData.fourSquareColor}
+                            onChange={(color) => updateFormData("fourSquareColor", color)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {showCornholeColors && (
+                    <div className="space-y-3">
+                      <div className="text-xs font-semibold text-red-400">Cornhole</div>
+                      <div className="space-y-2">
+                        <div>
+                          <label className="text-xs block mb-1">Board Color</label>
+                          <ColorSelector
+                            value={formData.cornholeColor}
+                            onChange={(color) => updateFormData("cornholeColor", color)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {showBattersBoxColors && (
+                    <div className="space-y-3">
+                      <div className="text-xs font-semibold text-gray-400">Batters Box</div>
+                      <div className="space-y-2">
+                        <div>
+                          <label className="text-xs block mb-1">Box Color</label>
+                          <ColorSelector
+                            value={formData.battersBoxColor}
+                            onChange={(color) => updateFormData("battersBoxColor", color)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -938,6 +1004,9 @@ export function OrderFormSidebar() {
               badmintonCourtColor={formData.badmintonCourtColor}
               volleyballCourtColor={formData.volleyballCourtColor}
               futsalCourtColor={formData.futsalCourtColor}
+              fourSquareColor={formData.fourSquareColor}
+              cornholeColor={formData.cornholeColor}
+              battersBoxColor={formData.battersBoxColor}
               linePaintingColor={formData.linePainting ? formData.linePaintingColor : undefined}
             />
           ) : (

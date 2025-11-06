@@ -509,7 +509,7 @@ export function InteractiveCourtBuilder({
 
   React.useEffect(() => {
     drawCourt();
-  }, [courtLength, courtWidth, baseTileColor, elements, selectedElement, isFullscreen, scale, basketballCourtColor, basketballLaneColor, basketballBorderColor, basketballRegulation, basketballOverhang, pickleballInnerCourtColor, pickleballOuterCourtColor, pickleballKitchenColor, shuffleboardCourtColor, shuffleboardShootingAreaColor, shuffleboardBorderColor, tennisCourtColor, tennisServiceBoxColor, soccerFieldColor, soccerPenaltyBoxColor, hockeyIceColor, hockeyCreaseColor, gameLines]);
+  }, [courtLength, courtWidth, baseTileColor, elements, selectedElement, isFullscreen, scale, basketballCourtColor, basketballLaneColor, basketballBorderColor, basketballRegulation, basketballOverhang, pickleballInnerCourtColor, pickleballOuterCourtColor, pickleballKitchenColor, shuffleboardCourtColor, shuffleboardShootingAreaColor, shuffleboardBorderColor, tennisCourtColor, tennisServiceBoxColor, soccerFieldColor, soccerPenaltyBoxColor, hockeyIceColor, hockeyCreaseColor, badmintonCourtColor, volleyballCourtColor, futsalCourtColor, fourSquareColor, cornholeColor, battersBoxColor, linePaintingColor, gameLines]);
 
   // Handle canvas interactions
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
