@@ -916,62 +916,57 @@ function drawBasketball(
     }
   }
 
-  // 3-POINT LINE - SIMPLE AND CORRECT
-  // Just draw from baseline: short horizontal, then arc wrapping around
+  // 3-POINT LINE - Copy reference image exactly
+  // Corner 3-point runs parallel to sideline, arc at top
   
   const basketX = baselineOffset + 5;
-  const radius = 18; // Simple fixed radius that works
+  const arcRadius = 16; // Arc radius
   
-  // Corner 3-point is 22ft from basket, runs parallel to sideline (horizontal)
-  const cornerYPos = 3; // How far from sideline the corner straight is
-  const cornerLength = 5; // How long the corner straight is (horizontal from baseline)
+  // Corner section Y position and length
+  const cornerY = 3; // 3 tiles from sideline
+  const cornerEndX = 22; // Where corner section ends (X distance from baseline)
   
-  // Only draw if space permits
-  if (basketX + radius < (isHalfCourt ? width - 5 : width / 2 - 10)) {
-    // LEFT 3-point line
+  // Draw if space permits
+  if (basketX + arcRadius < (isHalfCourt ? width - 5 : width / 2 - 10)) {
+    // LEFT side
     ctx.beginPath();
-    // Top corner (horizontal along sideline)
-    ctx.moveTo((x + baselineOffset) * tileSize, (y + cornerYPos) * tileSize);
-    ctx.lineTo((x + baselineOffset + cornerLength) * tileSize, (y + cornerYPos) * tileSize);
-    // Diagonal to arc
-    ctx.lineTo((x + basketX + radius) * tileSize, (y + height * 0.28) * tileSize);
-    // Arc (semicircle facing right)
+    // Top corner - horizontal line from baseline
+    ctx.moveTo((x + baselineOffset) * tileSize, (y + cornerY) * tileSize);
+    ctx.lineTo((x + basketX + cornerEndX) * tileSize, (y + cornerY) * tileSize);
+    // Vertical down to arc
+    ctx.lineTo((x + basketX + cornerEndX) * tileSize, (y + height / 2 - 12) * tileSize);
+    // Arc
     ctx.arc(
       (x + basketX) * tileSize,
       (y + height / 2) * tileSize,
-      radius * tileSize,
-      -Math.PI / 2.2,
-      Math.PI / 2.2
+      arcRadius * tileSize,
+      -Math.PI / 2,
+      Math.PI / 2
     );
-    // Diagonal from arc
-    ctx.lineTo((x + baselineOffset + cornerLength) * tileSize, (y + height - cornerYPos) * tileSize);
-    // Bottom corner (horizontal)
-    ctx.lineTo((x + baselineOffset) * tileSize, (y + height - cornerYPos) * tileSize);
+    // Vertical up from arc
+    ctx.lineTo((x + basketX + cornerEndX) * tileSize, (y + height - cornerY) * tileSize);
+    // Bottom corner horizontal
+    ctx.lineTo((x + baselineOffset) * tileSize, (y + height - cornerY) * tileSize);
     ctx.stroke();
   }
 
-  if (!isHalfCourt && basketX + radius < width / 2 - 10) {
-    // RIGHT 3-point line
+  if (!isHalfCourt && basketX + arcRadius < width / 2 - 10) {
+    // RIGHT side
     const rightBasketX = width - basketX;
     
     ctx.beginPath();
-    // Top corner
-    ctx.moveTo((x + width - baselineOffset) * tileSize, (y + cornerYPos) * tileSize);
-    ctx.lineTo((x + width - baselineOffset - cornerLength) * tileSize, (y + cornerYPos) * tileSize);
-    // Diagonal to arc
-    ctx.lineTo((x + rightBasketX - radius) * tileSize, (y + height * 0.28) * tileSize);
-    // Arc (semicircle facing left)
+    ctx.moveTo((x + width - baselineOffset) * tileSize, (y + cornerY) * tileSize);
+    ctx.lineTo((x + rightBasketX - cornerEndX) * tileSize, (y + cornerY) * tileSize);
+    ctx.lineTo((x + rightBasketX - cornerEndX) * tileSize, (y + height / 2 - 12) * tileSize);
     ctx.arc(
       (x + rightBasketX) * tileSize,
       (y + height / 2) * tileSize,
-      radius * tileSize,
-      Math.PI / 2.2 + Math.PI,
-      -Math.PI / 2.2 + Math.PI
+      arcRadius * tileSize,
+      Math.PI / 2,
+      (3 * Math.PI) / 2
     );
-    // Diagonal from arc
-    ctx.lineTo((x + width - baselineOffset - cornerLength) * tileSize, (y + height - cornerYPos) * tileSize);
-    // Bottom corner
-    ctx.lineTo((x + width - baselineOffset) * tileSize, (y + height - cornerYPos) * tileSize);
+    ctx.lineTo((x + rightBasketX - cornerEndX) * tileSize, (y + height - cornerY) * tileSize);
+    ctx.lineTo((x + width - baselineOffset) * tileSize, (y + height - cornerY) * tileSize);
     ctx.stroke();
   }
 
