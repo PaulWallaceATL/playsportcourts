@@ -95,6 +95,9 @@ interface OrderFormData {
   soccerPenaltyBoxColor: string;
   hockeyIceColor: string;
   hockeyCreaseColor: string;
+  badmintonCourtColor: string;
+  volleyballCourtColor: string;
+  futsalCourtColor: string;
 }
 
 export function OrderFormSidebar() {
@@ -137,6 +140,9 @@ export function OrderFormSidebar() {
     soccerPenaltyBoxColor: "Olive Green",
     hockeyIceColor: "Light Blue",
     hockeyCreaseColor: "Royal Blue",
+    badmintonCourtColor: "Emerald Green",
+    volleyballCourtColor: "Bright Red",
+    futsalCourtColor: "Orange",
   });
 
   const [logoFile, setLogoFile] = React.useState<File | null>(null);
@@ -211,6 +217,21 @@ export function OrderFormSidebar() {
       formData.gameLines.some((line) =>
         ["Hockey Regulation", "Hockey Crease"].includes(line)
       ),
+    [formData.gameLines]
+  );
+
+  const showBadmintonColors = React.useMemo(
+    () => formData.gameLines.includes("Badminton"),
+    [formData.gameLines]
+  );
+
+  const showVolleyballColors = React.useMemo(
+    () => formData.gameLines.includes("Volleyball"),
+    [formData.gameLines]
+  );
+
+  const showFutsalColors = React.useMemo(
+    () => formData.gameLines.some((line) => ["Futsal - Reduced", "Futsal - Regulated"].includes(line)),
     [formData.gameLines]
   );
 
@@ -558,7 +579,7 @@ export function OrderFormSidebar() {
               </div>
 
               {/* Sport Colors */}
-              {(showPickleballColors || showBasketballColors || showShuffleboardColors || showTennisColors || showSoccerColors || showHockeyColors) && (
+              {(showPickleballColors || showBasketballColors || showShuffleboardColors || showTennisColors || showSoccerColors || showHockeyColors || showBadmintonColors || showVolleyballColors || showFutsalColors) && (
                 <div className="space-y-3 lg:space-y-4">
                   <h3 className="font-bold text-xs lg:text-sm uppercase tracking-wider text-[var(--brand-primary)]">
                     Sport Colors
@@ -744,6 +765,51 @@ export function OrderFormSidebar() {
                       </div>
                     </div>
                   )}
+
+                  {showBadmintonColors && (
+                    <div className="space-y-3">
+                      <div className="text-xs font-semibold text-green-400">Badminton</div>
+                      <div className="space-y-2">
+                        <div>
+                          <label className="text-xs block mb-1">Court Color</label>
+                          <ColorSelector
+                            value={formData.badmintonCourtColor}
+                            onChange={(color) => updateFormData("badmintonCourtColor", color)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {showVolleyballColors && (
+                    <div className="space-y-3">
+                      <div className="text-xs font-semibold text-red-400">Volleyball</div>
+                      <div className="space-y-2">
+                        <div>
+                          <label className="text-xs block mb-1">Court Color</label>
+                          <ColorSelector
+                            value={formData.volleyballCourtColor}
+                            onChange={(color) => updateFormData("volleyballCourtColor", color)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {showFutsalColors && (
+                    <div className="space-y-3">
+                      <div className="text-xs font-semibold text-orange-400">Futsal</div>
+                      <div className="space-y-2">
+                        <div>
+                          <label className="text-xs block mb-1">Court Color</label>
+                          <ColorSelector
+                            value={formData.futsalCourtColor}
+                            onChange={(color) => updateFormData("futsalCourtColor", color)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -869,6 +935,10 @@ export function OrderFormSidebar() {
               soccerPenaltyBoxColor={formData.soccerPenaltyBoxColor}
               hockeyIceColor={formData.hockeyIceColor}
               hockeyCreaseColor={formData.hockeyCreaseColor}
+              badmintonCourtColor={formData.badmintonCourtColor}
+              volleyballCourtColor={formData.volleyballCourtColor}
+              futsalCourtColor={formData.futsalCourtColor}
+              linePaintingColor={formData.linePainting ? formData.linePaintingColor : undefined}
             />
           ) : (
             <div className="h-full min-h-[400px] card-premium flex items-center justify-center p-6">

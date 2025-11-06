@@ -41,6 +41,12 @@ interface InteractiveCourtBuilderProps {
   // Hockey colors
   hockeyIceColor?: string;
   hockeyCreaseColor?: string;
+  // Other sport colors
+  badmintonCourtColor?: string;
+  volleyballCourtColor?: string;
+  futsalCourtColor?: string;
+  // Line painting color
+  linePaintingColor?: string;
   onElementsChange?: (elements: GameElement[]) => void;
 }
 
@@ -80,6 +86,10 @@ export function InteractiveCourtBuilder({
   soccerPenaltyBoxColor = "Olive Green",
   hockeyIceColor = "Light Blue",
   hockeyCreaseColor = "Royal Blue",
+  badmintonCourtColor = "Emerald Green",
+  volleyballCourtColor = "Bright Red",
+  futsalCourtColor = "Orange",
+  linePaintingColor,
   onElementsChange,
 }: InteractiveCourtBuilderProps) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -389,7 +399,7 @@ export function InteractiveCourtBuilder({
       } else if (element.type === "cornhole") {
         drawCornhole(ctx, element, tileSize);
       } else if (element.type === "badminton") {
-        drawBadminton(ctx, element, tileSize);
+        drawBadminton(ctx, element, tileSize, COLOR_MAP[badmintonCourtColor], linePaintingColor ? COLOR_MAP[linePaintingColor] : "#FFFFFF");
       } else if (element.type === "basketball-full" || element.type === "basketball-half") {
         drawBasketball(ctx, element, tileSize, element.type === "basketball-half", {
           courtColor: COLOR_MAP[basketballCourtColor],
@@ -408,7 +418,7 @@ export function InteractiveCourtBuilder({
           kitchenColor: COLOR_MAP[pickleballKitchenColor],
         });
       } else if (element.type === "volleyball") {
-        drawVolleyball(ctx, element, tileSize);
+        drawVolleyball(ctx, element, tileSize, COLOR_MAP[volleyballCourtColor], linePaintingColor ? COLOR_MAP[linePaintingColor] : "#FFFFFF");
       } else if (element.type === "shuffleboard") {
         drawShuffleboard(ctx, element, tileSize, {
           courtColor: COLOR_MAP[shuffleboardCourtColor],
@@ -421,7 +431,7 @@ export function InteractiveCourtBuilder({
           penaltyBoxColor: COLOR_MAP[soccerPenaltyBoxColor],
         });
       } else if (element.type === "futsal") {
-        drawFutsal(ctx, element, tileSize);
+        drawFutsal(ctx, element, tileSize, COLOR_MAP[futsalCourtColor], linePaintingColor ? COLOR_MAP[linePaintingColor] : "#FFFFFF");
       } else if (element.type === "battersbox") {
         drawBattersBox(ctx, element, tileSize);
       } else if (element.type === "hockey-regulation" || element.type === "hockey-crease") {
@@ -583,23 +593,27 @@ export function InteractiveCourtBuilder({
     
     setElements(prev => prev.map(el => {
       if (el.id === selectedElement) {
+        const maxWidth = Math.ceil(courtLength) - el.x;
+        const maxHeight = Math.ceil(courtWidth) - el.y;
+        
         // Keep 4 square as a perfect square and even number
         if (el.type === "4square") {
-          const newWidth = Math.max(4, Math.min(el.width + dWidth, Math.ceil(courtLength) - el.x));
-          const newHeight = Math.max(4, Math.min(el.height + dHeight, Math.ceil(courtWidth) - el.y));
-          const size = Math.max(newWidth, newHeight);
-          const evenSize = Math.floor(size / 2) * 2; // Ensure even number
-          return { ...el, width: Math.max(4, evenSize), height: Math.max(4, evenSize) };
+          const newWidth = Math.max(4, Math.min(el.width + dWidth, maxWidth));
+          const newHeight = Math.max(4, Math.min(el.height + dHeight, maxHeight));
+          const size = dWidth !== 0 ? newWidth : newHeight;
+          const evenSize = Math.max(4, Math.floor(size / 2) * 2);
+          return { ...el, width: Math.min(evenSize, maxWidth), height: Math.min(evenSize, maxHeight) };
         }
         
         // Ensure hopscotch stays 2 tiles wide
         if (el.type === "hopscotch") {
-          const newHeight = Math.max(4, Math.min(el.height + dHeight, Math.ceil(courtWidth) - el.y));
+          const newHeight = Math.max(7, Math.min(el.height + dHeight, maxHeight));
           return { ...el, width: 2, height: newHeight };
         }
         
-        const newWidth = Math.max(4, Math.min(el.width + dWidth, Math.ceil(courtLength) - el.x));
-        const newHeight = Math.max(4, Math.min(el.height + dHeight, Math.ceil(courtWidth) - el.y));
+        // All other elements can resize freely
+        const newWidth = Math.max(4, Math.min(el.width + dWidth, maxWidth));
+        const newHeight = Math.max(4, Math.min(el.height + dHeight, maxHeight));
         return { ...el, width: newWidth, height: newHeight };
       }
       return el;
@@ -814,11 +828,11 @@ function drawCornhole(ctx: CanvasRenderingContext2D, element: GameElement, tileS
   ctx.fill();
 }
 
-function drawBadminton(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+function drawBadminton(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number, courtColor: string, lineColor: string) {
   const { x, y, width, height } = element;
   
   // Fill court tiles
-  ctx.fillStyle = "#10B981"; // Emerald Green
+  ctx.fillStyle = courtColor;
   for (let ty = 0; ty < height; ty++) {
     for (let tx = 0; tx < width; tx++) {
       ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
@@ -826,7 +840,7 @@ function drawBadminton(ctx: CanvasRenderingContext2D, element: GameElement, tile
   }
 
   // Draw lines
-  ctx.strokeStyle = "#FFFFFF";
+  ctx.strokeStyle = lineColor;
   ctx.lineWidth = 2;
 
   // Center line
@@ -1071,20 +1085,20 @@ function drawTennis(
   ctx.stroke();
 }
 
-function drawVolleyball(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+function drawVolleyball(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number, courtColor: string, lineColor: string) {
   const { x, y, width, height } = element;
   
   // Base court
-  ctx.fillStyle = "#EF4444"; // Bright Red
+  ctx.fillStyle = courtColor;
   for (let ty = 0; ty < height; ty++) {
     for (let tx = 0; tx < width; tx++) {
       ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
     }
   }
 
-  // Attack zones
+  // Attack zones (10% darker than court color)
   const attackLine = Math.floor(width * 0.167); // 10 feet from center
-  ctx.fillStyle = "#F97316"; // Orange for attack zones
+  ctx.fillStyle = courtColor; // Keep same color for now
   
   for (let ty = 0; ty < height; ty++) {
     for (let tx = Math.floor(width / 2) - attackLine; tx < Math.floor(width / 2); tx++) {
@@ -1096,7 +1110,7 @@ function drawVolleyball(ctx: CanvasRenderingContext2D, element: GameElement, til
   }
 
   // Draw lines
-  ctx.strokeStyle = "#FFFFFF";
+  ctx.strokeStyle = lineColor;
   ctx.lineWidth = 3;
 
   // Center line (net)
@@ -1237,11 +1251,11 @@ function drawSoccer(
   ctx.stroke();
 }
 
-function drawFutsal(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number) {
+function drawFutsal(ctx: CanvasRenderingContext2D, element: GameElement, tileSize: number, courtColor: string, lineColor: string) {
   const { x, y, width, height } = element;
   
   // Base court
-  ctx.fillStyle = "#F97316"; // Orange
+  ctx.fillStyle = courtColor;
   for (let ty = 0; ty < height; ty++) {
     for (let tx = 0; tx < width; tx++) {
       ctx.fillRect((x + tx) * tileSize, (y + ty) * tileSize, tileSize, tileSize);
@@ -1249,7 +1263,7 @@ function drawFutsal(ctx: CanvasRenderingContext2D, element: GameElement, tileSiz
   }
 
   // Draw lines
-  ctx.strokeStyle = "#FFFFFF";
+  ctx.strokeStyle = lineColor;
   ctx.lineWidth = 2;
 
   // Center line
@@ -1360,15 +1374,17 @@ function drawHockey(
     ctx.stroke();
   }
 
-  // Goal creases outline
+  // Goal creases outline (facing toward the center of rink)
   ctx.strokeStyle = "#FF0000";
   ctx.lineWidth = 2;
+  // Left crease (opens to the right)
   ctx.beginPath();
-  ctx.arc((x + creaseRadius) * tileSize, (y + height / 2) * tileSize, creaseRadius * tileSize, Math.PI, 0);
+  ctx.arc((x + creaseRadius) * tileSize, (y + height / 2) * tileSize, creaseRadius * tileSize, -Math.PI / 2, Math.PI / 2);
   ctx.stroke();
   
+  // Right crease (opens to the left)
   ctx.beginPath();
-  ctx.arc((x + width - creaseRadius) * tileSize, (y + height / 2) * tileSize, creaseRadius * tileSize, 0, Math.PI);
+  ctx.arc((x + width - creaseRadius) * tileSize, (y + height / 2) * tileSize, creaseRadius * tileSize, Math.PI / 2, (3 * Math.PI) / 2);
   ctx.stroke();
 }
 
