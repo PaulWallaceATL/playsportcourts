@@ -295,36 +295,22 @@ Generated: ${new Date().toLocaleString()}
           </div>
           <div className="flex items-center gap-1 sm:gap-2">
             <button
-              onClick={() => handleDownload("txt")}
-              className="hidden sm:flex btn-premium-secondary items-center gap-2 text-sm"
-              title="Download as text file"
-            >
-              <Download className="w-4 h-4" />
-              <span className="hidden lg:inline">TXT</span>
-            </button>
-            <button
-              onClick={() => handleDownload("pdf")}
-              className="hidden sm:flex btn-premium-secondary items-center gap-2 text-sm"
-              title="Download as PDF"
-            >
-              <FileText className="w-4 h-4" />
-              <span className="hidden lg:inline">PDF</span>
-            </button>
-            <button
               onClick={() => handleDownload("dxf")}
-              className="hidden sm:flex btn-premium-secondary items-center gap-2 text-sm"
+              className="btn-premium-secondary flex items-center gap-2 text-sm px-3 py-2"
               title="Download CAD file (DXF)"
             >
               <Download className="w-4 h-4" />
-              <span className="hidden lg:inline">DXF</span>
+              <span className="hidden sm:inline">CAD/DXF</span>
+              <span className="sm:hidden">CAD</span>
             </button>
             <button
-              onClick={handlePrint}
-              className="hidden sm:flex btn-premium-secondary items-center gap-2 text-sm"
-              title="Print summary"
+              onClick={() => handleDownload("pdf")}
+              className="btn-premium-primary flex items-center gap-2 text-sm px-3 py-2"
+              title="Download as PDF"
             >
-              <Printer className="w-4 h-4" />
-              <span className="hidden lg:inline">Print</span>
+              <FileText className="w-4 h-4" />
+              <span className="hidden sm:inline">Download PDF</span>
+              <span className="sm:hidden">PDF</span>
             </button>
             <button
               onClick={onClose}
@@ -336,7 +322,7 @@ Generated: ${new Date().toLocaleString()}
         </div>
 
         {/* Scrollable Content */}
-        <div className="overflow-y-auto p-3 sm:p-4 lg:p-6 space-y-4 lg:space-y-6" style={{ maxHeight: "calc(95vh - 100px)" }}>
+        <div className="overflow-y-auto overflow-x-hidden p-3 sm:p-4 lg:p-6 space-y-4 lg:space-y-6" style={{ maxHeight: "calc(95vh - 120px)" }}>
           {/* Project Info */}
           <div>
             <h3 className="font-bold text-xs sm:text-sm uppercase tracking-wider text-[var(--brand-primary)] mb-2 sm:mb-3">
