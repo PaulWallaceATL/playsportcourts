@@ -9,8 +9,6 @@ import { PlaySportLogo } from "@/components/ui/PlaySportLogo";
 import { siteContent } from "@/data/home";
 import { getCurrentUser, isDealer } from "@/lib/mock-auth";
 import { cn } from "@/lib/utils";
-import { courtTiles, garageTiles } from "@/data/products";
-import Image from "next/image";
 
 const NAV_ITEMS = [
   { href: "/", label: "Home", dropdown: undefined },
@@ -230,36 +228,13 @@ export function Header() {
                     <Link
                       href={item.href}
                       className={cn(
-                        "block rounded-md px-3 py-2 text-sm font-medium glass-hover",
-                        pathname === item.href ? "text-[var(--primary)]" : "text-foreground/90"
+                        "block rounded-md px-3 py-2 text-sm font-semibold glass-hover",
+                        pathname === item.href ? "text-[var(--brand-primary)]" : "text-white/90"
                       )}
+                      aria-current={pathname === item.href ? "page" : undefined}
                     >
                       {item.label}
                     </Link>
-                    {item.dropdown === "court" && (
-                      <ul className="mt-1 ml-3 grid gap-1">
-                        {courtTiles.map((p) => (
-                          <li key={p.slug}>
-                            <Link href={`/court-tiles/${p.slug}`} className="flex items-center gap-2 rounded px-2 py-1 text-sm hover:bg-foreground/5">
-                              <Image src={p.thumbnail} alt="" width={24} height={24} className="h-6 w-6 rounded object-contain" />
-                              <span>{p.name}</span>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                    {item.dropdown === "garage" && (
-                      <ul className="mt-1 ml-3 grid gap-1">
-                        {garageTiles.map((p) => (
-                          <li key={p.slug}>
-                            <Link href={`/garage-tiles/${p.slug}`} className="flex items-center gap-2 rounded px-2 py-1 text-sm hover:bg-foreground/5">
-                              <Image src={p.thumbnail} alt="" width={24} height={24} className="h-6 w-6 rounded object-contain" />
-                              <span>{p.name}</span>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
                   </li>
                 ))}
               </ul>
