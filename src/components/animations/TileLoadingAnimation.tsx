@@ -9,16 +9,31 @@ export function TileLoadingAnimation() {
     // Hide loading after animation completes
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3000); // 3 second animation
+    }, 5000); // 5 second animation (slower)
 
     return () => clearTimeout(timer);
   }, []);
 
   if (!isLoading) return null;
 
-  // Create a grid of tiles
-  const gridSize = 20; // 20x20 grid
+  // Create a grid representing 12"×12" tiles
+  const gridSize = 16; // 16x16 grid (cleaner, represents court layout)
   const tiles = Array.from({ length: gridSize * gridSize }, (_, i) => i);
+
+  // Actual colors we offer
+  const tileColors = [
+    "#000000", // Black
+    "#2C2C2C", // Graphite
+    "#6B7280", // Titanium
+    "#1E3A8A", // Navy Blue
+    "#2563EB", // Royal Blue
+    "#60A5FA", // Light Blue
+    "#10B981", // Emerald Green
+    "#84CC16", // Olive Green
+    "#EF4444", // Bright Red
+    "#F97316", // Orange
+    "#FDE047", // Yellow
+  ];
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden">
@@ -29,17 +44,10 @@ export function TileLoadingAnimation() {
         {tiles.map((i) => {
           const row = Math.floor(i / gridSize);
           const col = i % gridSize;
-          const delay = (row + col) * 0.02; // Diagonal wave effect
+          const delay = (row + col) * 0.04; // Slower diagonal wave (was 0.02)
           
-          // Random colors for tiles
-          const colors = [
-            "#2563EB", // Royal Blue
-            "#10B981", // Emerald Green  
-            "#F97316", // Orange
-            "#EF4444", // Red
-            "#6B7280", // Gray
-          ];
-          const color = colors[Math.floor(Math.random() * colors.length)];
+          // Use actual tile colors we offer
+          const color = tileColors[Math.floor(Math.random() * tileColors.length)];
           
           return (
             <div
@@ -56,18 +64,21 @@ export function TileLoadingAnimation() {
       </div>
 
       {/* Center Logo */}
-      <div className="relative z-10 text-center animate-fade-in" style={{ animationDelay: "1s" }}>
+      <div className="relative z-10 text-center animate-fade-in" style={{ animationDelay: "1.5s" }}>
         <div className="mb-4">
-          <div className="inline-block w-24 h-24 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-neon-blue animate-pulse">
-            <span className="text-4xl font-black text-black">PS</span>
+          <div className="inline-block w-28 h-28 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-neon-blue animate-pulse">
+            <span className="text-5xl font-black text-black">PS</span>
           </div>
         </div>
-        <h1 className="text-4xl font-black text-white mb-2 animate-slide-up" style={{ animationDelay: "1.2s" }}>
+        <h1 className="text-5xl font-black text-white mb-2 animate-slide-up" style={{ animationDelay: "1.8s" }}>
           PlaySport Courts
         </h1>
-        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground animate-slide-up" style={{ animationDelay: "1.4s" }}>
+        <div className="text-xl font-bold text-gradient-hero mb-3 animate-slide-up" style={{ animationDelay: "2s" }}>
+          12" × 12" Premium Court Tiles
+        </div>
+        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground animate-slide-up" style={{ animationDelay: "2.2s" }}>
           <div className="w-2 h-2 rounded-full bg-[var(--brand-primary)] animate-pulse" />
-          <span>Building your experience</span>
+          <span>Assembling your court</span>
         </div>
       </div>
 
@@ -77,13 +88,13 @@ export function TileLoadingAnimation() {
             transform: scale(0) rotate(180deg);
             opacity: 0;
           }
-          50% {
-            transform: scale(1.1) rotate(0deg);
-            opacity: 0.8;
+          60% {
+            transform: scale(1.05) rotate(0deg);
+            opacity: 0.9;
           }
           100% {
             transform: scale(1) rotate(0deg);
-            opacity: 0.8;
+            opacity: 0.9;
           }
         }
 
@@ -97,7 +108,7 @@ export function TileLoadingAnimation() {
         }
 
         .tile-animate {
-          animation: tileSlide 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          animation: tileSlide 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
         @keyframes fadeIn {

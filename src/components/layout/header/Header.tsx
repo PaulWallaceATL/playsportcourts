@@ -15,7 +15,6 @@ const NAV_ITEMS = [
   { href: "/", label: "Home", dropdown: undefined },
   { href: "/court-tiles", label: "Court Tiles", dropdown: undefined },
   { href: "/resurfacing", label: "Resurfacing", dropdown: undefined },
-  { href: "/gallery", label: "Gallery", dropdown: undefined },
   { href: "/contact", label: "Contact", dropdown: undefined },
 ] as const;
 
@@ -187,32 +186,18 @@ export function Header() {
                   )}
                 </li>
               ))}
-              {/* Dealer CTA: dynamic label */}
-              {isDealer(dealer) ? (
-                <li>
-                  <Link
-                    href="/dealer-portal"
-                    className={cn(
-                      "text-sm font-medium transition-colors nav-underline holo-link",
-                      pathname === "/dealer-portal" ? "text-[var(--primary)]" : "text-foreground/80"
-                    )}
-                  >
-                    Dealer Portal
-                  </Link>
-                </li>
-              ) : (
-                <li>
-                  <Link
-                    href="/contact"
-                    className={cn(
-                      "text-sm font-medium transition-colors nav-underline holo-link",
-                      pathname === "/contact" ? "text-[var(--primary)]" : "text-foreground/80"
-                    )}
-                  >
-                    Become a Dealer
-                  </Link>
-                </li>
-              )}
+              {/* PlaySport+ link */}
+              <li>
+                <Link
+                  href="/dealer-portal"
+                  className={cn(
+                    "text-sm font-medium transition-colors nav-underline holo-link",
+                    pathname === "/dealer-portal" ? "text-[var(--primary)]" : "text-foreground/80"
+                  )}
+                >
+                  PlaySport+
+                </Link>
+              </li>
             </ul>
           </nav>
 
