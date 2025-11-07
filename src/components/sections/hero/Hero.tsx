@@ -20,8 +20,8 @@ export function Hero() {
       <div className="pointer-events-none absolute -top-24 -left-24 w-[600px] h-[600px] rounded-full opacity-60" style={{ background: "radial-gradient(closest-side, rgba(0,212,255,0.15), transparent 70%)" }} />
       <div className="pointer-events-none absolute -bottom-32 -right-32 w-[640px] h-[640px] rounded-full opacity-60" style={{ background: "radial-gradient(closest-side, rgba(251,146,60,0.15), transparent 70%)" }} />
       <div className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full opacity-40" style={{ background: "radial-gradient(closest-side, rgba(167,139,250,0.10), transparent 75%)" }} />
-      <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
-        <div className="grid items-center gap-8 lg:grid-cols-2">
+      <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section overflow-x-hidden">
+        <div className="grid items-center gap-8 lg:grid-cols-2 w-full">
           {/* Left: headline + CTA */}
           <div className="text-foreground anim-slide-up">
             <p className="text-xs uppercase tracking-wide text-muted-foreground">PlaySport Atlanta</p>
@@ -52,8 +52,8 @@ export function Hero() {
           </div>
 
         {/* Right: Mini Court Builder */}
-        <div className="relative justify-self-end">
-          <MiniCourtBuilder className="w-[220px] sm:w-[260px] lg:w-[420px]" />
+        <div className="relative flex justify-center lg:justify-end w-full">
+          <MiniCourtBuilder className="w-full max-w-[320px] sm:max-w-[360px] lg:max-w-[420px]" />
         </div>
         </div>
 

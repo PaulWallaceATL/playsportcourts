@@ -46,7 +46,7 @@ export default function Home() {
       <Hero />
 
       {/* Value Proposition - Redesigned */}
-      <section className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-32 overflow-hidden">
+      <section className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-32 overflow-x-hidden overflow-y-visible">
         {/* Ambient orbs */}
         <div className="absolute -top-24 -right-24 w-[500px] h-[500px] bg-gradient-primary/5 rounded-full blur-3xl animate-pulse" />
         <div className="absolute -bottom-24 -left-24 w-[500px] h-[500px] bg-[var(--brand-accent)]/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
@@ -131,7 +131,7 @@ export default function Home() {
       </section>
 
       {/* Sports Grid - Premium Design */}
-      <section id="sports" className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-32 overflow-hidden">
+      <section id="sports" className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-32 overflow-x-hidden overflow-y-visible">
         <div className="absolute top-1/4 left-1/4 w-3 h-3 rounded-full bg-[var(--brand-primary)] animate-ping opacity-10" />
         <div className="absolute bottom-1/4 right-1/4 w-3 h-3 rounded-full bg-[var(--brand-accent)] animate-ping opacity-10" style={{ animationDelay: "1s" }} />
         

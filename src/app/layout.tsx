@@ -51,8 +51,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark theme-premium-dark">
-      <body className={`${body.variable} ${display.variable} antialiased`}>
+    <html lang="en" className="dark theme-premium-dark overflow-x-hidden">
+      <body className={`${body.variable} ${display.variable} antialiased overflow-x-hidden`}>
         {GA_ID && (
           <>
             <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
