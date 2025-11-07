@@ -116,10 +116,6 @@ function DealerPortalContent() {
     setActiveTab("dashboard");
   };
 
-  const handleAddToCart = (productId: ProductId, color: string, quantity: number) => {
-    setCart((prev) => [...prev, { productId, color, quantity }]);
-    setTimeout(() => setActiveTab("cart"), 300);
-  };
 
   const handleRemoveFromCart = (index: number) => {
     setCart((prev) => prev.filter((_, i) => i !== index));

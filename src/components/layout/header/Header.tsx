@@ -12,12 +12,12 @@ import { courtTiles, garageTiles } from "@/data/products";
 import Image from "next/image";
 
 const NAV_ITEMS = [
-  { href: "/", label: "Home" },
-  { href: "/court-tiles", label: "Court Tiles" },
-  { href: "/resurfacing", label: "Resurfacing" },
-  { href: "/gallery", label: "Gallery" },
-  { href: "/contact", label: "Contact" },
-];
+  { href: "/", label: "Home", dropdown: undefined },
+  { href: "/court-tiles", label: "Court Tiles", dropdown: undefined },
+  { href: "/resurfacing", label: "Resurfacing", dropdown: undefined },
+  { href: "/gallery", label: "Gallery", dropdown: undefined },
+  { href: "/contact", label: "Contact", dropdown: undefined },
+] as const;
 
 export function Header() {
   const pathname = usePathname();
