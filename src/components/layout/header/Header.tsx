@@ -23,14 +23,12 @@ export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
-  const [hovered, setHovered] = React.useState<null | "court" | "garage">(null);
   const [dealer, setDealer] = React.useState(() => getCurrentUser());
   React.useEffect(() => {
     const listener = () => setDealer(getCurrentUser());
     window.addEventListener("mock-auth-change", listener);
     return () => window.removeEventListener("mock-auth-change", listener);
   }, []);
-  const hoverTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   React.useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 8);
@@ -41,7 +39,6 @@ export function Header() {
 
   React.useEffect(() => {
     setOpen(false);
-    setHovered(null);
   }, [pathname]);
 
   const isDealerPortal = pathname?.startsWith("/dealer-portal");
@@ -78,35 +75,23 @@ export function Header() {
                 <li
                   key={item.href}
                   className="relative z-50"
-                  onMouseEnter={() => {
-                    if (!item.dropdown) return;
-                    if (hoverTimer.current) clearTimeout(hoverTimer.current);
-                    setHovered(item.dropdown);
-                  }}
-                  onMouseLeave={() => {
-                    if (!item.dropdown) return;
-                    if (hoverTimer.current) clearTimeout(hoverTimer.current);
-                    hoverTimer.current = setTimeout(() => setHovered(null), 120);
-                  }}
                 >
                   <Link
                     href={item.href}
                     className={cn(
-                      "text-sm font-medium transition-colors nav-underline holo-link",
-                      pathname === item.href ? "text-[var(--primary)]" : "text-foreground/80"
+                      "text-sm font-semibold transition-all nav-underline relative",
+                      pathname === item.href 
+                        ? "text-[var(--brand-primary)]" 
+                        : "text-white/90 hover:text-white"
                     )}
                     aria-current={pathname === item.href ? "page" : undefined}
-                    onMouseMove={(e) => {
-                      const t = e.currentTarget as HTMLElement;
-                      const rect = t.getBoundingClientRect();
-                      const x = ((e.clientX - rect.left) / rect.width) * 100;
-                      t.style.setProperty("--mx", `${x}%`);
-                    }}
+                    aria-label={`Navigate to ${item.label}`}
                   >
                     {item.label}
                   </Link>
 
-                  {item.dropdown === "court" && hovered === "court" && (
+                  {/* Dropdown menus removed - simplified navigation */}
+                  {false && (
                     <div
                       className="menu-panel absolute left-1/2 -translate-x-1/2 top-full w-[720px]"
                       onMouseEnter={() => {
