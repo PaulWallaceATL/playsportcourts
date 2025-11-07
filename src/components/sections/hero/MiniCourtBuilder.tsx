@@ -208,6 +208,7 @@ export function MiniCourtBuilder({ className = "" }: { className?: string }) {
               ))}
             </div>
           </div>
+        </div>
 
         {/* Info Text */}
         <div className="mt-3 text-center">
