@@ -53,12 +53,7 @@ export function Hero() {
 
         {/* Right: Mini Court Builder */}
         <div className="relative justify-self-end">
-          <div className="relative">
-            <MiniCourtBuilder className="w-[220px] sm:w-[260px] lg:w-[400px]" />
-            <div className="absolute -bottom-4 -right-4 px-4 py-2 rounded-full bg-gradient-primary text-black text-sm font-bold shadow-neon-blue">
-              Interactive Preview
-            </div>
-          </div>
+          <MiniCourtBuilder className="w-[220px] sm:w-[260px] lg:w-[420px]" />
         </div>
         </div>
 
