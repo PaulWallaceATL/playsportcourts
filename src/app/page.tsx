@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Check, ArrowRight, Zap, Shield, Palette } from "lucide-react";
+import { Check, ArrowRight, Zap, Shield, Palette, Sparkles } from "lucide-react";
 import { Hero } from "@/components/sections/hero/Hero";
 import { TilesShowcase } from "@/components/sections/tiles/TilesShowcase";
 import { Resurfacing } from "@/components/sections/resurfacing/Resurfacing";
+import { ScrollReveal } from "@/components/animations/ScrollReveal";
+import { CountUp } from "@/components/animations/CountUp";
 
 export const metadata: Metadata = {
   title: "PlaySport Courts - Premium 12\" × 12\" Modular Court Tiles",
@@ -44,26 +46,38 @@ export default function Home() {
       <Hero />
 
       {/* Value Proposition */}
-      <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-16">
-          <h2 className="heading-display text-gradient-hero mb-4">
-            Build Your Dream Court
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Premium 12&quot; × 12&quot; modular tiles. Design in 3D, customize every detail, 
-            and get professional results built your way.
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
-          {BENEFITS.map((benefit) => (
-            <div key={benefit.title} className="card-premium text-center group hover:scale-105 transition-transform">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-primary flex items-center justify-center">
-                <benefit.icon className="w-8 h-8 text-black" />
-              </div>
-              <h3 className="heading-3 mb-3">{benefit.title}</h3>
-              <p className="text-sm text-muted-foreground">{benefit.description}</p>
+      <section className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-20 overflow-hidden">
+        {/* Ambient background effects */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-primary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-[var(--brand-accent)]/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+        
+        <ScrollReveal direction="fade">
+          <div className="text-center mb-16 relative">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-primary/10 border border-[var(--brand-primary)]/20 mb-6">
+              <Sparkles className="w-4 h-4 text-[var(--brand-primary)]" />
+              <span className="text-sm font-semibold text-[var(--brand-primary)]">Interactive Court Design</span>
             </div>
+            <h2 className="heading-display text-gradient-hero mb-4">
+              Build Your Dream Court
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Premium 12&quot; × 12&quot; modular tiles. Design in 3D, customize every detail, 
+              and get professional results built your way.
+            </p>
+          </div>
+        </ScrollReveal>
+
+        <div className="grid md:grid-cols-3 gap-8 mb-16 relative">
+          {BENEFITS.map((benefit, idx) => (
+            <ScrollReveal key={benefit.title} direction="up" delay={idx * 100}>
+              <div className="card-premium text-center group hover:scale-105 transition-all duration-300">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-primary flex items-center justify-center group-hover:shadow-neon-blue transition-shadow">
+                  <benefit.icon className="w-8 h-8 text-black group-hover:scale-110 transition-transform" />
+                </div>
+                <h3 className="heading-3 mb-3">{benefit.title}</h3>
+                <p className="text-sm text-muted-foreground">{benefit.description}</p>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
 
@@ -83,23 +97,29 @@ export default function Home() {
       <TilesShowcase />
 
       {/* Sports Grid - Redesigned */}
-      <section id="sports" className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-12">
-          <h2 className="heading-display text-gradient-hero mb-4">
-            Any Sport. Any Size.
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Design a court for your favorite sport with our interactive 3D designers.
-          </p>
-        </div>
+      <section id="sports" className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-20 overflow-hidden">
+        {/* Animated particles */}
+        <div className="absolute top-1/4 left-1/4 w-2 h-2 rounded-full bg-[var(--brand-primary)] animate-ping opacity-20" />
+        <div className="absolute top-3/4 right-1/4 w-2 h-2 rounded-full bg-[var(--brand-accent)] animate-ping opacity-20" style={{ animationDelay: "1s" }} />
+        
+        <ScrollReveal direction="fade">
+          <div className="text-center mb-12 relative">
+            <h2 className="heading-display text-gradient-hero mb-4">
+              Any Sport. Any Size.
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Design a court for your favorite sport with our interactive 3D designers.
+            </p>
+          </div>
+        </ScrollReveal>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {SPORTS.map((sport) => (
-            <Link
-              key={sport.id}
-              href={`/design/${sport.id}`}
-              className="group"
-            >
+          {SPORTS.map((sport, idx) => (
+            <ScrollReveal key={sport.id} direction="up" delay={idx * 80}>
+              <Link
+                href={`/design/${sport.id}`}
+                className="group"
+              >
               <div className={`relative aspect-square rounded-2xl bg-gradient-to-br ${sport.gradient} p-6 flex flex-col items-center justify-center overflow-hidden transition-all hover:scale-105 hover:shadow-2xl`}>
                 {/* Grid pattern */}
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTSAwIDAgTCA0MCAwIEwgNDAgNDAgTCAwIDQwIFoiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIiBzdHJva2Utd2lkdGg9IjEiLz48L3N2Zz4=')] opacity-20" />
@@ -122,7 +142,8 @@ export default function Home() {
                   <ArrowRight className="w-4 h-4 text-white" />
                 </div>
               </div>
-            </Link>
+              </Link>
+            </ScrollReveal>
           ))}
         </div>
 
@@ -134,56 +155,71 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Social Proof */}
+      {/* Social Proof - Animated */}
       <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-20">
-        <div className="card-premium">
-          <div className="grid md:grid-cols-3 gap-12 text-center">
-            <div>
-              <div className="text-5xl font-black text-gradient-hero mb-2">500+</div>
-              <div className="text-sm text-muted-foreground">Courts Built</div>
-            </div>
-            <div>
-              <div className="text-5xl font-black text-gradient-hero mb-2">5.0</div>
-              <div className="text-sm text-muted-foreground">Average Rating</div>
-            </div>
-            <div>
-              <div className="text-5xl font-black text-gradient-hero mb-2">15+</div>
-              <div className="text-sm text-muted-foreground">Years Experience</div>
+        <ScrollReveal direction="up">
+          <div className="card-premium border-premium-animated">
+            <div className="grid md:grid-cols-3 gap-12 text-center">
+              <div className="group">
+                <div className="text-6xl font-black text-gradient-hero mb-2 group-hover:scale-110 transition-transform">
+                  <CountUp end={500} suffix="+" />
+                </div>
+                <div className="text-sm text-muted-foreground">Courts Built</div>
+              </div>
+              <div className="group">
+                <div className="text-6xl font-black text-gradient-hero mb-2 group-hover:scale-110 transition-transform">
+                  <CountUp end={5} suffix=".0" />
+                </div>
+                <div className="text-sm text-muted-foreground">Average Rating</div>
+              </div>
+              <div className="group">
+                <div className="text-6xl font-black text-gradient-hero mb-2 group-hover:scale-110 transition-transform">
+                  <CountUp end={15} suffix="+" />
+                </div>
+                <div className="text-sm text-muted-foreground">Years Experience</div>
+              </div>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       {/* How It Works */}
-      <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-16">
-          <h2 className="heading-display text-gradient-hero mb-4">
-            How It Works
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            From design to installation, we make it simple to get the court you want.
-          </p>
-        </div>
+      <section className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-20">
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-primary)]/5 via-transparent to-[var(--brand-accent)]/5 opacity-50" />
+        
+        <ScrollReveal direction="fade">
+          <div className="text-center mb-16 relative">
+            <h2 className="heading-display text-gradient-hero mb-4">
+              How It Works
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              From design to installation, we make it simple to get the court you want.
+            </p>
+          </div>
+        </ScrollReveal>
 
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-4 gap-8 relative">
           {[
             { step: "1", title: "Design Your Court", description: "Use our 3D designer or interactive builder to visualize your perfect court" },
             { step: "2", title: "Choose Colors & Markings", description: "Select from 11 premium colors and customize game lines for your sport" },
             { step: "3", title: "Get Instant Quote", description: "Export your design and receive detailed pricing with tile breakdown" },
             { step: "4", title: "Professional Install", description: "Expert installation or DIY with our comprehensive guide" },
-          ].map((item) => (
-            <div key={item.step} className="relative">
-              <div className="text-center">
-                <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-neon-blue">
-                  <span className="text-3xl font-black text-black">{item.step}</span>
+          ].map((item, idx) => (
+            <ScrollReveal key={item.step} direction="up" delay={idx * 150}>
+              <div className="relative">
+                <div className="text-center">
+                  <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-neon-blue animate-pulse" style={{ animationDelay: `${idx * 200}ms` }}>
+                    <span className="text-3xl font-black text-black">{item.step}</span>
+                  </div>
+                  <h3 className="font-bold text-lg mb-3">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground">{item.description}</p>
                 </div>
-                <h3 className="font-bold text-lg mb-3">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">{item.description}</p>
+                {item.step !== "4" && (
+                  <ArrowRight className="hidden md:block absolute top-8 -right-4 w-8 h-8 text-[var(--brand-primary)]/30 animate-pulse" />
+                )}
               </div>
-              {item.step !== "4" && (
-                <ArrowRight className="hidden md:block absolute top-8 -right-4 w-8 h-8 text-[var(--brand-primary)]/30" />
-              )}
-            </div>
+            </ScrollReveal>
           ))}
         </div>
 
@@ -271,24 +307,34 @@ export default function Home() {
       <Resurfacing />
 
       {/* Final CTA */}
-      <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-20">
-        <div className="card-premium text-center p-16 border-premium-animated">
-          <h2 className="heading-2 text-gradient-hero mb-4">
-            Ready to Build Your Court?
-          </h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Start designing today with our interactive tools or speak with our team for personalized guidance.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <Link href="/dealer-portal" className="btn-premium-primary text-lg px-10 py-4 flex items-center gap-2">
-              Launch Builder
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-            <Link href="/contact" className="btn-premium-secondary text-lg px-10 py-4">
-              Talk to an Expert
-            </Link>
+      <section className="relative mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-20">
+        {/* Animated glow effect */}
+        <div className="absolute inset-0 bg-gradient-radial from-[var(--brand-primary)]/10 to-transparent opacity-50 animate-pulse" />
+        
+        <ScrollReveal direction="up">
+          <div className="card-premium text-center p-16 border-premium-animated relative overflow-hidden">
+            {/* Subtle grid animation */}
+            <div className="absolute inset-0 grid-pattern-premium opacity-20" />
+            
+            <div className="relative">
+              <h2 className="heading-2 text-gradient-hero mb-4">
+                Ready to Build Your Court?
+              </h2>
+              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+                Start designing today with our interactive tools or speak with our team for personalized guidance.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-4">
+                <Link href="/dealer-portal" className="btn-premium-primary text-lg px-10 py-4 flex items-center gap-2 group">
+                  Launch Builder
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <Link href="/contact" className="btn-premium-secondary text-lg px-10 py-4">
+                  Talk to an Expert
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
     </div>
   );
