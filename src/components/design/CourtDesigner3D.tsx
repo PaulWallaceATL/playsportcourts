@@ -30,7 +30,7 @@ export function CourtDesigner3D({ sport }: CourtDesigner3DProps) {
   const [zoom, setZoom] = React.useState(1);
   const [isDragging, setIsDragging] = React.useState(false);
   const [lastMouse, setLastMouse] = React.useState({ x: 0, y: 0 });
-  const animationRef = React.useRef<number>();
+  const animationRef = React.useRef<number | undefined>(undefined);
   
   // Court customization
   const [baseColor, setBaseColor] = React.useState("#2C2C2C");

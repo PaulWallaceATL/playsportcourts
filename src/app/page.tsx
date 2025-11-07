@@ -70,8 +70,8 @@ export default function Home() {
         </ScrollReveal>
 
         <div className="grid md:grid-cols-3 gap-8 lg:gap-12 mb-20 relative">
-          {BENEFITS.map((benefit, idx) => (
-            <ScrollReveal key={benefit.title} direction="up" delay={idx * 150}>
+          {BENEFITS.map((benefit, index) => (
+            <ScrollReveal key={benefit.title} direction="up" delay={index * 150}>
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-primary/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="card-premium text-center relative hover:scale-105 transition-all duration-500">
@@ -201,8 +201,8 @@ export default function Home() {
             { step: "02", title: "Customize", description: "Choose from 11 premium colors and customize every game line" },
             { step: "03", title: "Quote", description: "Get instant pricing with detailed tile breakdown and export options" },
             { step: "04", title: "Install", description: "Professional installation or comprehensive DIY guide included" },
-          ].map((item, idx) => (
-            <ScrollReveal key={item.step} direction="up" delay={idx * 200}>
+          ].map((item, index) => (
+            <ScrollReveal key={item.step} direction="up" delay={index * 200}>
               <div className="relative group">
                 <div className="text-center">
                   <div className="relative w-24 h-24 mx-auto mb-8">
@@ -214,7 +214,7 @@ export default function Home() {
                   <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
                   <p className="text-base text-muted-foreground leading-relaxed">{item.description}</p>
                 </div>
-                {idx < 3 && (
+                {index < 3 && (
                   <div className="hidden md:block absolute top-12 -right-6 w-12 h-12">
                     <ArrowRight className="w-full h-full text-[var(--brand-primary)]/20" />
                   </div>

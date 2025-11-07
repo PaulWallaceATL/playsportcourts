@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Palette, RefreshCw } from "lucide-react";
+import { Palette } from "lucide-react";
 
 const COLORS = [
   { name: "Graphite", hex: "#2C2C2C" },
