@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { X, FileText, Download, Printer } from "lucide-react";
+import { X, FileText, Download } from "lucide-react";
 
 interface OrderSummaryProps {
   formData: {
@@ -83,7 +83,7 @@ export function OrderSummary({ formData, pricing, squareFeet, onClose }: OrderSu
 
     // Convert to array and calculate totals
     return Object.entries(breakdown)
-      .filter(([_, quantity]) => quantity > 0)
+      .filter(([, quantity]) => quantity > 0)
       .map(([color, quantity]) => ({
         color,
         quantity,
@@ -91,10 +91,6 @@ export function OrderSummary({ formData, pricing, squareFeet, onClose }: OrderSu
         total: quantity * tilePrice,
       }));
   }, [formData.baseTileColor, formData.basketballLaneColor, formData.pickleballKitchenColor, formData.gameLines, totalTiles, tilePrice]);
-
-  const handlePrint = () => {
-    window.print();
-  };
 
   const handleDownload = (format: "txt" | "pdf" | "dxf") => {
     if (format === "txt") {

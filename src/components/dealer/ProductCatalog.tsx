@@ -19,7 +19,7 @@ const TILE_PRODUCTS = [
     ],
     colors: ["Black", "Graphite", "Titanium", "Navy Blue", "Royal Blue", "Light Blue", "Emerald Green", "Olive Green", "Bright Red", "Orange", "Yellow"],
     specifications: {
-      size: "12\" × 12\" × 0.75\"",
+      size: "12&quot; × 12&quot; × 0.75&quot;",
       material: "High-Performance Polypropylene",
       weight: "0.5 lbs per tile",
       coverage: "1 sq ft per tile"
@@ -41,7 +41,7 @@ const TILE_PRODUCTS = [
     ],
     colors: ["Black", "Graphite", "Titanium", "Navy Blue", "Royal Blue", "Light Blue", "Emerald Green", "Olive Green", "Bright Red", "Orange", "Yellow"],
     specifications: {
-      size: "12\" × 12\" × 0.875\"",
+      size: "12&quot; × 12&quot; × 0.875&quot;",
       material: "Advanced Copolymer Blend",
       weight: "0.6 lbs per tile",
       coverage: "1 sq ft per tile"
@@ -63,7 +63,7 @@ const TILE_PRODUCTS = [
     ],
     colors: ["Black", "Graphite", "Titanium", "Navy Blue", "Royal Blue", "Light Blue", "Emerald Green", "Olive Green", "Bright Red", "Orange", "Yellow"],
     specifications: {
-      size: "12\" × 12\" × 1\"",
+      size: "12&quot; × 12&quot; × 1&quot;",
       material: "Premium Performance Composite",
       weight: "0.7 lbs per tile",
       coverage: "1 sq ft per tile"
