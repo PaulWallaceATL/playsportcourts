@@ -219,8 +219,8 @@ export function Header() {
           {/* Actions */}
           <div className="flex items-center gap-3">
             <div className="hidden lg:flex gap-2">
-              <Link href="/shop" className="btn-premium-secondary px-5 py-2 text-sm rounded-lg">
-                Shop
+              <Link href="/dealer-portal" className="btn-premium-secondary px-5 py-2 text-sm rounded-lg">
+                Court Builder
               </Link>
               {isDealer(dealer) ? (
                 <Link href="/dealer-portal" className="btn-premium-primary px-5 py-2 text-sm rounded-lg">
