@@ -13,8 +13,7 @@ import Image from "next/image";
 
 const NAV_ITEMS = [
   { href: "/", label: "Home" },
-  { href: "/court-tiles", label: "Court Tiles", dropdown: "court" as const },
-  { href: "/garage-tiles", label: "Garage Tiles", dropdown: "garage" as const },
+  { href: "/court-tiles", label: "Court Tiles" },
   { href: "/resurfacing", label: "Resurfacing" },
   { href: "/gallery", label: "Gallery" },
   { href: "/contact", label: "Contact" },
