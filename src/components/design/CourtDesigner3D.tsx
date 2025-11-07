@@ -61,12 +61,12 @@ export function CourtDesigner3D({ sport }: CourtDesigner3DProps) {
     // Project 3D point to 2D
     const project = (x: number, y: number, z: number) => {
       // Rotate around Y axis
-      let x1 = x * Math.cos(rotY) - z * Math.sin(rotY);
-      let z1 = x * Math.sin(rotY) + z * Math.cos(rotY);
+      const x1 = x * Math.cos(rotY) - z * Math.sin(rotY);
+      const z1 = x * Math.sin(rotY) + z * Math.cos(rotY);
       
       // Rotate around X axis
-      let y1 = y * Math.cos(rotX) - z1 * Math.sin(rotX);
-      let z2 = y * Math.sin(rotX) + z1 * Math.cos(rotX);
+      const y1 = y * Math.cos(rotX) - z1 * Math.sin(rotX);
+      const z2 = y * Math.sin(rotX) + z1 * Math.cos(rotX);
       
       // Perspective projection
       const perspective = 500;
