@@ -10,30 +10,22 @@ export function TileLoadingAnimation() {
     // Hide loading after animation completes
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 5000); // 5 second animation (slower)
+    }, 6000); // 6 second animation (even slower, more premium)
 
     return () => clearTimeout(timer);
   }, []);
 
   if (!isLoading) return null;
 
-  // Create a grid representing 12"×12" tiles
-  const gridSize = 16; // 16x16 grid (cleaner, represents court layout)
+  // Smaller grid for more chic, premium feel
+  const gridSize = 12; // 12x12 grid (cleaner, less busy)
   const tiles = Array.from({ length: gridSize * gridSize }, (_, i) => i);
 
-  // Actual colors we offer
+  // Limited premium color palette
   const tileColors = [
-    "#000000", // Black
-    "#2C2C2C", // Graphite
-    "#6B7280", // Titanium
-    "#1E3A8A", // Navy Blue
+    "#2C2C2C", // Graphite (primary)
     "#2563EB", // Royal Blue
-    "#60A5FA", // Light Blue
-    "#10B981", // Emerald Green
-    "#84CC16", // Olive Green
-    "#EF4444", // Bright Red
-    "#F97316", // Orange
-    "#FDE047", // Yellow
+    "#06b6d4", // Cyan (brand)
   ];
 
   return (
@@ -45,10 +37,11 @@ export function TileLoadingAnimation() {
         {tiles.map((i) => {
           const row = Math.floor(i / gridSize);
           const col = i % gridSize;
-          const delay = (row + col) * 0.04; // Slower diagonal wave (was 0.02)
+          const delay = (row + col) * 0.08; // Much slower wave for premium feel
           
-          // Use actual tile colors we offer
-          const color = tileColors[Math.floor(Math.random() * tileColors.length)];
+          // Use premium color palette (mostly graphite with accents)
+          const isAccent = Math.random() > 0.7; // 30% accent tiles
+          const color = isAccent ? tileColors[Math.floor(Math.random() * (tileColors.length - 1)) + 1] : tileColors[0];
           
           return (
             <div
@@ -109,7 +102,7 @@ export function TileLoadingAnimation() {
         }
 
         .tile-animate {
-          animation: tileSlide 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          animation: tileSlide 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
         @keyframes fadeIn {

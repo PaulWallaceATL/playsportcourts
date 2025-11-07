@@ -8,44 +8,49 @@ export function PlaySportLogo({ size = 40, className = "" }: { size?: number; cl
       xmlns="http://www.w3.org/2000/svg"
       className={className}
     >
-      {/* Background square representing a tile */}
-      <rect width="100" height="100" rx="12" fill="url(#logo-gradient)" />
-      
-      {/* Grid lines to represent court tiles */}
-      <line x1="50" y1="10" x2="50" y2="90" stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
-      <line x1="10" y1="50" x2="90" y2="50" stroke="rgba(0,0,0,0.2)" strokeWidth="1" />
-      
-      {/* Stylized P and S */}
-      <path
-        d="M 30 35 L 30 65 M 30 35 L 45 35 Q 52 35 52 42 Q 52 49 45 49 L 30 49"
-        stroke="currentColor"
-        strokeWidth="6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      
-      <path
-        d="M 58 38 Q 65 35 72 38 Q 75 40 75 45 Q 75 50 72 52 Q 65 55 58 52 M 58 48 Q 65 45 72 48 Q 75 50 75 55 Q 75 60 72 62 Q 65 65 58 62"
-        stroke="currentColor"
-        strokeWidth="6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      
-      {/* Small court markings detail */}
-      <circle cx="25" cy="75" r="3" fill="currentColor" opacity="0.6" />
-      <circle cx="75" cy="25" r="3" fill="currentColor" opacity="0.6" />
-      
+      {/* Tile grid background */}
       <defs>
-        <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#00d4ff" />
-          <stop offset="50%" stopColor="#0ea5e9" />
-          <stop offset="100%" stopColor="#06b6d4" />
+        <linearGradient id="ps-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#06b6d4" />
+          <stop offset="100%" stopColor="#0ea5e9" />
         </linearGradient>
+        <pattern id="tile-grid" x="0" y="0" width="25" height="25" patternUnits="userSpaceOnUse">
+          <rect width="24" height="24" fill="none" stroke="rgba(0,0,0,0.15)" strokeWidth="1"/>
+        </pattern>
       </defs>
+      
+      {/* Background */}
+      <rect width="100" height="100" rx="16" fill="url(#ps-gradient)"/>
+      <rect width="100" height="100" rx="16" fill="url(#tile-grid)"/>
+      
+      {/* Court outline */}
+      <rect x="15" y="20" width="70" height="60" rx="2" fill="none" stroke="rgba(0,0,0,0.2)" strokeWidth="2"/>
+      
+      {/* Bold P */}
+      <path
+        d="M 28 38 L 28 68 M 28 38 C 28 38 28 38 40 38 C 46 38 46 44 46 48 C 46 52 46 53 40 53 L 28 53"
+        stroke="#000000"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+        opacity="0.9"
+      />
+      
+      {/* Bold S with court lines */}
+      <path
+        d="M 54 42 C 58 40 64 40 68 42 C 70 43 70 46 68 48 C 66 49 62 50 60 50 M 60 50 C 58 50 54 51 52 52 C 50 54 50 57 52 59 C 54 61 60 62 64 60"
+        stroke="#000000"
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+        opacity="0.9"
+      />
+      
+      {/* Court markings accents */}
+      <circle cx="50" cy="53" r="8" fill="none" stroke="rgba(0,0,0,0.15)" strokeWidth="1.5"/>
+      <line x1="50" y1="20" x2="50" y2="80" stroke="rgba(0,0,0,0.1)" strokeWidth="1"/>
     </svg>
   );
 }
-

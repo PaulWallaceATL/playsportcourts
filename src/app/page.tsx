@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/sections/hero/Hero";
+import { TilesShowcase } from "@/components/sections/tiles/TilesShowcase";
 import { Solutions } from "@/components/sections/sports/Solutions";
 import { Resurfacing } from "@/components/sections/resurfacing/Resurfacing";
-import { GarageSlideshow } from "@/components/sections/garage/GarageSlideshow";
 
 export const metadata: Metadata = {
   title: "Home",
@@ -13,10 +13,12 @@ export default function Home() {
   return (
     <div>
       <Hero />
-      {/* Sports Applications Grid with expandable compatible tiles */}
-      <Solutions />
+      
+      {/* Our Tiles Section */}
+      <TilesShowcase />
 
-      <GarageSlideshow />
+      {/* Sports Applications Grid */}
+      <Solutions />
 
       {/* Resurfacing CTA */}
       <Resurfacing />
