@@ -353,10 +353,10 @@ function DealerPortalContent() {
               <div className="mb-8 card-premium">
                 <h2 className="heading-2 mb-2">Product Catalog</h2>
                 <p className="text-body text-muted-foreground">
-                  Select from our premium line of modular sport court tiles. All products backed by industry-leading warranties.
+                  Browse our premium line of modular sport court tiles. All products backed by industry-leading warranties.
                 </p>
               </div>
-              <ProductCatalog onAddToCart={handleAddToCart} />
+              <ProductCatalog />
             </div>
           )}
 
