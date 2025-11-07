@@ -54,7 +54,7 @@ export function TilesShowcase() {
       <div className="text-center mb-12">
         <h2 className="heading-2 text-gradient-hero mb-3">Our Court Tiles</h2>
         <p className="text-body text-muted-foreground max-w-2xl mx-auto">
-          Premium 12" × 12" modular tiles. Choose your performance level.
+          Premium 12&quot; × 12&quot; modular tiles. Choose your performance level.
         </p>
       </div>
 

@@ -161,7 +161,7 @@ export function MiniCourtBuilder({ className = "" }: { className?: string }) {
         </div>
         <div className="absolute top-4 left-4 px-3 py-1.5 rounded-lg bg-black/80 backdrop-blur-sm border border-white/10 text-xs text-white">
           <div className="font-semibold mb-1">16 × 10 ft Court</div>
-          <div className="text-[var(--brand-primary)]">160 tiles (12" × 12")</div>
+          <div className="text-[var(--brand-primary)]">160 tiles (12&quot; × 12&quot;)</div>
         </div>
       </div>
     </Link>
