@@ -3,8 +3,6 @@
 import * as React from "react";
 import { Palette, RefreshCw } from "lucide-react";
 
-type CourtType = "basketball" | "tennis" | "pickleball";
-
 const COLORS = [
   { name: "Graphite", hex: "#2C2C2C" },
   { name: "Royal Blue", hex: "#2563EB" },
@@ -15,7 +13,6 @@ const COLORS = [
 
 export function MiniCourtBuilder({ className = "" }: { className?: string }) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
-  const [courtType, setCourtType] = React.useState<CourtType>("basketball");
   const [baseColor, setBaseColor] = React.useState("#2C2C2C"); // Graphite
   const [laneColor, setLaneColor] = React.useState("#2563EB"); // Royal Blue
   const [hovering, setHovering] = React.useState(false);
@@ -70,9 +67,8 @@ export function MiniCourtBuilder({ className = "" }: { className?: string }) {
       }
     }
 
-    // Draw sport-specific markings
-    if (courtType === "basketball") {
-      // Left lane (4 tiles wide, centered vertically)
+    // Draw basketball court markings
+    // Left lane (4 tiles wide, centered vertically)
       ctx.fillStyle = laneColor;
       for (let y = 4; y <= 7; y++) {
         for (let x = 0; x < 4; x++) {
@@ -114,85 +110,6 @@ export function MiniCourtBuilder({ className = "" }: { className?: string }) {
       ctx.lineTo(offsetX + 13 * tileSize, offsetY + 8 * tileSize);
       ctx.stroke();
 
-    } else if (courtType === "tennis") {
-      // Tennis court - proper layout (78ft x 36ft proportions)
-      // Service boxes are the areas near the net
-      const serviceLinePos = Math.floor(courtWidth * 0.27); // Service line position from each end
-      
-      ctx.fillStyle = laneColor;
-      // Service boxes (rectangular areas)
-      for (let y = 3; y <= 7; y++) { // Center court area
-        for (let x = 0; x < serviceLinePos / tileSize; x++) {
-          ctx.fillRect(offsetX + x * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
-          ctx.fillRect(offsetX + (courtWidth / tileSize - serviceLinePos / tileSize + x) * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
-        }
-      }
-
-      // Court lines
-      ctx.strokeStyle = "#FFFFFF";
-      ctx.lineWidth = 2;
-      
-      // Center net line
-      ctx.beginPath();
-      ctx.moveTo(offsetX + courtWidth / 2, offsetY);
-      ctx.lineTo(offsetX + courtWidth / 2, offsetY + courtHeight);
-      ctx.stroke();
-      
-      // Service lines (perpendicular to net)
-      ctx.beginPath();
-      ctx.moveTo(offsetX + serviceLinePos, offsetY);
-      ctx.lineTo(offsetX + serviceLinePos, offsetY + courtHeight);
-      ctx.moveTo(offsetX + courtWidth - serviceLinePos, offsetY);
-      ctx.lineTo(offsetX + courtWidth - serviceLinePos, offsetY + courtHeight);
-      ctx.stroke();
-      
-      // Center service line (parallel to sidelines)
-      ctx.beginPath();
-      ctx.moveTo(offsetX, offsetY + courtHeight / 2);
-      ctx.lineTo(offsetX + courtWidth, offsetY + courtHeight / 2);
-      ctx.stroke();
-
-    } else if (courtType === "pickleball") {
-      // Pickleball court - accurate 44ft x 20ft proportions
-      // Kitchen/non-volley zones are 7ft from net on each side
-      const kitchenDepth = 3; // 3 tiles = 7ft from net
-      
-      ctx.fillStyle = laneColor;
-      // Kitchen zones (7ft from net on both sides)
-      for (let y = 0; y < courtHeight / tileSize; y++) {
-        for (let x = 0; x < kitchenDepth; x++) {
-          // Left kitchen
-          ctx.fillRect(offsetX + x * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
-          // Right kitchen
-          ctx.fillRect(offsetX + (courtWidth / tileSize - kitchenDepth + x) * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
-        }
-      }
-
-      // Court lines
-      ctx.strokeStyle = "#FFFFFF";
-      ctx.lineWidth = 2;
-      
-      // Center net line
-      ctx.beginPath();
-      ctx.moveTo(offsetX + courtWidth / 2, offsetY);
-      ctx.lineTo(offsetX + courtWidth / 2, offsetY + courtHeight);
-      ctx.stroke();
-      
-      // Kitchen lines (no-volley zone boundaries)
-      ctx.beginPath();
-      ctx.moveTo(offsetX + kitchenDepth * tileSize, offsetY);
-      ctx.lineTo(offsetX + kitchenDepth * tileSize, offsetY + courtHeight);
-      ctx.moveTo(offsetX + courtWidth - kitchenDepth * tileSize, offsetY);
-      ctx.lineTo(offsetX + courtWidth - kitchenDepth * tileSize, offsetY + courtHeight);
-      ctx.stroke();
-      
-      // Center sideline (divides doubles court)
-      ctx.beginPath();
-      ctx.moveTo(offsetX, offsetY + courtHeight / 2);
-      ctx.lineTo(offsetX + courtWidth, offsetY + courtHeight / 2);
-      ctx.stroke();
-    }
-
     // Grid lines on top
     ctx.strokeStyle = "rgba(0, 0, 0, 0.25)";
     ctx.lineWidth = 1;
@@ -219,7 +136,7 @@ export function MiniCourtBuilder({ className = "" }: { className?: string }) {
     ctx.strokeRect(offsetX, offsetY, courtWidth, courtHeight);
     ctx.shadowBlur = 0;
 
-  }, [courtType, baseColor, laneColor, hovering, mousePos]);
+  }, [baseColor, laneColor, hovering, mousePos]);
 
   React.useEffect(() => {
     const animationId = requestAnimationFrame(drawCourt);
@@ -240,40 +157,6 @@ export function MiniCourtBuilder({ className = "" }: { className?: string }) {
   return (
     <div className={className}>
       <div className="relative">
-        {/* Court Type Selector */}
-        <div className="mb-3 flex gap-2">
-          <button
-            onClick={() => setCourtType("basketball")}
-            className={`flex-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-              courtType === "basketball"
-                ? "bg-gradient-primary text-black shadow-neon-blue"
-                : "bg-white/5 text-white hover:bg-white/10 border border-white/10"
-            }`}
-          >
-            🏀 Basketball
-          </button>
-          <button
-            onClick={() => setCourtType("tennis")}
-            className={`flex-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-              courtType === "tennis"
-                ? "bg-gradient-primary text-black shadow-neon-blue"
-                : "bg-white/5 text-white hover:bg-white/10 border border-white/10"
-            }`}
-          >
-            🎾 Tennis
-          </button>
-          <button
-            onClick={() => setCourtType("pickleball")}
-            className={`flex-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
-              courtType === "pickleball"
-                ? "bg-gradient-primary text-black shadow-neon-blue"
-                : "bg-white/5 text-white hover:bg-white/10 border border-white/10"
-            }`}
-          >
-            🏓 Pickleball
-          </button>
-        </div>
-
         <div className="relative rounded-xl overflow-hidden">
           <canvas
             ref={canvasRef}
@@ -340,13 +223,14 @@ export function MiniCourtBuilder({ className = "" }: { className?: string }) {
 
         {/* Info Text */}
         <div className="mt-3 text-center">
-          <p className="text-xs text-muted-foreground">
-            {courtType === "basketball" && "Full court with painted lanes and center circle"}
-            {courtType === "tennis" && "Regulation court with service boxes"}
-            {courtType === "pickleball" && "Standard court with non-volley zones (kitchen)"}
+          <p className="text-sm font-semibold text-white mb-1">
+            Basketball Court Preview
           </p>
-          <p className="text-xs text-[var(--brand-primary)] mt-1">
-            Hover over court to see tile glow • Change colors to preview
+          <p className="text-xs text-muted-foreground">
+            Full court with painted lanes and center circle
+          </p>
+          <p className="text-xs text-[var(--brand-primary)] mt-2">
+            Hover to see glow effect • Click colors to customize
           </p>
         </div>
       </div>
