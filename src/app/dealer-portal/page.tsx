@@ -196,7 +196,7 @@ function DealerPortalContent() {
                     <Sparkles className="w-6 h-6" />
                   </div>
                   <div>
-                    <h1 className="heading-1 text-gradient-hero">Dealer Portal</h1>
+                    <h1 className="heading-1 text-gradient-hero">PlaySport Pro</h1>
                     <p className="text-sm text-muted-foreground">
                       Welcome back, <span className="text-[var(--brand-primary)] font-semibold">{user?.email}</span>
                     </p>
@@ -396,7 +396,7 @@ function DealerPortalContent() {
 export default function DealerPortalPage() {
   return (
     <Suspense fallback={
-      <LoadingSpinner size="lg" text="Loading dealer portal..." fullScreen />
+      <LoadingSpinner size="lg" text="Loading PlaySport Pro..." fullScreen />
     }>
       <DealerPortalContent />
     </Suspense>

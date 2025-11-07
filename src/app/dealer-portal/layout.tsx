@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Dealer Portal",
-  description: "Secure dealer portal for browsing products, placing orders, and managing your account. Access exclusive dealer pricing and resources.",
+  title: "PlaySport Pro",
+  description: "Professional portal for browsing products, placing custom orders, and managing your account. Access exclusive pro pricing and court builder tools.",
 };
 
 export default function DealerPortalLayout({

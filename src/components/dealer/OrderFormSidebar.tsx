@@ -298,7 +298,7 @@ export function OrderFormSidebar() {
       )}
 
       {/* Mobile: Stack vertically, Desktop: Side by side */}
-      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 lg:h-[calc(100vh-8rem)]">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 lg:h-[calc(100vh-8rem)] mb-20">
       {/* Sidebar - Scrollable Form */}
       <div
         className={`transition-all duration-300 ${
