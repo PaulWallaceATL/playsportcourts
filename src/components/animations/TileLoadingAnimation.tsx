@@ -10,23 +10,31 @@ export function TileLoadingAnimation() {
     // Hide loading after animation completes
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 6000); // 6 second animation (even slower, more premium)
+    }, 5500); // 5.5 second animation
 
     return () => clearTimeout(timer);
   }, []);
 
   if (!isLoading) return null;
 
-  // Smaller grid for more chic, premium feel
-  const gridSize = 12; // 12x12 grid (cleaner, less busy)
+  // Sophisticated minimal grid
+  const gridSize = 10; // 10x10 grid (even cleaner, more refined)
   const tiles = Array.from({ length: gridSize * gridSize }, (_, i) => i);
 
-  // Limited premium color palette
+  // Sophisticated monochromatic palette with subtle accent
   const tileColors = [
-    "#2C2C2C", // Graphite (primary)
-    "#2563EB", // Royal Blue
-    "#06b6d4", // Cyan (brand)
+    "#1a1a1a", // Deep black (80%)
+    "#2C2C2C", // Graphite (15%)
+    "#06b6d4", // Cyan accent (5%)
   ];
+  
+  // Weight the colors for sophistication
+  const getColor = () => {
+    const rand = Math.random();
+    if (rand < 0.8) return tileColors[0]; // 80% deep black
+    if (rand < 0.95) return tileColors[1]; // 15% graphite
+    return tileColors[2]; // 5% cyan accent
+  };
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden">
@@ -37,11 +45,10 @@ export function TileLoadingAnimation() {
         {tiles.map((i) => {
           const row = Math.floor(i / gridSize);
           const col = i % gridSize;
-          const delay = (row + col) * 0.08; // Much slower wave for premium feel
+          const delay = (row + col) * 0.1; // Slower, more deliberate wave
           
-          // Use premium color palette (mostly graphite with accents)
-          const isAccent = Math.random() > 0.7; // 30% accent tiles
-          const color = isAccent ? tileColors[Math.floor(Math.random() * (tileColors.length - 1)) + 1] : tileColors[0];
+          // Sophisticated weighted color selection
+          const color = getColor();
           
           return (
             <div
@@ -57,22 +64,33 @@ export function TileLoadingAnimation() {
         })}
       </div>
 
-      {/* Center Logo */}
-      <div className="relative z-10 text-center animate-fade-in" style={{ animationDelay: "1.5s" }}>
-        <div className="mb-6 flex justify-center">
-          <div className="animate-pulse">
-            <PlaySportLogo size={120} className="text-black drop-shadow-2xl" />
+      {/* Center Content - Sophisticated */}
+      <div className="relative z-10 text-center">
+        {/* Logo */}
+        <div className="mb-8 flex justify-center animate-fade-in" style={{ animationDelay: "2s" }}>
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-primary blur-2xl opacity-40 animate-pulse" />
+            <PlaySportLogo size={140} className="text-black relative" />
           </div>
         </div>
-        <h1 className="text-5xl font-black text-white mb-2 animate-slide-up" style={{ animationDelay: "1.8s" }}>
+        
+        {/* Brand Name */}
+        <h1 className="text-6xl font-black text-white mb-3 tracking-tight animate-slide-up" style={{ animationDelay: "2.3s" }}>
           PlaySport Courts
         </h1>
-        <div className="text-xl font-bold text-gradient-hero mb-3 animate-slide-up" style={{ animationDelay: "2s" }}>
-          12&quot; × 12&quot; Premium Court Tiles
+        
+        {/* Tagline */}
+        <div className="text-2xl font-light text-white/80 mb-6 animate-slide-up" style={{ animationDelay: "2.5s" }}>
+          Premium Modular Court Tiles
         </div>
-        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground animate-slide-up" style={{ animationDelay: "2.2s" }}>
-          <div className="w-2 h-2 rounded-full bg-[var(--brand-primary)] animate-pulse" />
-          <span>Assembling your court</span>
+        
+        {/* Loading indicator */}
+        <div className="flex items-center justify-center gap-3 animate-fade-in" style={{ animationDelay: "2.7s" }}>
+          <div className="flex gap-1.5">
+            <div className="w-2 h-2 rounded-full bg-gradient-primary animate-pulse" style={{ animationDelay: "0s" }} />
+            <div className="w-2 h-2 rounded-full bg-gradient-primary animate-pulse" style={{ animationDelay: "0.2s" }} />
+            <div className="w-2 h-2 rounded-full bg-gradient-primary animate-pulse" style={{ animationDelay: "0.4s" }} />
+          </div>
         </div>
       </div>
 
@@ -102,7 +120,7 @@ export function TileLoadingAnimation() {
         }
 
         .tile-animate {
-          animation: tileSlide 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          animation: tileSlide 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         @keyframes fadeIn {

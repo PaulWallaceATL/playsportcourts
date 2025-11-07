@@ -115,12 +115,16 @@ export function MiniCourtBuilder({ className = "" }: { className?: string }) {
       ctx.stroke();
 
     } else if (courtType === "tennis") {
-      // Service boxes (both ends)
+      // Tennis court - proper layout (78ft x 36ft proportions)
+      // Service boxes are the areas near the net
+      const serviceLinePos = Math.floor(courtWidth * 0.27); // Service line position from each end
+      
       ctx.fillStyle = laneColor;
-      for (let y = 2; y <= 8; y++) {
-        for (let x = 0; x < 3; x++) {
+      // Service boxes (rectangular areas)
+      for (let y = 3; y <= 7; y++) { // Center court area
+        for (let x = 0; x < serviceLinePos / tileSize; x++) {
           ctx.fillRect(offsetX + x * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
-          ctx.fillRect(offsetX + (13 + x) * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
+          ctx.fillRect(offsetX + (courtWidth / tileSize - serviceLinePos / tileSize + x) * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
         }
       }
 
@@ -128,29 +132,39 @@ export function MiniCourtBuilder({ className = "" }: { className?: string }) {
       ctx.strokeStyle = "#FFFFFF";
       ctx.lineWidth = 2;
       
-      // Center net
+      // Center net line
       ctx.beginPath();
       ctx.moveTo(offsetX + courtWidth / 2, offsetY);
       ctx.lineTo(offsetX + courtWidth / 2, offsetY + courtHeight);
       ctx.stroke();
       
-      // Service boxes outline
-      ctx.strokeRect(offsetX, offsetY + 2 * tileSize, 3 * tileSize, 7 * tileSize);
-      ctx.strokeRect(offsetX + 13 * tileSize, offsetY + 2 * tileSize, 3 * tileSize, 7 * tileSize);
+      // Service lines (perpendicular to net)
+      ctx.beginPath();
+      ctx.moveTo(offsetX + serviceLinePos, offsetY);
+      ctx.lineTo(offsetX + serviceLinePos, offsetY + courtHeight);
+      ctx.moveTo(offsetX + courtWidth - serviceLinePos, offsetY);
+      ctx.lineTo(offsetX + courtWidth - serviceLinePos, offsetY + courtHeight);
+      ctx.stroke();
       
-      // Service line across
+      // Center service line (parallel to sidelines)
       ctx.beginPath();
       ctx.moveTo(offsetX, offsetY + courtHeight / 2);
       ctx.lineTo(offsetX + courtWidth, offsetY + courtHeight / 2);
       ctx.stroke();
 
     } else if (courtType === "pickleball") {
-      // Kitchen/non-volley zones (2 tiles deep on each side)
+      // Pickleball court - accurate 44ft x 20ft proportions
+      // Kitchen/non-volley zones are 7ft from net on each side
+      const kitchenDepth = 3; // 3 tiles = 7ft from net
+      
       ctx.fillStyle = laneColor;
+      // Kitchen zones (7ft from net on both sides)
       for (let y = 0; y < courtHeight / tileSize; y++) {
-        for (let x = 0; x < 2; x++) {
+        for (let x = 0; x < kitchenDepth; x++) {
+          // Left kitchen
           ctx.fillRect(offsetX + x * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
-          ctx.fillRect(offsetX + (14 + x) * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
+          // Right kitchen
+          ctx.fillRect(offsetX + (courtWidth / tileSize - kitchenDepth + x) * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
         }
       }
 
@@ -158,21 +172,21 @@ export function MiniCourtBuilder({ className = "" }: { className?: string }) {
       ctx.strokeStyle = "#FFFFFF";
       ctx.lineWidth = 2;
       
-      // Center net
+      // Center net line
       ctx.beginPath();
       ctx.moveTo(offsetX + courtWidth / 2, offsetY);
       ctx.lineTo(offsetX + courtWidth / 2, offsetY + courtHeight);
       ctx.stroke();
       
-      // Kitchen lines
+      // Kitchen lines (no-volley zone boundaries)
       ctx.beginPath();
-      ctx.moveTo(offsetX + 2 * tileSize, offsetY);
-      ctx.lineTo(offsetX + 2 * tileSize, offsetY + courtHeight);
-      ctx.moveTo(offsetX + 14 * tileSize, offsetY);
-      ctx.lineTo(offsetX + 14 * tileSize, offsetY + courtHeight);
+      ctx.moveTo(offsetX + kitchenDepth * tileSize, offsetY);
+      ctx.lineTo(offsetX + kitchenDepth * tileSize, offsetY + courtHeight);
+      ctx.moveTo(offsetX + courtWidth - kitchenDepth * tileSize, offsetY);
+      ctx.lineTo(offsetX + courtWidth - kitchenDepth * tileSize, offsetY + courtHeight);
       ctx.stroke();
       
-      // Sideline
+      // Center sideline (divides doubles court)
       ctx.beginPath();
       ctx.moveTo(offsetX, offsetY + courtHeight / 2);
       ctx.lineTo(offsetX + courtWidth, offsetY + courtHeight / 2);
