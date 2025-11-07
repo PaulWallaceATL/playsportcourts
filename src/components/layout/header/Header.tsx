@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PlaySportLogo } from "@/components/ui/PlaySportLogo";
 import { siteContent } from "@/data/home";
 import { getCurrentUser, isDealer } from "@/lib/mock-auth";
 import { cn } from "@/lib/utils";
@@ -61,8 +62,8 @@ export function Header() {
           <Link href="/" className="flex items-center gap-3 group">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-primary blur-lg opacity-50 group-hover:opacity-75 transition-opacity" />
-              <div className="relative w-10 h-10 rounded-xl bg-gradient-primary flex items-center justify-center font-bold text-black shadow-neon-blue">
-                PS
+              <div className="relative">
+                <PlaySportLogo size={40} className="text-black" />
               </div>
             </div>
             <span className="hidden font-bold text-lg sm:inline text-gradient-hero">

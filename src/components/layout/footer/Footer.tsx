@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MapPin, Phone, Mail, Instagram, Facebook, Linkedin } from "lucide-react";
+import { PlaySportLogo } from "@/components/ui/PlaySportLogo";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -20,9 +21,7 @@ export function Footer() {
             <div className="flex items-center gap-3 mb-4">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-primary blur-md opacity-50" />
-                <div className="relative w-12 h-12 rounded-xl bg-gradient-primary flex items-center justify-center font-bold text-black text-lg shadow-neon-blue">
-                  PS
-                </div>
+                <PlaySportLogo size={48} className="text-black" />
               </div>
               <span className="font-bold text-xl text-gradient-hero">
                 PlaySport Courts

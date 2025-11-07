@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { PlaySportLogo } from "@/components/ui/PlaySportLogo";
 
 export function TileLoadingAnimation() {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -65,9 +66,9 @@ export function TileLoadingAnimation() {
 
       {/* Center Logo */}
       <div className="relative z-10 text-center animate-fade-in" style={{ animationDelay: "1.5s" }}>
-        <div className="mb-4">
-          <div className="inline-block w-28 h-28 rounded-2xl bg-gradient-primary flex items-center justify-center shadow-neon-blue animate-pulse">
-            <span className="text-5xl font-black text-black">PS</span>
+        <div className="mb-6 flex justify-center">
+          <div className="animate-pulse">
+            <PlaySportLogo size={120} className="text-black drop-shadow-2xl" />
           </div>
         </div>
         <h1 className="text-5xl font-black text-white mb-2 animate-slide-up" style={{ animationDelay: "1.8s" }}>

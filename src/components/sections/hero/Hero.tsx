@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { Button, type ButtonProps } from "@/components/ui/button";
-import { HeroTile } from "@/components/sections/hero/HeroTile";
+import { MiniCourtBuilder } from "@/components/sections/hero/MiniCourtBuilder";
 import { HeroVideo } from "@/components/sections/hero/HeroVideo";
 import { siteContent } from "@/data/home";
-import { TileCourt, TileGarage, Palette } from "@/components/icons";
+import { TileCourt, Palette } from "@/components/icons";
 
 export function Hero() {
   return (
@@ -45,27 +45,18 @@ export function Hero() {
               <Link href="/court-tiles" className="quick-pill" aria-label="Browse court tiles">
                 <TileCourt size={18} /> Court Tiles
               </Link>
-              <Link href="/garage-tiles" className="quick-pill" aria-label="Browse garage tiles">
-                <TileGarage size={18} /> Garage Tiles
-              </Link>
-              <Link href="#" className="quick-pill" aria-label="Open color designer">
-                <Palette size={18} /> Try Colors
+              <Link href="/dealer-portal" className="quick-pill" aria-label="Try Court Builder">
+                <Palette size={18} /> Build Your Court
               </Link>
             </div>
           </div>
 
-        {/* Right: 3D tile aligned opposite the text */}
+        {/* Right: Mini Court Builder */}
         <div className="relative justify-self-end">
-          <HeroTile className="w-[220px] sm:w-[260px] lg:w-[420px]" />
-
-          {/* Interaction lure: encourages users to play with the tile */}
-          <div className="pointer-events-none absolute -right-1 sm:right-2 top-4 hero-interact">
-            <div className="ring" />
-            <div className="label" aria-hidden>
-              <svg className="hand" width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path d="M6 12v-1c0-1.657 1.343-3 3-3m0 0V6a1 1 0 1 1 2 0v2m-2 0h2m0 0V6a1 1 0 1 1 2 0v2m0 0h2m0 0V7a1 1 0 1 1 2 0v5c0 3.866-3.134 7-7 7h-1.5c-1.657 0-3-1.343-3-3V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <span>Drag to spin</span>
+          <div className="relative">
+            <MiniCourtBuilder className="w-[220px] sm:w-[260px] lg:w-[400px]" />
+            <div className="absolute -bottom-4 -right-4 px-4 py-2 rounded-full bg-gradient-primary text-black text-sm font-bold shadow-neon-blue">
+              Interactive Preview
             </div>
           </div>
         </div>
