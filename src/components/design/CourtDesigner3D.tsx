@@ -297,7 +297,7 @@ export function CourtDesigner3D({ sport }: CourtDesigner3DProps) {
               />
             </div>
             <p className="text-xs text-muted-foreground">
-              Total: {dimensions.length × dimensions.width} sq ft ({dimensions.length × dimensions.width} tiles)
+              Total: {dimensions.length * dimensions.width} sq ft ({dimensions.length * dimensions.width} tiles)
             </p>
           </div>
         </div>
@@ -397,7 +397,7 @@ export function CourtDesigner3D({ sport }: CourtDesigner3DProps) {
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Tiles:</span>
-              <span className="font-semibold">{dimensions.length × dimensions.width}</span>
+              <span className="font-semibold">{dimensions.length * dimensions.width}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Base Color:</span>
