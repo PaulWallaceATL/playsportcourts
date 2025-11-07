@@ -26,15 +26,33 @@ const COLORS = [
 export function CourtDesigner3D({ sport }: CourtDesigner3DProps) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [rotation, setRotation] = React.useState({ x: 30, y: 45 }); // 3D rotation angles
+  const [targetRotation, setTargetRotation] = React.useState({ x: 30, y: 45 }); // Smooth interpolation target
   const [zoom, setZoom] = React.useState(1);
   const [isDragging, setIsDragging] = React.useState(false);
   const [lastMouse, setLastMouse] = React.useState({ x: 0, y: 0 });
+  const animationRef = React.useRef<number>();
   
   // Court customization
   const [baseColor, setBaseColor] = React.useState("#2C2C2C");
   const [accentColor, setAccentColor] = React.useState("#2563EB");
   const [lineColor, setLineColor] = React.useState("#FFFFFF");
   const [dimensions, setDimensions] = React.useState({ length: 94, width: 50 }); // Basketball default
+
+  // Smooth interpolation for rotation
+  React.useEffect(() => {
+    const animate = () => {
+      setRotation(current => ({
+        x: current.x + (targetRotation.x - current.x) * 0.15, // Smooth lerp
+        y: current.y + (targetRotation.y - current.y) * 0.15,
+      }));
+      animationRef.current = requestAnimationFrame(animate);
+    };
+    
+    animationRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    };
+  }, [targetRotation]);
 
   const draw3DCourt = React.useCallback(() => {
     const canvas = canvasRef.current;
@@ -46,7 +64,15 @@ export function CourtDesigner3D({ sport }: CourtDesigner3DProps) {
     canvas.width = 800;
     canvas.height = 600;
 
-    ctx.fillStyle = "#0a0a0a";
+    // Anti-aliasing
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+
+    // Background with subtle gradient
+    const gradient = ctx.createLinearGradient(0, 0, 0, 600);
+    gradient.addColorStop(0, "#0a0a0a");
+    gradient.addColorStop(1, "#050505");
+    ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, 800, 600);
 
     // 3D projection setup
@@ -54,7 +80,7 @@ export function CourtDesigner3D({ sport }: CourtDesigner3DProps) {
     const centerY = 300;
     const scale = 3 * zoom;
     
-    // Convert angles to radians
+    // Convert angles to radians with smooth values
     const rotX = (rotation.x * Math.PI) / 180;
     const rotY = (rotation.y * Math.PI) / 180;
 
@@ -182,8 +208,13 @@ export function CourtDesigner3D({ sport }: CourtDesigner3DProps) {
   }, [sport, rotation, zoom, baseColor, accentColor, lineColor, dimensions]);
 
   React.useEffect(() => {
-    const interval = setInterval(draw3DCourt, 16); // 60fps
-    return () => clearInterval(interval);
+    let frameId: number;
+    const animate = () => {
+      draw3DCourt();
+      frameId = requestAnimationFrame(animate);
+    };
+    frameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frameId);
   }, [draw3DCourt]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -197,9 +228,10 @@ export function CourtDesigner3D({ sport }: CourtDesigner3DProps) {
     const deltaX = e.clientX - lastMouse.x;
     const deltaY = e.clientY - lastMouse.y;
     
-    setRotation(prev => ({
-      x: Math.max(-90, Math.min(90, prev.x + deltaY * 0.5)),
-      y: prev.y + deltaX * 0.5,
+    // Update target rotation for smooth interpolation
+    setTargetRotation(prev => ({
+      x: Math.max(-90, Math.min(90, prev.x + deltaY * 0.3)), // Slower, smoother
+      y: prev.y + deltaX * 0.3,
     }));
     
     setLastMouse({ x: e.clientX, y: e.clientY });
@@ -227,16 +259,17 @@ export function CourtDesigner3D({ sport }: CourtDesigner3DProps) {
               >
                 <ZoomOut className="w-4 h-4" />
               </button>
-              <button
-                onClick={() => {
-                  setRotation({ x: 30, y: 45 });
-                  setZoom(1);
-                }}
-                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
-                title="Reset View"
-              >
-                <RotateCcw className="w-4 h-4" />
-              </button>
+                <button
+                  onClick={() => {
+                    setRotation({ x: 30, y: 45 });
+                    setTargetRotation({ x: 30, y: 45 });
+                    setZoom(1);
+                  }}
+                  className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+                  title="Reset View"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                </button>
             </div>
           </div>
 
