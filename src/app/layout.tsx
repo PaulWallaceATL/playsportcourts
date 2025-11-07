@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/header/Header";
 import { ScrollProgress } from "@/components/animations/ScrollProgress";
 import { PageTransition } from "@/components/animations/PageTransition";
+import { TileLoadingAnimation } from "@/components/animations/TileLoadingAnimation";
 import { LiveChat } from "@/components/advanced/LiveChat";
 import { GA_ID } from "@/lib/analytics";
 import { Footer } from "@/components/layout/footer/Footer";
@@ -62,6 +63,7 @@ export default function RootLayout({
             />
           </>
         )}
+        <TileLoadingAnimation />
         <ScrollProgress />
         <Header />
         <main>
