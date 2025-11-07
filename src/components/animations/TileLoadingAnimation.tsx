@@ -5,14 +5,23 @@ import { PlaySportLogo } from "@/components/ui/PlaySportLogo";
 
 export function TileLoadingAnimation() {
   const [isLoading, setIsLoading] = React.useState(true);
+  const [isFoldingOut, setIsFoldingOut] = React.useState(false);
 
   React.useEffect(() => {
-    // Hide loading after animation completes
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 5500); // 5.5 second animation
+    // Start fold-out animation
+    const foldTimer = setTimeout(() => {
+      setIsFoldingOut(true);
+    }, 4500); // Start folding at 4.5s
 
-    return () => clearTimeout(timer);
+    // Complete hide after fold animation
+    const hideTimer = setTimeout(() => {
+      setIsLoading(false);
+    }, 5500); // Hide at 5.5s (1s fold animation)
+
+    return () => {
+      clearTimeout(foldTimer);
+      clearTimeout(hideTimer);
+    };
   }, []);
 
   if (!isLoading) return null;
@@ -53,7 +62,7 @@ export function TileLoadingAnimation() {
           return (
             <div
               key={i}
-              className="tile-animate"
+              className={`tile-animate ${isFoldingOut ? 'tile-fold-out' : ''}`}
               style={{
                 backgroundColor: color,
                 animationDelay: `${delay}s`,
@@ -121,6 +130,25 @@ export function TileLoadingAnimation() {
 
         .tile-animate {
           animation: tileSlide 1.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes tileFoldOut {
+          0% {
+            transform: scale(1) rotateY(0deg);
+            opacity: 0.9;
+          }
+          50% {
+            transform: scale(0.8) rotateY(90deg);
+            opacity: 0.5;
+          }
+          100% {
+            transform: scale(0) rotateY(180deg);
+            opacity: 0;
+          }
+        }
+
+        .tile-fold-out {
+          animation: tileFoldOut 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
         }
 
         @keyframes fadeIn {

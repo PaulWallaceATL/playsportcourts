@@ -94,12 +94,12 @@ export function ProductCatalog() {
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {TILE_PRODUCTS.map((product) => {
           const selectedColor = selectedProducts[product.id] || product.colors[0];
-          
-          return (
-            <div
+        
+        return (
+          <div
               key={product.id}
               className="card-premium hover:scale-[1.02] transition-all"
-            >
+          >
               {/* Product Image/Color Preview */}
               <div className="relative aspect-square bg-gradient-to-br from-white/5 to-white/10 rounded-lg overflow-hidden mb-6">
                 <div 
@@ -111,14 +111,14 @@ export function ProductCatalog() {
                   <div className="px-3 py-1 rounded-full bg-gradient-primary text-black text-sm font-bold">
                     ${product.price}
                   </div>
-                </div>
+              </div>
                 {product.id === "x" && (
                   <div className="absolute top-4 left-4">
                     <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-[var(--brand-accent)]/20 border border-[var(--brand-accent)]/50">
                       <Star className="w-3 h-3 text-[var(--brand-accent)] fill-[var(--brand-accent)]" />
                       <span className="text-xs font-bold text-[var(--brand-accent)]">PRO</span>
-                    </div>
-                  </div>
+              </div>
+            </div>
                 )}
               </div>
 
@@ -131,9 +131,9 @@ export function ProductCatalog() {
                     <span className="text-sm text-muted-foreground">{product.priceUnit}</span>
                   </div>
                   <p className="text-sm text-muted-foreground">{product.description}</p>
-                </div>
+              </div>
 
-                {/* Features */}
+              {/* Features */}
                 <div>
                   <div className="text-xs font-semibold uppercase tracking-wide text-[var(--brand-primary)] mb-2">Features</div>
                   <ul className="space-y-1.5">
@@ -172,12 +172,12 @@ export function ProductCatalog() {
                     {product.bestFor.map((use, idx) => (
                       <span key={idx} className="sport-badge text-xs">
                         {use}
-                      </span>
-                    ))}
+                  </span>
+                ))}
                   </div>
-                </div>
+              </div>
 
-                {/* Color Selection */}
+              {/* Color Selection */}
                 <div>
                   <div className="text-xs font-semibold uppercase tracking-wide text-[var(--brand-primary)] mb-2">
                     Available Colors ({product.colors.length})
@@ -206,10 +206,10 @@ export function ProductCatalog() {
                   </div>
                   <p className="text-xs text-muted-foreground">{selectedColor}</p>
                 </div>
-              </div>
             </div>
-          );
-        })}
+          </div>
+        );
+      })}
       </div>
 
       {/* Comparison Table */}

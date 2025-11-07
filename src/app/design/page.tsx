@@ -53,7 +53,7 @@ const COURT_TYPES = [
 ];
 
 export default function DesignPage() {
-  return (
+	return (
     <div>
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
@@ -74,7 +74,7 @@ export default function DesignPage() {
       </section>
 
       {/* Court Designer Grid */}
-      <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
+		<section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 pad-section">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {COURT_TYPES.map((court) => (
             <Link
@@ -152,8 +152,8 @@ export default function DesignPage() {
               </p>
             </div>
           </div>
-        </div>
-      </section>
+			</div>
+		</section>
     </div>
-  );
+	);
 }

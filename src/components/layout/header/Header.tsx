@@ -91,10 +91,10 @@ export function Header() {
               ))}
               
               {/* PlaySport+ link */}
-              <li>
-                <Link
-                  href="/dealer-portal"
-                  className={cn(
+                <li>
+                  <Link
+                    href="/dealer-portal"
+                    className={cn(
                     "text-sm font-semibold transition-all nav-underline relative",
                     pathname === "/dealer-portal" 
                       ? "text-[var(--brand-primary)]" 
@@ -104,8 +104,8 @@ export function Header() {
                   aria-label="Navigate to PlaySport Pro"
                 >
                   PlaySport+
-                </Link>
-              </li>
+                  </Link>
+                </li>
             </ul>
           </nav>
 
