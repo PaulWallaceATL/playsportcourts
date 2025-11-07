@@ -89,9 +89,10 @@ export function Header() {
                   >
                     {item.label}
                   </Link>
-
-                  {/* Dropdown menus removed - simplified navigation */}
-                  {false && (
+                </li>
+              ))}
+              {/* PlaySport+ link - skip this, will add after loop */}
+              {false && (
                     <div
                       className="menu-panel absolute left-1/2 -translate-x-1/2 top-full w-[720px]"
                       onMouseEnter={() => {
@@ -177,9 +178,13 @@ export function Header() {
                 <Link
                   href="/dealer-portal"
                   className={cn(
-                    "text-sm font-medium transition-colors nav-underline holo-link",
-                    pathname === "/dealer-portal" ? "text-[var(--primary)]" : "text-foreground/80"
+                    "text-sm font-semibold transition-all nav-underline relative",
+                    pathname === "/dealer-portal" 
+                      ? "text-[var(--brand-primary)]" 
+                      : "text-white/90 hover:text-white"
                   )}
+                  aria-current={pathname === "/dealer-portal" ? "page" : undefined}
+                  aria-label="Navigate to PlaySport Pro"
                 >
                   PlaySport+
                 </Link>
