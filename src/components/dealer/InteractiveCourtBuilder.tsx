@@ -801,6 +801,18 @@ export function InteractiveCourtBuilder({
         />
       </div>
 
+      {/* Debug: Show element positions */}
+      {elements.length > 0 && (
+        <div className="mt-4 p-3 bg-black/50 rounded text-xs font-mono">
+          <div className="text-[var(--brand-primary)] mb-2">Elements ({elements.length}):</div>
+          {elements.map((el) => (
+            <div key={el.id} className={`${selectedElement === el.id ? 'text-[var(--brand-accent)]' : 'text-muted-foreground'}`}>
+              {el.type}: x={el.x}, y={el.y}, w={el.width}, h={el.height}
+            </div>
+          ))}
+        </div>
+      )}
+      
       {gameLines.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-2">
           {gameLines.map((line) => (
