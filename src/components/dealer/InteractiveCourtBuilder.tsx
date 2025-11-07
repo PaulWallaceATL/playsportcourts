@@ -517,21 +517,27 @@ export function InteractiveCourtBuilder({
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
-    const maxWidth = isFullscreen ? 1200 : 800;
-    const maxHeight = isFullscreen ? 800 : 500;
+    
+    // Get actual canvas dimensions
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
     
     const tileSize = Math.min(
-      maxWidth / courtLength,
-      maxHeight / courtWidth
+      canvasWidth / courtLength,
+      canvasHeight / courtWidth
     ) * 0.9 * scale;
 
     const courtPixelWidth = courtLength * tileSize;
     const courtPixelHeight = courtWidth * tileSize;
-    const offsetX = (maxWidth - courtPixelWidth) / 2;
-    const offsetY = (maxHeight - courtPixelHeight) / 2;
+    const offsetX = (canvasWidth - courtPixelWidth) / 2;
+    const offsetY = (canvasHeight - courtPixelHeight) / 2;
 
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    // Scale mouse position to canvas coordinates
+    const scaleX = canvasWidth / rect.width;
+    const scaleY = canvasHeight / rect.height;
+    
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
 
     const tileX = Math.floor((x - offsetX) / tileSize);
     const tileY = Math.floor((y - offsetY) / tileSize);
@@ -578,21 +584,27 @@ export function InteractiveCourtBuilder({
     if (!canvas) return;
 
     const rect = canvas.getBoundingClientRect();
-    const maxWidth = isFullscreen ? 1200 : 800;
-    const maxHeight = isFullscreen ? 800 : 500;
+    
+    // Get actual canvas dimensions
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
     
     const tileSize = Math.min(
-      maxWidth / courtLength,
-      maxHeight / courtWidth
+      canvasWidth / courtLength,
+      canvasHeight / courtWidth
     ) * 0.9 * scale;
 
     const courtPixelWidth = courtLength * tileSize;
     const courtPixelHeight = courtWidth * tileSize;
-    const offsetX = (maxWidth - courtPixelWidth) / 2;
-    const offsetY = (maxHeight - courtPixelHeight) / 2;
+    const offsetX = (canvasWidth - courtPixelWidth) / 2;
+    const offsetY = (canvasHeight - courtPixelHeight) / 2;
 
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    // Scale mouse position to canvas coordinates
+    const scaleX = canvasWidth / rect.width;
+    const scaleY = canvasHeight / rect.height;
+    
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
 
     const tileX = Math.floor((x - offsetX) / tileSize);
     const tileY = Math.floor((y - offsetY) / tileSize);
