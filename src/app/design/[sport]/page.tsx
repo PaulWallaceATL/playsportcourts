@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { CourtDesigner3D } from "@/components/design/CourtDesigner3D";
 
 type Sport = "basketball" | "pickleball" | "tennis" | "multi-sport" | "shuffleboard" | "volleyball";
 
@@ -41,27 +42,26 @@ export default async function SportDesignerPage({ params }: { params: Promise<{ 
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[var(--background)]">
       <div className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-8">
-        <div className="card-premium">
-          <h1 className="heading-1 text-gradient-hero mb-4">{info.name}</h1>
-          <p className="text-muted-foreground mb-8">{info.description}</p>
-          
-          <div className="text-center py-20">
-            <p className="text-xl text-muted-foreground mb-4">
-              Sport-specific designer coming soon!
-            </p>
-            <p className="text-sm text-muted-foreground mb-6">
-              For now, use our full court builder in PlaySport Pro
-            </p>
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="heading-1 text-gradient-hero mb-2">{info.name}</h1>
+              <p className="text-muted-foreground">{info.description}</p>
+            </div>
             <a 
               href="/dealer-portal"
-              className="btn-premium-primary inline-flex items-center gap-2"
+              className="btn-premium-secondary text-sm"
             >
-              Go to PlaySport Pro →
+              Advanced Builder →
             </a>
           </div>
         </div>
+
+        {/* 3D Designer */}
+        <CourtDesigner3D sport={sport as Sport} />
       </div>
     </div>
   );
