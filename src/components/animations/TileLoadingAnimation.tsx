@@ -74,7 +74,7 @@ export function TileLoadingAnimation() {
           PlaySport Courts
         </h1>
         <div className="text-xl font-bold text-gradient-hero mb-3 animate-slide-up" style={{ animationDelay: "2s" }}>
-          12" × 12" Premium Court Tiles
+          12&quot; × 12&quot; Premium Court Tiles
         </div>
         <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground animate-slide-up" style={{ animationDelay: "2.2s" }}>
           <div className="w-2 h-2 rounded-full bg-[var(--brand-primary)] animate-pulse" />
