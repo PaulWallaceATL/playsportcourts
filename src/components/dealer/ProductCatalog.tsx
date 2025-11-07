@@ -234,9 +234,9 @@ export function ProductCatalog() {
               </tr>
               <tr className="border-b border-white/10">
                 <td className="p-4">Thickness</td>
-                <td className="text-center p-4">0.75"</td>
-                <td className="text-center p-4">0.875"</td>
-                <td className="text-center p-4 font-bold">1"</td>
+                <td className="text-center p-4">0.75&quot;</td>
+                <td className="text-center p-4">0.875&quot;</td>
+                <td className="text-center p-4 font-bold">1&quot;</td>
               </tr>
               <tr className="border-b border-white/10">
                 <td className="p-4">Warranty</td>
