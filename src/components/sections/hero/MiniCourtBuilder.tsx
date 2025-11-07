@@ -47,7 +47,7 @@ export function MiniCourtBuilder({ className = "" }: { className?: string }) {
         const tileX = offsetX + x * tileSize;
         const tileY = offsetY + y * tileSize;
         
-        let color = baseColor;
+        const color = baseColor;
         
         // Hover glow
         if (hovering) {
