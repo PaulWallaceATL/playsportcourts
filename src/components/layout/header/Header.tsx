@@ -74,7 +74,7 @@ export function Header() {
           {/* Desktop nav */}
           <nav className="hidden md:block">
             <ul className="flex items-center gap-6">
-              {NAV_ITEMS.filter((item) => item.label !== "Admin").map((item) => (
+              {NAV_ITEMS.map((item) => (
                 <li
                   key={item.href}
                   className="relative z-50"

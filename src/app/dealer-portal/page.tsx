@@ -16,7 +16,7 @@ import {
   FileText,
 } from "lucide-react";
 import { getCurrentUser, login, logout, signup, isDealer } from "@/lib/mock-auth";
-import { CartItem, ProductId } from "@/lib/stripe";
+import { CartItem } from "@/lib/stripe";
 import { AuthUI } from "@/components/dealer/AuthUI";
 import { DashboardMetrics } from "@/components/dealer/DashboardMetrics";
 import { ProductCatalog } from "@/components/dealer/ProductCatalog";
