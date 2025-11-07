@@ -555,24 +555,16 @@ export function InteractiveCourtBuilder({
       (a.width * a.height) - (b.width * b.height)
     )[0];
 
-    // Debug: Check if within court bounds
+    // Check if within court bounds
     if (tileX < 0 || tileX >= Math.ceil(courtLength) || tileY < 0 || tileY >= Math.ceil(courtWidth)) {
-      console.log('Click outside court bounds');
       return;
     }
-
-    console.log('Click at tile:', tileX, tileY, 'Elements found:', clickedElements.length);
     
     if (clickedElement) {
-      console.log('✓ Selected:', clickedElement.type, clickedElement.id);
       setSelectedElement(clickedElement.id);
       setIsDragging(true);
       setDragStart({ x: tileX - clickedElement.x, y: tileY - clickedElement.y });
-      
-      // Force immediate redraw to show selection
-      drawCourt();
     } else {
-      console.log('✗ No element at this position. Elements:', elements.map(e => ({type: e.type, x: e.x, y: e.y, w: e.width, h: e.height})));
       setSelectedElement(null);
     }
   };
@@ -801,18 +793,6 @@ export function InteractiveCourtBuilder({
         />
       </div>
 
-      {/* Debug: Show element positions */}
-      {elements.length > 0 && (
-        <div className="mt-4 p-3 bg-black/50 rounded text-xs font-mono">
-          <div className="text-[var(--brand-primary)] mb-2">Elements ({elements.length}):</div>
-          {elements.map((el) => (
-            <div key={el.id} className={`${selectedElement === el.id ? 'text-[var(--brand-accent)]' : 'text-muted-foreground'}`}>
-              {el.type}: x={el.x}, y={el.y}, w={el.width}, h={el.height}
-            </div>
-          ))}
-        </div>
-      )}
-      
       {gameLines.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-2">
           {gameLines.map((line) => (

@@ -109,8 +109,8 @@ export function OrderSummary({ formData, pricing, squareFeet, onClose }: OrderSu
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } else if (format === "pdf") {
-      // PDF generation - would use jsPDF library in production
-      alert("PDF export feature - integrate with jsPDF library");
+      // PDF generation using print to PDF
+      window.print();
     } else if (format === "dxf") {
       // DXF/DWG generation for CAD
       const dxfContent = generateDXF();
