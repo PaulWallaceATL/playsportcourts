@@ -209,18 +209,6 @@ export function MiniCourtBuilder({ className = "" }: { className?: string }) {
             </div>
           </div>
 
-          <button
-            onClick={() => {
-              setBaseColor("#2C2C2C");
-              setLaneColor("#2563EB");
-            }}
-            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
-            title="Reset Colors"
-          >
-            <RefreshCw className="w-4 h-4 text-white" />
-          </button>
-        </div>
-
         {/* Info Text */}
         <div className="mt-3 text-center">
           <p className="text-sm font-semibold text-white mb-1">

@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Check, ArrowRight, Zap, Shield, Palette, Sparkles, Layers, Box } from "lucide-react";
 import { Hero } from "@/components/sections/hero/Hero";
 import { TilesShowcase } from "@/components/sections/tiles/TilesShowcase";
+import { FeaturesGrid } from "@/components/sections/home/FeaturesGrid";
+import { Testimonials } from "@/components/sections/home/Testimonials";
 import { Resurfacing } from "@/components/sections/resurfacing/Resurfacing";
 import { ScrollReveal } from "@/components/animations/ScrollReveal";
 import { CountUp } from "@/components/animations/CountUp";
@@ -303,26 +305,32 @@ export default function Home() {
       {/* Social Proof */}
       <ScrollReveal direction="up">
         <section className="mx-auto max-w-screen-2xl px-4 sm:px-6 lg:px-8 py-32">
-          <div className="card-premium border-premium-animated p-16 md:p-20 relative overflow-hidden">
+          <div className="card-premium border-premium-animated p-12 md:p-20 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-primary)]/5 to-[var(--brand-accent)]/5" />
-            <div className="grid md:grid-cols-3 gap-16 text-center relative">
+            <div className="grid md:grid-cols-3 gap-12 md:gap-16 text-center relative">
               {[
                 { value: 500, suffix: "+", label: "Courts Built" },
                 { value: 5, suffix: ".0", label: "Avg Rating" },
                 { value: 15, suffix: "+", label: "Years Experience" },
               ].map((stat) => (
                 <div key={stat.label} className="group">
-                  <div className="text-8xl font-black text-gradient-hero mb-5 group-hover:scale-110 transition-transform duration-500">
+                  <div className="text-6xl md:text-8xl font-black text-gradient-hero mb-5 group-hover:scale-110 transition-transform duration-500">
                     <CountUp end={stat.value} suffix={stat.suffix} />
                   </div>
-                  <div className="text-lg text-white/80 font-semibold">{stat.label}</div>
-                  <div className="w-24 h-1.5 bg-gradient-primary mx-auto mt-5 rounded-full" />
+                  <div className="text-base md:text-lg text-white/80 font-semibold">{stat.label}</div>
+                  <div className="w-20 md:w-24 h-1.5 bg-gradient-primary mx-auto mt-4 md:mt-5 rounded-full" />
                 </div>
               ))}
             </div>
           </div>
         </section>
       </ScrollReveal>
+
+      {/* Features Grid */}
+      <FeaturesGrid />
+
+      {/* Testimonials */}
+      <Testimonials />
 
       {/* Resurfacing */}
       <Resurfacing />
