@@ -50,7 +50,7 @@ export default function Home() {
             Build Your Dream Court
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Premium 12" × 12" modular tiles. Design in 3D, customize every detail, 
+            Premium 12&quot; × 12&quot; modular tiles. Design in 3D, customize every detail, 
             and get professional results built your way.
           </p>
         </div>
@@ -204,7 +204,7 @@ export default function Home() {
             </h2>
             <ul className="space-y-4">
               {[
-                "Premium 12\" × 12\" modular tiles",
+                "Premium 12&quot; × 12&quot; modular tiles",
                 "11 professional color options",
                 "18 sport configurations available",
                 "Interactive 3D design tools",
