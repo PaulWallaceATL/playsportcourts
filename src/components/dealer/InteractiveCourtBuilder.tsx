@@ -549,18 +549,24 @@ export function InteractiveCourtBuilder({
       (a.width * a.height) - (b.width * b.height)
     )[0];
 
-    console.log('Click at tile:', tileX, tileY);
-    console.log('Elements:', elements);
-    console.log('Clicked elements:', clickedElements);
+    // Debug: Check if within court bounds
+    if (tileX < 0 || tileX >= Math.ceil(courtLength) || tileY < 0 || tileY >= Math.ceil(courtWidth)) {
+      console.log('Click outside court bounds');
+      return;
+    }
 
+    console.log('Click at tile:', tileX, tileY, 'Elements found:', clickedElements.length);
+    
     if (clickedElement) {
-      console.log('Selected:', clickedElement);
+      console.log('✓ Selected:', clickedElement.type, clickedElement.id);
       setSelectedElement(clickedElement.id);
       setIsDragging(true);
       setDragStart({ x: tileX - clickedElement.x, y: tileY - clickedElement.y });
+      
+      // Force immediate redraw to show selection
+      drawCourt();
     } else {
-      // Clicked on empty space - deselect
-      console.log('No element at this position');
+      console.log('✗ No element at this position. Elements:', elements.map(e => ({type: e.type, x: e.x, y: e.y, w: e.width, h: e.height})));
       setSelectedElement(null);
     }
   };
@@ -701,12 +707,12 @@ export function InteractiveCourtBuilder({
       </div>
 
       {/* Resize Controls */}
-      {selectedElement && (
-        <div className="mb-4 p-4 rounded-lg bg-gradient-primary/10 border-2 border-[var(--brand-primary)]/50">
+        {selectedElement && elements.find(e => e.id === selectedElement) && (
+        <div className="mb-4 p-4 rounded-lg bg-gradient-primary/10 border-2 border-[var(--brand-primary)]/50 animate-in">
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
               <span className="font-semibold text-[var(--brand-primary)]">
-                {elements.find(e => e.id === selectedElement)?.type.toUpperCase()}
+                ✓ {elements.find(e => e.id === selectedElement)?.type.toUpperCase()}
               </span>
               <span className="text-sm text-muted-foreground">
                 {elements.find(e => e.id === selectedElement)?.width} × {elements.find(e => e.id === selectedElement)?.height} tiles
