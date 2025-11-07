@@ -25,23 +25,41 @@ const display = Space_Grotesk({
 
 export const metadata: Metadata = {
   title: {
-    default: "PlaySport Courts",
+    default: "PlaySport Courts - Premium 12\" × 12\" Modular Court Tiles",
     template: "%s | PlaySport Courts",
   },
-  description: "Premium modular sport court tiles and flooring solutions. Professional installation, custom designs, and superior quality for residential and commercial applications.",
-  keywords: ["sport courts", "court tiles", "athletic flooring", "modular tiles", "basketball courts", "tennis courts", "pickleball courts", "game tiles"],
+  description: "Design and build your dream court with premium 12\" × 12\" modular tiles. Interactive 3D designers, custom colors, and professional installation. 11 colors, 18 sports supported.",
+  keywords: ["sport courts", "court tiles", "modular tiles", "basketball courts", "tennis courts", "pickleball courts", "court builder", "3D court designer", "custom court tiles"],
   authors: [{ name: "PlaySport Courts" }],
+  icons: {
+    icon: [
+      { url: "/logo.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/logo.svg", type: "image/svg+xml" },
+    ],
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
+    url: "https://playsportcourts.com",
     siteName: "PlaySport Courts",
-    title: "PlaySport Courts - Premium Sport Court Tiles",
-    description: "Premium modular sport court tiles and flooring solutions for residential and commercial applications.",
+    title: "PlaySport Courts - Interactive 3D Court Designer",
+    description: "Design your dream court with our interactive 3D tools. Premium 12\" × 12\" modular tiles in 11 colors. Professional installation available.",
+    images: [
+      {
+        url: "/og-image.svg",
+        width: 1200,
+        height: 630,
+        alt: "PlaySport Courts - Premium Modular Court Tiles",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "PlaySport Courts - Premium Sport Court Tiles",
-    description: "Premium modular sport court tiles and flooring solutions.",
+    title: "PlaySport Courts - Interactive 3D Court Designer",
+    description: "Design your dream court with premium 12\" × 12\" modular tiles. 11 colors, 18 sports, interactive 3D visualization.",
+    images: ["/og-image.svg"],
   },
 };
 
