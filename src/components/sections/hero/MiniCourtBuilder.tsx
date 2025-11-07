@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Palette, RotateCcw } from "lucide-react";
+import { Palette, RefreshCw } from "lucide-react";
 
 type CourtType = "basketball" | "tennis" | "pickleball";
 
@@ -10,15 +10,16 @@ const COLORS = [
   { name: "Royal Blue", hex: "#2563EB" },
   { name: "Emerald", hex: "#10B981" },
   { name: "Orange", hex: "#F97316" },
+  { name: "Titanium", hex: "#6B7280" },
 ];
 
 export function MiniCourtBuilder({ className = "" }: { className?: string }) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const [courtType, setCourtType] = React.useState<CourtType>("basketball");
-  const [baseColor, setBaseColor] = React.useState(COLORS[0].hex);
-  const [accentColor, setAccentColor] = React.useState(COLORS[1].hex);
-  const [dragElement, setDragElement] = React.useState<{ x: number; y: number } | null>(null);
-  const [isDragging, setIsDragging] = React.useState(false);
+  const [baseColor, setBaseColor] = React.useState("#2C2C2C"); // Graphite
+  const [laneColor, setLaneColor] = React.useState("#2563EB"); // Royal Blue
+  const [hovering, setHovering] = React.useState(false);
+  const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
 
   const drawCourt = React.useCallback(() => {
     const canvas = canvasRef.current;
@@ -35,132 +36,151 @@ export function MiniCourtBuilder({ className = "" }: { className?: string }) {
     ctx.fillRect(0, 0, size, size);
 
     const tileSize = 20;
-    const courtWidth = 16 * tileSize;
-    const courtHeight = 10 * tileSize;
+    const courtWidth = 16 * tileSize; // 16 tiles
+    const courtHeight = 11 * tileSize; // 11 tiles
     const offsetX = (size - courtWidth) / 2;
     const offsetY = (size - courtHeight) / 2;
 
-    // Draw base tiles
+    // Draw base tiles with subtle hover effect
     for (let y = 0; y < courtHeight / tileSize; y++) {
       for (let x = 0; x < courtWidth / tileSize; x++) {
-        ctx.fillStyle = baseColor;
-        ctx.fillRect(
-          offsetX + x * tileSize,
-          offsetY + y * tileSize,
-          tileSize - 1,
-          tileSize - 1
-        );
+        const tileX = offsetX + x * tileSize;
+        const tileY = offsetY + y * tileSize;
+        
+        let color = baseColor;
+        
+        // Hover glow
+        if (hovering) {
+          const dist = Math.sqrt(
+            Math.pow(tileX + tileSize / 2 - mousePos.x, 2) +
+            Math.pow(tileY + tileSize / 2 - mousePos.y, 2)
+          );
+          if (dist < 60) {
+            const intensity = 1 - dist / 60;
+            ctx.shadowBlur = 10 * intensity;
+            ctx.shadowColor = "#00d4ff";
+          } else {
+            ctx.shadowBlur = 0;
+          }
+        }
+        
+        ctx.fillStyle = color;
+        ctx.fillRect(tileX, tileY, tileSize - 1, tileSize - 1);
+        ctx.shadowBlur = 0;
       }
     }
 
-    // Draw court-specific markings
+    // Draw sport-specific markings
     if (courtType === "basketball") {
-      // Lane tiles
-      ctx.fillStyle = accentColor;
-      for (let y = 3; y <= 6; y++) {
+      // Left lane (4 tiles wide, centered vertically)
+      ctx.fillStyle = laneColor;
+      for (let y = 4; y <= 7; y++) {
         for (let x = 0; x < 4; x++) {
-          ctx.fillRect(
-            offsetX + x * tileSize,
-            offsetY + y * tileSize,
-            tileSize - 1,
-            tileSize - 1
-          );
+          ctx.fillRect(offsetX + x * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
+        }
+      }
+      
+      // Right lane
+      for (let y = 4; y <= 7; y++) {
+        for (let x = 12; x < 16; x++) {
+          ctx.fillRect(offsetX + x * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
         }
       }
 
-      // Lines
+      // Court lines
       ctx.strokeStyle = "#FFFFFF";
       ctx.lineWidth = 2;
-
-      // Lane outline
-      ctx.strokeRect(offsetX, offsetY + 3 * tileSize, 4 * tileSize, 4 * tileSize);
-
+      
       // Center line
       ctx.beginPath();
       ctx.moveTo(offsetX + courtWidth / 2, offsetY);
       ctx.lineTo(offsetX + courtWidth / 2, offsetY + courtHeight);
       ctx.stroke();
-
+      
       // Center circle
       ctx.beginPath();
-      ctx.arc(offsetX + courtWidth / 2, offsetY + courtHeight / 2, tileSize * 1.5, 0, Math.PI * 2);
+      ctx.arc(offsetX + courtWidth / 2, offsetY + courtHeight / 2, 25, 0, Math.PI * 2);
       ctx.stroke();
+      
+      // Lane outlines
+      ctx.strokeRect(offsetX, offsetY + 4 * tileSize, 4 * tileSize, 4 * tileSize);
+      ctx.strokeRect(offsetX + 12 * tileSize, offsetY + 4 * tileSize, 4 * tileSize, 4 * tileSize);
+      
+      // Free throw lines
+      ctx.beginPath();
+      ctx.moveTo(offsetX + 3 * tileSize, offsetY + 4 * tileSize);
+      ctx.lineTo(offsetX + 3 * tileSize, offsetY + 8 * tileSize);
+      ctx.moveTo(offsetX + 13 * tileSize, offsetY + 4 * tileSize);
+      ctx.lineTo(offsetX + 13 * tileSize, offsetY + 8 * tileSize);
+      ctx.stroke();
+
     } else if (courtType === "tennis") {
-      // Service boxes
-      ctx.fillStyle = accentColor;
-      for (let y = 2; y <= 7; y++) {
+      // Service boxes (both ends)
+      ctx.fillStyle = laneColor;
+      for (let y = 2; y <= 8; y++) {
         for (let x = 0; x < 3; x++) {
           ctx.fillRect(offsetX + x * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
+          ctx.fillRect(offsetX + (13 + x) * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
         }
       }
 
-      // Lines
+      // Court lines
       ctx.strokeStyle = "#FFFFFF";
       ctx.lineWidth = 2;
-
-      // Net
+      
+      // Center net
       ctx.beginPath();
       ctx.moveTo(offsetX + courtWidth / 2, offsetY);
       ctx.lineTo(offsetX + courtWidth / 2, offsetY + courtHeight);
       ctx.stroke();
+      
+      // Service boxes outline
+      ctx.strokeRect(offsetX, offsetY + 2 * tileSize, 3 * tileSize, 7 * tileSize);
+      ctx.strokeRect(offsetX + 13 * tileSize, offsetY + 2 * tileSize, 3 * tileSize, 7 * tileSize);
+      
+      // Service line across
+      ctx.beginPath();
+      ctx.moveTo(offsetX, offsetY + courtHeight / 2);
+      ctx.lineTo(offsetX + courtWidth, offsetY + courtHeight / 2);
+      ctx.stroke();
 
-      // Service lines
-      ctx.strokeRect(offsetX, offsetY + 2 * tileSize, 3 * tileSize, 6 * tileSize);
     } else if (courtType === "pickleball") {
-      // Kitchen zones
-      ctx.fillStyle = accentColor;
+      // Kitchen/non-volley zones (2 tiles deep on each side)
+      ctx.fillStyle = laneColor;
       for (let y = 0; y < courtHeight / tileSize; y++) {
         for (let x = 0; x < 2; x++) {
           ctx.fillRect(offsetX + x * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
-          ctx.fillRect(offsetX + (courtWidth / tileSize - 2 + x) * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
+          ctx.fillRect(offsetX + (14 + x) * tileSize, offsetY + y * tileSize, tileSize - 1, tileSize - 1);
         }
       }
 
-      // Lines
+      // Court lines
       ctx.strokeStyle = "#FFFFFF";
       ctx.lineWidth = 2;
-
-      // Center
+      
+      // Center net
       ctx.beginPath();
       ctx.moveTo(offsetX + courtWidth / 2, offsetY);
       ctx.lineTo(offsetX + courtWidth / 2, offsetY + courtHeight);
       ctx.stroke();
-
+      
       // Kitchen lines
       ctx.beginPath();
       ctx.moveTo(offsetX + 2 * tileSize, offsetY);
       ctx.lineTo(offsetX + 2 * tileSize, offsetY + courtHeight);
-      ctx.moveTo(offsetX + courtWidth - 2 * tileSize, offsetY);
-      ctx.lineTo(offsetX + courtWidth - 2 * tileSize, offsetY + courtHeight);
+      ctx.moveTo(offsetX + 14 * tileSize, offsetY);
+      ctx.lineTo(offsetX + 14 * tileSize, offsetY + courtHeight);
       ctx.stroke();
-    }
-
-    // Draggable element (4 square)
-    if (dragElement) {
-      ctx.fillStyle = "#F97316"; // Orange
-      const elementSize = 4 * tileSize;
-      ctx.fillRect(dragElement.x, dragElement.y, elementSize, elementSize);
-
-      // Grid lines on element
-      ctx.strokeStyle = "#FFFFFF";
-      ctx.lineWidth = 2;
+      
+      // Sideline
       ctx.beginPath();
-      ctx.moveTo(dragElement.x + elementSize / 2, dragElement.y);
-      ctx.lineTo(dragElement.x + elementSize / 2, dragElement.y + elementSize);
-      ctx.moveTo(dragElement.x, dragElement.y + elementSize / 2);
-      ctx.lineTo(dragElement.x + elementSize, dragElement.y + elementSize / 2);
+      ctx.moveTo(offsetX, offsetY + courtHeight / 2);
+      ctx.lineTo(offsetX + courtWidth, offsetY + courtHeight / 2);
       ctx.stroke();
-
-      // Selection border
-      ctx.strokeStyle = "#00d4ff";
-      ctx.lineWidth = 2;
-      ctx.setLineDash([4, 4]);
-      ctx.strokeRect(dragElement.x, dragElement.y, elementSize, elementSize);
-      ctx.setLineDash([]);
     }
 
-    // Grid lines
-    ctx.strokeStyle = "rgba(0, 0, 0, 0.3)";
+    // Grid lines on top
+    ctx.strokeStyle = "rgba(0, 0, 0, 0.25)";
     ctx.lineWidth = 1;
     for (let x = 0; x <= courtWidth / tileSize; x++) {
       ctx.beginPath();
@@ -175,187 +195,146 @@ export function MiniCourtBuilder({ className = "" }: { className?: string }) {
       ctx.stroke();
     }
 
-    // Border
-    ctx.strokeStyle = "#06b6d4";
+    // Border with hover glow
+    ctx.strokeStyle = hovering ? "#00d4ff" : "#06b6d4";
     ctx.lineWidth = 3;
+    if (hovering) {
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = "#00d4ff";
+    }
     ctx.strokeRect(offsetX, offsetY, courtWidth, courtHeight);
-  }, [courtType, baseColor, accentColor, dragElement]);
+    ctx.shadowBlur = 0;
+
+  }, [courtType, baseColor, laneColor, hovering, mousePos]);
 
   React.useEffect(() => {
-    drawCourt();
+    const animationId = requestAnimationFrame(drawCourt);
+    return () => cancelAnimationFrame(animationId);
   }, [drawCourt]);
 
-  // Initialize draggable element
-  React.useEffect(() => {
-    const size = 420;
-    const tileSize = 20;
-    const courtWidth = 16 * tileSize;
-    const courtHeight = 10 * tileSize;
-    const offsetX = (size - courtWidth) / 2;
-    const offsetY = (size - courtHeight) / 2;
-    
-    setDragElement({
-      x: offsetX + 6 * tileSize,
-      y: offsetY + 3 * tileSize,
-    });
-  }, []);
-
-  const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!dragElement) return;
-    
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    const rect = canvas.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * canvas.width;
-    const y = ((e.clientY - rect.top) / rect.height) * canvas.height;
-    
-    const elementSize = 80;
-    if (
-      x >= dragElement.x &&
-      x <= dragElement.x + elementSize &&
-      y >= dragElement.y &&
-      y <= dragElement.y + elementSize
-    ) {
-      setIsDragging(true);
-    }
-  };
-
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    if (!isDragging || !dragElement) return;
-    
     const canvas = canvasRef.current;
     if (!canvas) return;
     
     const rect = canvas.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * canvas.width;
-    const y = ((e.clientY - rect.top) / rect.height) * canvas.height;
-    
-    const size = 420;
-    const tileSize = 20;
-    const courtWidth = 16 * tileSize;
-    const courtHeight = 10 * tileSize;
-    const offsetX = (size - courtWidth) / 2;
-    const offsetY = (size - courtHeight) / 2;
-    const elementSize = 80;
-    
-    // Constrain to court and snap to grid
-    const tileX = Math.floor((x - offsetX) / tileSize) * tileSize;
-    const tileY = Math.floor((y - offsetY) / tileSize) * tileSize;
-    
-    setDragElement({
-      x: Math.max(offsetX, Math.min(offsetX + courtWidth - elementSize, offsetX + tileX)),
-      y: Math.max(offsetY, Math.min(offsetY + courtHeight - elementSize, offsetY + tileY)),
+    setMousePos({
+      x: ((e.clientX - rect.left) / rect.width) * canvas.width,
+      y: ((e.clientY - rect.top) / rect.height) * canvas.height,
     });
   };
 
   return (
     <div className={className}>
       <div className="relative">
-        {/* Controls */}
-        <div className="absolute -top-12 left-0 right-0 flex justify-center gap-2 z-10">
+        {/* Court Type Selector */}
+        <div className="mb-3 flex gap-2">
           <button
             onClick={() => setCourtType("basketball")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               courtType === "basketball"
-                ? "bg-gradient-primary text-black"
-                : "bg-white/10 text-white hover:bg-white/20"
+                ? "bg-gradient-primary text-black shadow-neon-blue"
+                : "bg-white/5 text-white hover:bg-white/10 border border-white/10"
             }`}
           >
-            Basketball
+            🏀 Basketball
           </button>
           <button
             onClick={() => setCourtType("tennis")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               courtType === "tennis"
-                ? "bg-gradient-primary text-black"
-                : "bg-white/10 text-white hover:bg-white/20"
+                ? "bg-gradient-primary text-black shadow-neon-blue"
+                : "bg-white/5 text-white hover:bg-white/10 border border-white/10"
             }`}
           >
-            Tennis
+            🎾 Tennis
           </button>
           <button
             onClick={() => setCourtType("pickleball")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex-1 px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
               courtType === "pickleball"
-                ? "bg-gradient-primary text-black"
-                : "bg-white/10 text-white hover:bg-white/20"
+                ? "bg-gradient-primary text-black shadow-neon-blue"
+                : "bg-white/5 text-white hover:bg-white/10 border border-white/10"
             }`}
           >
-            Pickleball
+            🏓 Pickleball
           </button>
         </div>
 
-        <canvas
-          ref={canvasRef}
-          className="w-full h-auto rounded-xl shadow-2xl cursor-move"
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={() => setIsDragging(false)}
-          onMouseLeave={() => setIsDragging(false)}
-          style={{ maxWidth: "100%" }}
-        />
+        <div className="relative rounded-xl overflow-hidden">
+          <canvas
+            ref={canvasRef}
+            className="w-full h-auto"
+            onMouseEnter={() => setHovering(true)}
+            onMouseLeave={() => setHovering(false)}
+            onMouseMove={handleMouseMove}
+            style={{ maxWidth: "100%", display: "block" }}
+          />
+        </div>
 
         {/* Color Controls */}
-        <div className="absolute bottom-4 left-4 flex gap-2">
-          {COLORS.map((color) => (
-            <button
-              key={color.hex}
-              onClick={() => setBaseColor(color.hex)}
-              className={`w-8 h-8 rounded-lg border-2 transition-all hover:scale-110 ${
-                baseColor === color.hex
-                  ? "border-white shadow-neon-blue"
-                  : "border-white/30"
-              }`}
-              style={{ backgroundColor: color.hex }}
-              title={`Base: ${color.name}`}
-            />
-          ))}
+        <div className="mt-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Palette className="w-4 h-4 text-white/60" />
+            <span className="text-xs text-white/60">Base:</span>
+            <div className="flex gap-1.5">
+              {COLORS.slice(0, 3).map((color) => (
+                <button
+                  key={color.hex}
+                  onClick={() => setBaseColor(color.hex)}
+                  className={`w-7 h-7 rounded-md border-2 transition-all hover:scale-110 ${
+                    baseColor === color.hex
+                      ? "border-white shadow-neon-blue"
+                      : "border-white/20"
+                  }`}
+                  style={{ backgroundColor: color.hex }}
+                  title={color.name}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-white/60">Accent:</span>
+            <div className="flex gap-1.5">
+              {COLORS.slice(1, 5).map((color) => (
+                <button
+                  key={color.hex}
+                  onClick={() => setLaneColor(color.hex)}
+                  className={`w-7 h-7 rounded-md border-2 transition-all hover:scale-110 ${
+                    laneColor === color.hex
+                      ? "border-white shadow-neon-blue"
+                      : "border-white/20"
+                  }`}
+                  style={{ backgroundColor: color.hex }}
+                  title={color.name}
+                />
+              ))}
+            </div>
+          </div>
+
+          <button
+            onClick={() => {
+              setBaseColor("#2C2C2C");
+              setLaneColor("#2563EB");
+            }}
+            className="p-2 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
+            title="Reset Colors"
+          >
+            <RefreshCw className="w-4 h-4 text-white" />
+          </button>
         </div>
 
-        {/* Accent Color */}
-        <div className="absolute bottom-4 right-4 flex gap-2">
-          <Palette className="w-4 h-4 text-white/60" />
-          {COLORS.slice(1).map((color) => (
-            <button
-              key={color.hex}
-              onClick={() => setAccentColor(color.hex)}
-              className={`w-8 h-8 rounded-lg border-2 transition-all hover:scale-110 ${
-                accentColor === color.hex
-                  ? "border-white shadow-neon-blue"
-                  : "border-white/30"
-              }`}
-              style={{ backgroundColor: color.hex }}
-              title={`Accent: ${color.name}`}
-            />
-          ))}
+        {/* Info Text */}
+        <div className="mt-3 text-center">
+          <p className="text-xs text-muted-foreground">
+            {courtType === "basketball" && "Full court with painted lanes and center circle"}
+            {courtType === "tennis" && "Regulation court with service boxes"}
+            {courtType === "pickleball" && "Standard court with non-volley zones (kitchen)"}
+          </p>
+          <p className="text-xs text-[var(--brand-primary)] mt-1">
+            Hover over court to see tile glow • Change colors to preview
+          </p>
         </div>
-
-        {/* Info Badge */}
-        <div className="absolute top-4 left-4 px-3 py-1.5 rounded-lg bg-black/80 backdrop-blur-sm border border-white/10 text-xs text-white">
-          <div className="font-semibold mb-1">Interactive Demo</div>
-          <div className="text-[var(--brand-primary)]">Drag the orange square</div>
-        </div>
-
-        {/* Reset */}
-        <button
-          onClick={() => {
-            const size = 420;
-            const tileSize = 20;
-            const courtWidth = 16 * tileSize;
-            const courtHeight = 10 * tileSize;
-            const offsetX = (size - courtWidth) / 2;
-            const offsetY = (size - courtHeight) / 2;
-            setDragElement({
-              x: offsetX + 6 * tileSize,
-              y: offsetY + 3 * tileSize,
-            });
-          }}
-          className="absolute top-4 right-4 p-2 rounded-lg bg-black/80 backdrop-blur-sm border border-white/10 hover:border-white/30 transition-colors"
-          title="Reset"
-        >
-          <RotateCcw className="w-4 h-4 text-white" />
-        </button>
       </div>
     </div>
   );
